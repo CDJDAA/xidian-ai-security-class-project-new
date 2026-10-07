@@ -1,4 +1,4 @@
-# 项目 04：研潮智枢 · 教学版使用指南
+# 项目 04：Intelligence Gathering使用指南
 
 [课程任务](COURSE.md) · [课程总说明](../../README.md) · [整理前说明](README.original.md)
 

@@ -1,4 +1,4 @@
-# 项目 04：研潮智枢 · 教学版
+# 项目 04：Intelligence Gathering
 
 ## 项目目标与运行
 
