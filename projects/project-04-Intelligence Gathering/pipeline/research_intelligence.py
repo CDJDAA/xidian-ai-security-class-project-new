@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from pipeline.topic_taxonomy import canonical_topic, topic_catalog
+from pipeline.content_identity import stored_fingerprint
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
@@ -192,7 +193,7 @@ def ingest_analysis(source_file: str, analysis_file: str, items: list[dict[str, 
             title = str(item.get("title") or "").strip()[:500]
             text = str(item.get("text") or "").strip()[:4000]
             url = str(item.get("source_url") or "").strip()[:1000]
-            fingerprint = hashlib.sha1(f"{title}\n{text}\n{url}".encode("utf-8")).hexdigest()
+            fingerprint = stored_fingerprint(item)
             document_id = _id("doc", fingerprint)
             is_new = conn.execute("SELECT 1 FROM documents WHERE fingerprint=?", (fingerprint,)).fetchone() is None
             normalized_item = {**item, "source_file": source_file}

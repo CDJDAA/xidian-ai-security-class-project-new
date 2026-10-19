@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import csv
 import asyncio
-import hashlib
 import json
 import os
 import re
@@ -13,6 +12,7 @@ from typing import Any
 import httpx
 import jieba.analyse
 from dotenv import load_dotenv
+from pipeline.content_identity import FINGERPRINT_VERSION, content_fingerprint
 from pipeline.research_intelligence import ingest_analysis
 from pipeline.topic_taxonomy import TOPIC_TAXONOMY, canonical_topic, topic_catalog
 
@@ -103,6 +103,7 @@ def _normalize(row: dict[str, Any]) -> dict[str, Any]:
         "text": description[:4000],
         "author": author[:200],
         "source_url": url[:1000],
+        "content_fingerprint": content_fingerprint(title, description, url),
         "source_platform": _first(row, "__source_platform"),
         "published_at": _first(row, "create_time", "publish_time", "time", "date"),
         "raw": row,
@@ -164,8 +165,7 @@ def _source_quality(platform: str, content_type: str, text_length: int) -> float
 
 
 def _fingerprint(item: dict[str, Any]) -> str:
-    source = f"{item.get('title', '')}\n{item.get('text', '')}\n{item.get('source_url', '')}"
-    return hashlib.sha1(re.sub(r"\s+", " ", source).strip().encode("utf-8")).hexdigest()
+    return item["content_fingerprint"]
 
 
 def _rule_analysis(item: dict[str, Any], taxonomy: dict[str, list[str]]) -> dict[str, Any]:
@@ -312,11 +312,17 @@ async def analyze_file(
     platform = relative_path.replace("\\", "/").split("/")[0]
     pending: list[dict[str, Any]] = []
     scope_excluded = 0
+    duplicate_count = 0
+    empty_count = 0
     for row in rows:
         normalized = _normalize(row)
         normalized["source_platform"] = normalized.get("source_platform") or platform
         key = _fingerprint(normalized)
-        if key in seen or not (normalized["title"] or normalized["text"]):
+        if not (normalized["title"] or normalized["text"]):
+            empty_count += 1
+            continue
+        if key in seen:
+            duplicate_count += 1
             continue
         seen.add(key)
         item = _rule_analysis(normalized, taxonomy)
@@ -342,7 +348,7 @@ async def analyze_file(
         for item in analyzed:
             handle.write(json.dumps(item, ensure_ascii=False) + "\n")
     intelligence = _build_research_intelligence(analyzed)
-    meta = {"source_file": relative_path, "output_file": str(output_path.relative_to(DATA_DIR)), "input_count": len(rows), "output_count": len(analyzed), "scope_excluded": scope_excluded, "selected_themes": list(taxonomy), "ai_enabled": bool(os.getenv("AI_API_KEY", "").strip()), "batch_size": max(10, min(int(os.getenv("AI_BATCH_SIZE", "50")), 100)), "batch_summaries": batch_summaries, "intelligence": intelligence, "created_at": datetime.now().isoformat(timespec="seconds")
+    meta = {"source_file": relative_path, "output_file": str(output_path.relative_to(DATA_DIR)), "input_count": len(rows), "output_count": len(analyzed), "scope_excluded": scope_excluded, "duplicate_count": duplicate_count, "empty_count": empty_count, "fingerprint_version": FINGERPRINT_VERSION, "selected_themes": list(taxonomy), "ai_enabled": bool(os.getenv("AI_API_KEY", "").strip()), "batch_size": max(10, min(int(os.getenv("AI_BATCH_SIZE", "50")), 100)), "batch_summaries": batch_summaries, "intelligence": intelligence, "created_at": datetime.now().isoformat(timespec="seconds")
     }
     (output_path.with_suffix(".meta.json")).write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     # Persist the machine-readable research record and update human-readable Obsidian views.
