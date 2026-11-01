@@ -4,6 +4,8 @@ AI-Researcher 将参考文献、研究想法、代码实验与论文写作串联
 
 [课程任务](COURSE.md) · [课程总说明](../../README.md) · [上游原始 README](README.original.md) · [上游仓库](https://github.com/HKUDS/AI-Researcher)
 
+**2026-11-01 课程进展：** 已完成文献元数据模块的小规模真实尝试，修复固定版本查询并增加无需 Docker 的模块入口。运行方法、实际结果和完整流程的准备条件见[本次模块报告](coursework/README.md)。以下完整框架说明的验证范围不因模块测试自动扩大。
+
 ## 1. 使用前准备
 
 - 推荐 Linux，或 Windows 下的 WSL2/Linux 环境；准备 Python 3.11、uv 和已启动的 Docker。
