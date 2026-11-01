@@ -94,6 +94,37 @@ def verify_candidate(candidate: Any, sources: list[dict[str, str]]) -> dict[str,
     }
 
 
+def verify_source_choices(candidate: Any, sources: list[dict[str, str]]) -> dict[str, Any]:
+    """Bind a one-based choice to its original identity, then verify the quote.
+
+    IDs supplied by a model are never repaired or trusted in this protocol.
+    A missing/invalid choice remains unbound and fails the existing strict gate.
+    """
+    if not isinstance(candidate, dict) or not isinstance(candidate.get("claims"), list):
+        return verify_candidate(candidate, sources)
+    claims = []
+    for claim in candidate["claims"][:21]:
+        if not isinstance(claim, dict):
+            claims.append(claim)
+            continue
+        bound = {**claim, "source_id": None}
+        choice = claim.get("source_index")
+        if isinstance(choice, int) and not isinstance(choice, bool) and 1 <= choice <= len(sources):
+            bound["source_id"] = sources[choice - 1]["source_id"]
+        claims.append(bound)
+    result = verify_candidate({**candidate, "claims": claims}, sources)
+    result["verification"]["source_binding"] = "program-index-v2"
+    return result
+
+
+CHOICE_INSTRUCTION = (
+    '返回 JSON 对象，包含 summary、topics、claims。claims 最多5条，每条是 '
+    '{"text":"原文连续摘录","source_index":1,"quote":"与text完全相同的原文连续摘录"}。'
+    "source_index 是 records 数组从1开始的整数序号，不要复制或编造哈希编号。"
+    "每条摘录必须在所选记录的text中逐字存在。不要补写输入没有的事实。"
+)
+
+
 CLAIM_INSTRUCTION = (
     '返回 JSON 对象，包含 summary、topics、claims。claims 最多5条，每条是 '
     '{"text":"原文连续摘录","source_id":"对应来源编号","quote":"与text完全相同的原文连续摘录"}。'

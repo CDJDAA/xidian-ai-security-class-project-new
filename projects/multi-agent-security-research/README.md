@@ -20,6 +20,7 @@
 | 开展规范的文献整理 | [文献综述流程](frameworks/LITERATURE_REVIEW.md) · [本次检索记录](docs/SEARCH_LOG.md) |
 | 设计可比较的安全实验 | [评测框架](frameworks/EVALUATION.md) |
 | 运行项目 04 的三角色来源追踪原型 | [实验与复现命令](experiments/source_tracking/README.md) · [真实运行报告](experiments/source_tracking/REPORT.md) |
+| 查看项目 04 后续完善与项目 01 尝试 | [2026-11-01 改进报告](experiments/source_tracking/REPORT_V2.md) · [项目 01 文献模块](../project-01-ai-researcher/coursework/README.md) |
 | 形成研究问题与近期计划 | [研究路线图](docs/ROADMAP.md) · [阅读路线](docs/READING_PATH.md) |
 | 找安全指南、协议与开源基准 | [资料与工具](resources/README.md) |
 | 新增论文或实验记录 | [贡献说明](CONTRIBUTING.md) · [模板目录](templates/README.md) |

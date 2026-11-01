@@ -14,7 +14,7 @@ from urllib.parse import urlsplit
 import httpx
 import jieba.analyse
 from dotenv import load_dotenv
-from pipeline.grounding import CLAIM_INSTRUCTION, SOURCE_POLICY, source_record, verify_candidate
+from pipeline.grounding import CHOICE_INSTRUCTION, SOURCE_POLICY, source_record, verify_source_choices
 from pipeline.research_intelligence import ingest_analysis
 from pipeline.topic_taxonomy import TOPIC_TAXONOMY, canonical_topic, topic_catalog
 
@@ -269,7 +269,7 @@ async def _summarize_batch(items: list[dict[str, Any]], batch_number: int) -> di
     prompt = {
         "batch_number": batch_number,
         "records": source_items,
-        "instruction": CLAIM_INSTRUCTION,
+        "instruction": CHOICE_INSTRUCTION,
     }
     base_url = os.getenv("AI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
     request = {"model": os.getenv("AI_MODEL", "gpt-4o-mini"), "temperature": 0.1,
@@ -287,7 +287,7 @@ async def _summarize_batch(items: list[dict[str, Any]], batch_number: int) -> di
             )
             response.raise_for_status()
             candidate = json.loads(response.json()["choices"][0]["message"]["content"])
-            return {**verify_candidate(candidate, source_items), "analysis_method": "ai-source-checked"}
+            return {**verify_source_choices(candidate, source_items), "analysis_method": "ai-source-checked-v2"}
     except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
         # Preserve failure visibility without exposing response bodies or credentials.
         return {"summary": "", "topics": [], "claims": [], "citations": [],

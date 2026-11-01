@@ -13,11 +13,13 @@ from urllib.parse import urlsplit
 
 import httpx
 from dotenv import load_dotenv
+from .budget import CallBudget
 
 COURSE_ROOT = Path(__file__).resolve().parents[3] / "project-04-Intelligence Gathering"
 if str(COURSE_ROOT) not in sys.path:
     sys.path.insert(0, str(COURSE_ROOT))
 from pipeline.grounding import CLAIM_INSTRUCTION, SOURCE_POLICY, source_record, verify_candidate  # noqa: E402
+from pipeline.grounding import CHOICE_INSTRUCTION, verify_source_choices  # noqa: E402
 
 ROLES = (
     ("reader", "阅读代理：根据用户任务提取研究内容，保留原文证据。"),
@@ -29,11 +31,15 @@ ROLES = (
 class ModelFailure(RuntimeError):
     """A sanitized model error, never containing credentials or response bodies."""
 
+    def __init__(self, code: str, *, attempted: bool = True):
+        super().__init__(code)
+        self.attempted = attempted
+
 
 class ChatClient:
     """Use the project's existing compatible chat API; never silently simulate it."""
 
-    def __init__(self, model: str, *, max_calls: int = 720, max_tokens: int = 650):
+    def __init__(self, model: str, *, max_calls: int = 720, max_tokens: int = 650, budget: CallBudget | None = None):
         load_dotenv(COURSE_ROOT / ".env")
         self.model = model
         course_key = os.getenv("AI_API_KEY")
@@ -47,7 +53,8 @@ class ChatClient:
             raise ValueError("Configure AI_API_KEY or OPENAI_API_KEY before a live run")
         self.max_calls = max_calls
         self.max_tokens = max_tokens
-        self.calls = 0
+        self.budget = budget
+        self.calls = budget.used if budget else 0
         self.http = httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0))
 
     async def close(self) -> None:
@@ -55,7 +62,9 @@ class ChatClient:
 
     async def complete(self, system: str, payload: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
         if self.calls >= self.max_calls:
-            raise ModelFailure("call_budget_exhausted")
+            raise ModelFailure("call_budget_exhausted", attempted=False)
+        if self.budget and not self.budget.reserve():
+            raise ModelFailure("call_budget_exhausted", attempted=False)
         self.calls += 1
         body = {
             "model": self.model, "temperature": 0.2, "max_tokens": self.max_tokens,
@@ -86,23 +95,30 @@ class ChatClient:
             raise ModelFailure("invalid_or_unavailable_response") from None
 
 
-async def run_chain(client: Any, item: dict[str, Any], task: str, guarded: bool) -> dict[str, Any]:
+async def run_chain(client: Any, item: dict[str, Any], task: str, guarded: bool, source_selection: str = "id") -> dict[str, Any]:
     """Make at most three calls; all authority and lineage remain outside the LLM."""
     sources = [source_record(item)]
     previous: dict[str, Any] = {}
     parent = sources[0]["source_id"]
     trace: list[dict[str, Any]] = []
     rejected = 0
+    if source_selection not in {"id", "index"}:
+        raise ValueError("Unknown source selection protocol")
+    verifier = verify_source_choices if source_selection == "index" else verify_candidate
     try:
         for role, description in ROLES:
-            system = description + CLAIM_INSTRUCTION + (SOURCE_POLICY if guarded else "")
+            instruction = CHOICE_INSTRUCTION if source_selection == "index" else CLAIM_INSTRUCTION
+            system = description + instruction + (SOURCE_POLICY if guarded else "")
             payload = {"task": task, "records": sources, "previous": previous}
             candidate, usage = await client.complete(system, payload)
-            checked = verify_candidate(candidate, sources)
+            checked = verifier(candidate, sources)
             rejected += checked["verification"]["rejected"]
             if guarded:
                 previous = {"summary": checked["summary"], "topics": checked["topics"],
                             "claims": [{key: claim[key] for key in ("text", "quote", "source_id")} for claim in checked["citations"]]}
+                if source_selection == "index":
+                    for claim in previous["claims"]:
+                        claim["source_index"] = next(i for i, source in enumerate(sources, 1) if source["source_id"] == claim["source_id"])
             else:
                 previous = candidate
             message_id = "msg_" + hashlib.sha256((parent + role + json.dumps(previous, ensure_ascii=False, sort_keys=True)).encode()).hexdigest()[:24]
@@ -111,11 +127,12 @@ async def run_chain(client: Any, item: dict[str, Any], task: str, guarded: bool)
                           "output": previous, "raw_candidate": candidate,
                           "verification": checked["verification"], **usage})
             parent = message_id
-        checked = verify_candidate(previous, sources)
+        checked = verifier(previous, sources)
         claims = previous.get("claims", [])
-        return {"status": "completed", "guarded": guarded, "summary": previous.get("summary", ""),
+        return {"status": "completed", "guarded": guarded, "call_attempts": len(trace), "summary": previous.get("summary", ""),
                 "claims": claims, "checked_claims": checked["claims"], "citations": checked["citations"],
                 "source_id": sources[0]["source_id"], "rejected_claims_across_roles": rejected, "trace": trace}
     except ModelFailure as exc:
         return {"status": "model-error", "guarded": guarded, "error": str(exc), "trace": trace,
+                "call_attempts": len(trace) + int(exc.attempted),
                 "claims": [], "summary": "", "checked_claims": [], "citations": []}

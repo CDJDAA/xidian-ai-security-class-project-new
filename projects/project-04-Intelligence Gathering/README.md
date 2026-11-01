@@ -148,6 +148,8 @@ npm run dev
 
 ## 26241215025-董俊逸：来源追踪课程实验
 
+2026-11-01 更新：摘要采用程序绑定的资料序号，实验调用增加持久预算记录及目录锁，网页可查看未通过原因。[新版运行报告](../multi-agent-security-research/experiments/source_tracking/REPORT_V2.md)记录本次验证；下面的 240 次结果为 2026-10-22 的历史实验。
+
 新增摘要原文核验、批次来源展示与三角色协作对照。复现命令及报告统一保存在多智能体项目文件夹内：
 
 - [运行与验证步骤](../multi-agent-security-research/experiments/source_tracking/README.md)

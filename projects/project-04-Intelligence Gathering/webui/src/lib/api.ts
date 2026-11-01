@@ -60,7 +60,7 @@ export interface SourceCheckedBatch {
   topics?: string[]
   claims?: string[]
   citations?: { source_id: string; source_url: string; quote: string; text: string; trust: string }[]
-  verification?: { status: 'source-matched' | 'rejected' | 'model-error'; accepted: number; rejected: number; error_type?: string }
+  verification?: { status: 'source-matched' | 'rejected' | 'model-error'; accepted: number; rejected: number; error_type?: string; reasons?: { index: number | null; reason: string }[]; source_binding?: string }
 }
 
 export interface AnalysisResult {

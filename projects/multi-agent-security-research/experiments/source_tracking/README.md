@@ -6,6 +6,8 @@
 
 已完成的真实运行、负结果和局限见 [REPORT.md](REPORT.md)。这是自建的课程原型，未复现 AgentDojo、CaMeL、Colosseum 或目录内其他论文的实验。
 
+2026-11-01 的改进、再次运行结果和回归检查见 [REPORT_V2.md](REPORT_V2.md)。旧报告及旧结果保留，不能把不同日期运行直接视为同一模型版本的提升证据。
+
 ## 环境准备
 
 在课程仓库根目录执行，命令均适用于 PowerShell：
@@ -39,6 +41,10 @@ P01–P02 仅用于试运行；正式比较使用 P03–P22，每个条件 60 �
 
 已有输出目录不会被覆盖。中断后可在完全相同的正式命令末尾加 `--resume`，从已保存的完整运行记录恢复；更换配置时使用新目录。异常退出时已发送但未记录的请求无法从结果还原，累计账单以模型服务记录为准。
 
+新版在发送请求前向 `calls.ledger` 预留并落盘一次预算；恢复时连同尚未保存结果的请求也计入上限。因此保守预留数可能高于实际已发送请求。目录锁阻止并发进程共用同一输出；异常退出遗留 `.running.lock` 时，先确认旧进程已停止再移除该锁。损坏的账本或旧版无账本结果会拒绝恢复，不会把预算归零。外部服务的 token 账单仍以服务方记录为准。
+
+要比较来源绑定方式，在不同的新输出目录分别使用 `--source-selection id`（默认，旧哈希协议）与 `--source-selection index`（新版序号协议）。示例：上述正式命令改为 `--repeats 1 --max-calls 240`，末尾添加相应协议选项；其余语料、范围和模型保持一致。课程 04 实际摘要管线默认采用新版协议。
+
 ## 运行项目 04 的完整资料流程
 
 ```powershell
@@ -61,7 +67,7 @@ uv run start.py
 在项目 04 目录执行：
 
 ```powershell
-uv run --frozen python -m pytest tests/test_source_grounding.py tests/test_api_limits.py tests/test_store_factory.py -q
+uv run --frozen python -m pytest tests/test_source_grounding.py tests/test_grounding_v2.py tests/test_api_limits.py tests/test_store_factory.py -q
 cd webui
 npm ci
 npm run build
