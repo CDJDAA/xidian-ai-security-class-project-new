@@ -4,6 +4,8 @@ AI-Researcher 将参考文献、研究想法、代码实验与论文写作串联
 
 [课程任务](COURSE.md) · [课程总说明](../../README.md) · [上游原始 README](README.original.md) · [上游仓库](https://github.com/HKUDS/AI-Researcher)
 
+**2026-11-01 课程进展：** 已完成文献元数据模块的小规模真实尝试，修复固定版本查询并增加独立运行入口。运行方法和实际结果见[本次模块报告](coursework/README.md)。
+
 ## 1. 使用前准备
 
 - 推荐 Linux，或 Windows 下的 WSL2/Linux 环境；准备 Python 3.11、uv 和已启动的 Docker。
@@ -81,4 +83,4 @@ python web_ai_researcher.py
 
 ## 6. 课程交付与版本
 
-在个人分支提交改动，报告写清输入、配置（不含密钥）、运行步骤、实验结果与局限。分支和 PR 流程见课程总说明。本课程源码整理时的上游版本为 `f9a6f8480860c193afff600eeffe3defcee8a978`。本次依据源码整理文档，未安装依赖或完成运行验证；本版上游根目录无独立 LICENSE，使用与分发前核实授权。
+在个人分支提交改动，报告写清输入、配置（不含密钥）、运行步骤与实际验证结果。分支和 PR 流程见课程总说明。本课程源码整理时的上游版本为 `f9a6f8480860c193afff600eeffe3defcee8a978`。本次文献模块的改动及验证记录见[模块报告](coursework/README.md)。本版上游根目录无独立 LICENSE，使用与分发前核实授权。
