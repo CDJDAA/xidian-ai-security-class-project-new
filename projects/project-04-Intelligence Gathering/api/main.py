@@ -87,6 +87,8 @@ if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 from adapters.intelligence.http import router as workbench_router, engine as workbench_engine
 app.include_router(workbench_router)
+from adapters.deeptutor.http import create_router as deeptutor_router
+app.include_router(deeptutor_router(workbench_engine.store))
 
 
 async def recover_workbench_tasks():
@@ -117,7 +119,7 @@ async def workbench_frontend(page: str):
         if not target.is_relative_to(build.resolve()) or not target.is_file():
             raise HTTPException(404, "工作台资源不存在")
         return FileResponse(target)
-    if page.strip("/") not in {"", "materials", "research", "tasks", "settings"}:
+    if page.strip("/") not in {"", "materials", "research", "discussion", "tasks", "settings"}:
         raise HTTPException(404, "工作台页面不存在")
     if not (build / "index.html").is_file():
         raise HTTPException(503, "请先在仓库workbench目录执行npm ci和npm run build")

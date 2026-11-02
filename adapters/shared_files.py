@@ -248,7 +248,8 @@ class TopicStore:
                     try:
                         import pypdf
                         from io import BytesIO
-                        text = "\n".join(f"[第{i+1}页]\n{p.extract_text() or ''}" for i, p in enumerate(pypdf.PdfReader(BytesIO(raw)).pages))
+                        pages = [(i + 1, p.extract_text() or '') for i, p in enumerate(pypdf.PdfReader(BytesIO(raw)).pages)]
+                        text = "\n".join(f"[第{i}页]\n{body}" for i, body in pages if body.strip())
                     except ImportError:
                         raise ValueError("PDF解析器未安装，请安装workbench后端依赖，或提供Markdown/纯文本")
                     if not text.strip():

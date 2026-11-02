@@ -3,7 +3,7 @@ import { ChevronRight, File, Folder, FolderOpen, Paperclip } from 'lucide-react'
 import type { Material, SharedFile } from './api'
 
 type Directory = { name: string; path: string; children: Map<string, Directory>; files: SharedFile[] }
-const labels: Record<string, string> = { materials: '资料', notes: '研究笔记', plans: '实验方案', runs: '运行记录', writing: '写作' }
+const labels: Record<string, string> = { materials: '资料', notes: '研究笔记', plans: '实验方案', outputs: '原始生成文件', runs: '运行记录', writing: '写作' }
 
 function treeFrom(files: SharedFile[]): Directory {
   const root: Directory = { name: '', path: '', children: new Map(), files: [] }
