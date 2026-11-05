@@ -1,0 +1,99 @@
+项目03 论文来源与入库清单
+整理日期：2026年11月4日
+负责人：26241215112 李艳
+首轮问答模型：gpt-6.1-sol，用户确认T01至T05五轮测试均使用该模型。
+用途：记录已经汇报的五篇论文的来源、版本与后续入库验证信息。
+状态说明：五篇论文的入库处理已有用户界面证据；P04/T01、P01/T02、P02/T03、P03/T04、P05/T05均完成首轮回答、原文与界面检索证据核对。入库成功不等同全文解析无误或所有问题均能正确回答。
+实际论文库名称：RAG知识库隐私泄露_论文库
+保留原有RAG入门测试库，作为此前的功能检查记录。
+页数为本地PDF物理页数，可能包含会议封面，与正文印刷页码不同。
+公开入口用于重新获取论文；下载版本可能更新，应结合SHA256确认实际使用文件。DOI等来源入口本身不等于授予转载许可。
+
+P01 Riddle Me This! Stealthy Membership Inference for Retrieval-Augmented Generation
+作者：Naseh 等
+版本说明：2025，CCS，本地PDF版本
+主题：成员推断：判断候选文档是否位于RAG检索库
+原文件名：Naseh 等 - 2025 - Riddle Me This! Stealthy Membership Inference for Retrieval-Augmented Generation.pdf
+公开来源入口：https://arxiv.org/abs/2502.00306
+本地PDF物理页数：15
+文件大小：1678488 字节
+SHA256：948e6e222d4028f42748926110f4970ec3c15f8b9ca619303d6eddd87adea95c
+材料类型：原始研究论文；与AI生成综述或实验草稿分别标记。
+汇报日期和汇报人：待填写
+实际入库日期及解析结果：2026年11月4日据用户增量上传日志，列出本文件正在索引，并显示成功处理4个文件；具体完成时间未在截图中显示，全文解析完整性尚未逐页验收。
+实际知识库配置：T02检索截图显示llamaindex、BAAI/bge-m3、1024维、chunk_size=512及mode=hybrid；其他配置待补，512不直接解释为汉字数量。
+问答验收：T02内容与引文核对通过，2/2分；已核对3次工具调用及相关检索原文。详见T02验收记录和检索截图。
+
+P02 Five Queries Are Enough: Query-Efficient and Surrogate-Free Membership Inference Attacks on RAG via Entailment
+作者：Nguyen 等
+版本说明：2026，USENIX Security，本地PDF含会议封面
+主题：成员推断：MEntA，使用回答与候选文档的蕴含关系
+原文件名：Nguyen 等 - Five Queries Are Enough Query-Efficient and Surrogate-Free Membership Inference Attacks on RAG via.pdf
+公开来源入口：https://www.usenix.org/conference/usenixsecurity26/presentation/nguyen-nguyen
+本地PDF物理页数：21
+文件大小：1809105 字节
+SHA256：184bd11b790c6d1c7ef2560a88ac980b34942f0d94aab952c9d9c3a2dbd28401
+材料类型：原始研究论文；与AI生成综述或实验草稿分别标记。
+汇报日期和汇报人：待填写
+实际入库日期及解析结果：2026年11月4日据用户增量上传日志，列出本文件正在索引，并显示成功处理4个文件；具体完成时间未在截图中显示，全文解析完整性尚未逐页验收。
+实际知识库配置：T03截图显示llamaindex、BAAI/bge-m3、1024维、chunk_size=512及mode=hybrid；其他配置待补，512不直接解释为汉字数量。
+问答验收：T03内容、引文及Table 5数字核对通过，2/2分；已核对5次工具调用中的相关检索片段。详见T03验收记录和截图。
+
+P03 Follow My Instruction and Spill the Beans: Scalable Data Extraction from Retrieval-Augmented Generation Systems
+作者：Qi 等
+版本说明：2025，ICLR，本地PDF版本；预印本最初发表于2024年
+主题：数据提取：通过问答接口恢复外部检索库原文
+原文件名：Qi 等 - 2025 - FOLLOW MY INSTRUCTION AND SPILL THE BEANS SCALABLE DATA EXTRACTION FROM RETRIEVAL- AUGMENTED GENERA.pdf
+公开来源入口：https://arxiv.org/abs/2402.17840
+本地PDF物理页数：23
+文件大小：1441078 字节
+SHA256：3e712d11dcadc4c11ff40d8f8227eaf4c61bb7c7874cc68797d5e7c9a5139201
+材料类型：原始研究论文；与AI生成综述或实验草稿分别标记。
+汇报日期和汇报人：待填写
+实际入库日期及解析结果：2026年11月4日据用户增量上传日志，列出本文件正在索引，并显示成功处理4个文件；具体完成时间未在截图中显示，全文解析完整性尚未逐页验收。
+实际知识库配置：T04截图显示llamaindex、BAAI/bge-m3、1024维、chunk_size=512及mode=hybrid；其他配置待补，512不直接解释为汉字数量。
+问答验收：T04内容、指标含义、引文及Table 3数值核对通过，2/2分；已核对3次工具调用中的相关检索片段。详见T04验收记录和截图。
+
+P04 The Good and The Bad: Exploring Privacy Issues in Retrieval-Augmented Generation (RAG)
+作者：Zeng 等
+版本说明：2024，Findings of ACL，本地PDF版本
+主题：隐私风险：区分外部检索库泄露与模型训练记忆泄露
+原文件名：Zeng 等 - 2024 - The Good and The Bad Exploring Privacy Issues in Retrieval-Augmented Generation (RAG).pdf
+公开来源入口：https://aclanthology.org/2024.findings-acl.267/
+本地PDF物理页数：20
+文件大小：504344 字节
+SHA256：b1d8fac43b05add1197862e3945776cfa9782a3a5b9c4bed03d7fb25c0f4a2c4
+材料类型：原始研究论文；与AI生成综述或实验草稿分别标记。
+汇报日期和汇报人：待填写
+实际入库日期及解析结果：据用户界面截图，2026/11/4 18:56:22最近索引，显示就绪、原始文档1篇、索引版本1；全文解析完整性未逐页验收。
+实际知识库引擎及嵌入模型：llamaindex，BAAI/bge-m3，1024维；日志显示chunk_size=512、mode=hybrid，其他实际切块/检索设置待补。
+验收问题编号及结果：T01回答内容与引文核对通过，2/2分；已核对用户提供的知识库检索记录及相关原文片段。详见单独的T01验收记录和检索截图。
+
+P05 InceptionRAG: Stealthy Poisoning Attack Against Retrieval-Augmented Generation
+作者：Zhang 等
+版本说明：2026，本地PDF标注CCS 2026
+主题：相关安全方向：知识库投毒、诱导错误回答，不等同于隐私泄露
+原文件名：Zhang 等 - 2026 - InceptionRAG Stealthy Poisoning Attack Against Retrieval-Augmented Generation.pdf
+公开来源入口：https://doi.org/10.1145/3830454.3846682
+本地PDF物理页数：20
+文件大小：3486771 字节
+SHA256：f5e201500be36a0778258ca028487347bbb206b4f910cb29ddaf5d95a44ff00f
+材料类型：原始研究论文；与AI生成综述或实验草稿分别标记。
+汇报日期和汇报人：待填写
+实际入库日期及解析结果：2026年11月4日据用户增量上传日志，列出本文件正在索引，并显示成功处理4个文件；具体完成时间未在截图中显示，全文解析完整性尚未逐页验收。
+实际知识库配置：T05截图显示llamaindex、BAAI/bge-m3、1024维、chunk_size=512及mode=hybrid；嵌入请求一次连接错误后重试成功，其他配置待补。
+问答验收：T05内容、引文与章节核对通过，2/2分；已核对3次工具调用中的相关片段，威胁模型另经原PDF核对。详见T05验收记录和截图。
+
+语料阶段说明：T01在仅含P04时完成；随后新增P01、P02、P03、P05。后续测试应记录五篇语料这一条件，代码修改前后比较时须固定实际语料及模型设置。
+新增四篇的入库证据：../experiment/论文库验收/screenshots/入库\论文库_新增四篇_处理完成.png
+
+每周新增论文的记录方法
+1. 依次新增P06、P07等编号，记录题名、作者、论文版本、来源URL、文件校验值与实际汇报信息。
+2. 向同一论文库增量添加原始PDF；逐篇确认处理结果，不以文件已选择或已上传代替索引完成。
+3. 为新论文新增至少一道可核对的问题，核对实际检索来源、回答内容与原文证据。
+4. 将清单、测试题及脱敏结果提交到GitHub；本地运行data、向量索引、密钥与登录凭据不提交。PDF在当前项目默认被忽略，先提交来源与重建说明。
+
+组内交接记录
+来自项目04：接收可阅读的原文/清洗文本及来源URL、采集日期、处理说明；不要只接收另一套系统的向量索引。
+来自项目01：标注AI生成、所依据论文、实际执行的实验及未验证结论；避免当作已发表论文或已证实事实。
+为原始论文、项目04采集资料与AI生成材料分别标记来源和核验状态。是否建立多个知识库属于可选组织方式，不是教师已指定要求；当前先完成一个论文库。
