@@ -7,6 +7,21 @@ from research_agent.inno import Agent
 from abc import ABC, abstractmethod
 from torch import nn
 
+def validate_prepare_result(result):
+    """Reject incomplete preparation instead of silently inventing references."""
+    required = ("reference_codebases", "reference_paths", "reference_papers")
+    if not isinstance(result, dict) or any(
+        not isinstance(result.get(key), list) or not result[key]
+        or any(not isinstance(item, str) or not item.strip() for item in result[key])
+        for key in required
+    ):
+        raise ValueError(
+            "Prepare Agent has no complete result. Choose No for its cache and "
+            "rerun preparation until case_resolved returns reference_codebases, "
+            "reference_paths and reference_papers."
+        )
+    return result
+
 class AgentModule:
     def __init__(self, agent: Agent, client: MetaChain, cache_path: str):
         self.agent = agent
@@ -60,10 +75,17 @@ class AgentModule:
             choice = single_select_menu(["Yes", "Resume", "No"], f"The agent '{agent_name}' cache file exists, do you want to use it?")
             if choice == "Yes":
                 with open(cache_file, "r", encoding="utf-8") as f:
-                    return json.load(f), True
+                    cached = json.load(f)
+                if not cached.get("messages"):
+                    print(f"Ignoring empty cache for agent '{agent_name}'; running it again.")
+                    return None, False
+                return cached, True
             elif choice == "Resume":
                 with open(cache_file, "r", encoding="utf-8") as f:
-                    return json.load(f), False
+                    cached = json.load(f)
+                if not cached.get("messages"):
+                    return None, False
+                return cached, False
             else:
                 return None, False
         return None, False
@@ -116,5 +138,3 @@ class FlowModule(ABC):
     
     async def __call__(self, *args, **kwargs):
         return await self.forward(*args, **kwargs)
-
-    

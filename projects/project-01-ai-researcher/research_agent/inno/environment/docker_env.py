@@ -1,7 +1,7 @@
 import os
 import os.path as osp
 import subprocess
-from constant import BASE_IMAGES, AI_USER, GITHUB_AI_TOKEN, GPUS, PLATFORM
+from research_agent.constant import BASE_IMAGES, AI_USER, GITHUB_AI_TOKEN, GPUS, PLATFORM
 import time
 import socket
 import json
@@ -75,13 +75,15 @@ class DockerEnv:
             running_container = subprocess.run(running_check_command, capture_output=True, text=True)
 
             if running_container.stdout.strip() == self.container_name:
-                print(f"Container '{self.container_name}' is already running. Skipping creation.")
+                print(f"Container '{self.container_name}' is already running. Checking readiness.")
+                self.wait_for_container_ready(timeout=60)
                 return  # container is already running, skip creation
             else:
                 # container exists but is not running, start it
                 start_command = ["docker", "start", self.container_name]
                 subprocess.run(start_command)
                 print(f"Container '{self.container_name}' has been started.")
+                self.wait_for_container_ready(timeout=60)
                 return
         
         # if the container does not exist, create and start a new container
@@ -116,10 +118,11 @@ class DockerEnv:
                 # 额外检查 tcp_server 是否运行
                 try:
                     port_info = check_container_ports(self.container_name)
-                    assert port_info and (port_info[0] == port_info[1])
+                    if not port_info or port_info[1] != 8000:
+                        raise RuntimeError(f"Expected a published TCP port for container port 8000; got {port_info!r}")
                     available_port = port_info[0]
                     self.communication_port = available_port
-                    result = self.run_command('ps aux')
+                    result = self.run_command('ps aux', timeout=5)
                     print("result", result)
                     if "tcp_server.py" in result['result']:
                         return True
@@ -135,13 +138,14 @@ class DockerEnv:
         if result.returncode != 0:
             raise Exception(f"Failed to stop container: {result.stderr}")
     
-    def run_command(self, command, stream_callback=None):
+    def run_command(self, command, stream_callback=None, timeout=None):
         """
         communicate with docker container and execute command, support stream output
         
         Args:
             command: the command to execute
             stream_callback: optional callback function, for handling stream output
+            timeout: optional socket timeout in seconds, used for readiness probes
                             the function signature should be callback(text: str)
         
         Returns:
@@ -152,6 +156,8 @@ class DockerEnv:
         buffer_size = 4096
         
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if timeout is not None:
+                s.settimeout(timeout)
             s.connect((hostname, port))
             s.sendall(command.encode())
             
@@ -246,7 +252,7 @@ def check_container_ports(container_name: str):
         if '->' in mapping:
             # parse '0.0.0.0:12345->12345/tcp' to (12345, 12345)
             host_part, container_part = mapping.split('->')
-            host_port = host_part.split(':')[1]  # get '12345' from '0.0.0.0:12345'
+            host_port = host_part.rsplit(':', 1)[1]  # supports IPv4 and IPv6 bindings
             container_port = container_part.split('/')[0]  # get '12345' from '12345/tcp'
             return (int(host_port), int(container_port))  # convert to integers
     return None

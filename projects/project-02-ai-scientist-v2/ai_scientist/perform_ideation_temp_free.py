@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import os.path as osp
 import re
 import traceback
@@ -17,12 +18,16 @@ from ai_scientist.llm import (
 from ai_scientist.tools.semantic_scholar import SemanticScholarSearchTool
 from ai_scientist.tools.base_tool import BaseTool
 
-# Create tool instances
+# 课程适配：没有 S2_API_KEY 时匿名检索会被限流（429），且会把模型带偏到反复检索。
+# 因此默认不向模型提供检索工具，让它直接收敛到 FinalizeIdea；
+# 需要检索时设置 AISCI_ALLOW_S2=1 并配置 S2_API_KEY。
 semantic_scholar_tool = SemanticScholarSearchTool()
 
 # Define tools at the top of the file
-tools = [
-    semantic_scholar_tool,
+tools = []
+if os.getenv("AISCI_ALLOW_S2", "0") == "1":
+    tools.append(semantic_scholar_tool)
+tools.append(
     {
         "name": "FinalizeIdea",
         "description": """Finalize your idea by providing the idea details.
@@ -35,8 +40,8 @@ The IDEA JSON should include the following fields:
 - "Abstract": An abstract that summarizes the proposal in conference format (approximately 250 words).
 - "Experiments": A list of experiments that would be conducted to validate the proposal. Ensure these are simple and feasible. Be specific in exactly how you would test the hypothesis, and detail precise algorithmic changes. Include the evaluation metrics you would use.
 - "Risk Factors and Limitations": A list of potential risks and limitations of the proposal.""",
-    },
-]
+    }
+)
 
 # Create a tools dictionary for easy lookup
 tools_dict = {tool.name: tool for tool in tools if isinstance(tool, BaseTool)}
@@ -180,21 +185,37 @@ def generate_temp_free_idea(
 
                 # Parse the LLM's response
                 try:
-                    # Use regular expressions to extract the components
-                    action_pattern = r"ACTION:\s*(.*?)\s*ARGUMENTS:"
-                    arguments_pattern = r"ARGUMENTS:\s*(.*?)(?:$|\nTHOUGHT:|\n$)"
-
-                    action_match = re.search(
-                        action_pattern, response_text, re.DOTALL | re.IGNORECASE
+                    # 课程适配：部分模型（如校内部署的 DeepSeek）会在一次响应里先输出
+                    # 若干探索性 ACTION（例如多次文献检索），最后才给出 FinalizeIdea。
+                    # 上游只取第一个匹配，会丢掉真正的最终动作。这里改为优先取最后一个
+                    # FinalizeIdea 块，若没有则取最后一个 ACTION 块。
+                    action_matches = list(
+                        re.finditer(
+                            r"ACTION:\s*([A-Za-z_]+)",
+                            response_text,
+                            re.DOTALL | re.IGNORECASE,
+                        )
                     )
-                    arguments_match = re.search(
-                        arguments_pattern, response_text, re.DOTALL | re.IGNORECASE
-                    )
-
-                    if not all([action_match, arguments_match]):
+                    if not action_matches:
                         raise ValueError("Failed to parse the LLM response.")
 
-                    action = action_match.group(1).strip()
+                    finalize_matches = [
+                        m
+                        for m in action_matches
+                        if m.group(1).strip().lower() == "finalizeidea"
+                    ]
+                    chosen = (
+                        finalize_matches[-1] if finalize_matches else action_matches[-1]
+                    )
+                    action = chosen.group(1).strip()
+
+                    arguments_match = re.search(
+                        r"ARGUMENTS:\s*(.*)",
+                        response_text[chosen.end() :],
+                        re.DOTALL | re.IGNORECASE,
+                    )
+                    if not arguments_match:
+                        raise ValueError("Failed to parse the LLM response.")
                     arguments_text = arguments_match.group(1).strip()
                     print(f"Action: {action}")
                     print(f"Arguments: {arguments_text}")
@@ -213,7 +234,17 @@ def generate_temp_free_idea(
                         try:
                             arguments_json = json.loads(arguments_text)
                         except json.JSONDecodeError:
-                            raise ValueError(f"Invalid arguments JSON for {action}.")
+                            # 课程适配：部分模型（如校内部署的 DeepSeek）会在 JSON 之后继续
+                            # 输出 "<assistant>" 之类的内容，导致 json.loads 报 Extra data。
+                            # 这里用 raw_decode 只解析第一个完整 JSON 对象，忽略尾部多余文本。
+                            try:
+                                arguments_json, _ = json.JSONDecoder().raw_decode(
+                                    arguments_text.lstrip()
+                                )
+                            except json.JSONDecodeError:
+                                raise ValueError(
+                                    f"Invalid arguments JSON for {action}."
+                                )
 
                         # Use the tool
                         try:
@@ -225,7 +256,13 @@ def generate_temp_free_idea(
                     elif action == "FinalizeIdea":
                         # Parse arguments
                         try:
-                            arguments_json = json.loads(arguments_text)
+                            try:
+                                arguments_json = json.loads(arguments_text)
+                            except json.JSONDecodeError:
+                                # 同上：容忍 JSON 之后的额外文本
+                                arguments_json, _ = json.JSONDecoder().raw_decode(
+                                    arguments_text.lstrip()
+                                )
                             idea = arguments_json.get("idea")
                             if not idea:
                                 raise ValueError("Missing 'idea' in arguments.")

@@ -53,11 +53,18 @@ class SemanticScholarSearchTool(BaseTool):
         backoff.expo,
         (requests.exceptions.HTTPError, requests.exceptions.ConnectionError),
         on_backoff=on_backoff,
+        max_tries=2,  # 课程适配：无 S2_API_KEY 时会被限流，限制重试次数避免长时间阻塞
     )
     def search_for_papers(self, query: str) -> Optional[List[Dict]]:
         if not query:
             return None
-        
+
+        # 课程适配：没有 S2_API_KEY 时匿名请求会被 429 限流，反复重试只会拖慢流程。
+        # 默认跳过检索，直接返回 None；设置 AISCI_ALLOW_S2=1 可强制尝试。
+        if not self.S2_API_KEY and os.getenv("AISCI_ALLOW_S2", "0") != "1":
+            print("[course-adapt] No S2_API_KEY: skip Semantic Scholar search.")
+            return None
+
         headers = {}
         if self.S2_API_KEY:
             headers["X-API-KEY"] = self.S2_API_KEY
@@ -70,6 +77,7 @@ class SemanticScholarSearchTool(BaseTool):
                 "limit": self.max_results,
                 "fields": "title,authors,venue,year,abstract,citationCount",
             },
+            timeout=15,  # 课程适配：避免请求无限挂起
         )
         print(f"Response Status Code: {rsp.status_code}")
         print(f"Response Content: {rsp.text[:500]}")
@@ -99,7 +107,10 @@ Abstract: {paper.get("abstract", "No abstract available.")}"""
 
 
 @backoff.on_exception(
-    backoff.expo, requests.exceptions.HTTPError, on_backoff=on_backoff
+    backoff.expo,
+    requests.exceptions.HTTPError,
+    on_backoff=on_backoff,
+    max_tries=2,  # 课程适配：无 S2_API_KEY 时会被限流，限制重试次数
 )
 def search_for_papers(query, result_limit=10) -> Union[None, List[Dict]]:
     S2_API_KEY = os.getenv("S2_API_KEY")
@@ -122,6 +133,7 @@ def search_for_papers(query, result_limit=10) -> Union[None, List[Dict]]:
             "limit": result_limit,
             "fields": "title,authors,venue,year,abstract,citationStyles,citationCount",
         },
+        timeout=15,  # 课程适配：避免请求无限挂起
     )
     print(f"Response Status Code: {rsp.status_code}")
     print(

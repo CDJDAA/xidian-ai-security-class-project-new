@@ -20,7 +20,6 @@ import pandas as pd
 import pdfminer
 import pdfminer.high_level
 import pptx
-from docling.document_converter import DocumentConverter as DocLingDocumentConverter
 
 # File-format detection
 import puremagic
@@ -440,6 +439,8 @@ class PdfConverter(DocumentConverter):
         extension = kwargs.get("file_extension", "")
         if extension.lower() != ".pdf":
             return None
+        # PDF processing is expensive; browser startup does not need Docling.
+        from docling.document_converter import DocumentConverter as DocLingDocumentConverter
         converter = DocLingDocumentConverter()
         result = converter.convert(local_path)
         text_content = result.document.export_to_markdown()

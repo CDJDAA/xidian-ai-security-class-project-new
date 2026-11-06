@@ -27,6 +27,8 @@ docker pull tjbtech1/airesearcher:v1
 
 `docker version` 应能显示服务端信息。无法拉取镜像时，可按 [Dockerfile](docker/Dockerfile) 自行构建：`docker build -t tjbtech1/airesearcher:v1 ./docker`。模型生成的实验代码会执行，应使用上游容器环境并限制实验范围。
 
+网页入口使用 Gradio 5 的组件参数，依赖已固定为 `gradio==5.49.1`。若旧环境已安装 Gradio 6，激活本项目虚拟环境后重新执行 `uv pip install -e .`，再启动网页；Gradio 6 会导致 `show_copy_button` 等参数不兼容。
+
 ## 3. 配置模型与实验
 
 首次配置时复制模板（已有 `.env` 时不要覆盖）：

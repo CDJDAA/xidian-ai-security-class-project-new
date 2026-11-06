@@ -3,6 +3,7 @@ import base64
 import io
 import json
 import multiprocessing
+import traceback
 import time
 import uuid
 
@@ -25,10 +26,10 @@ from browsergym.core.action.functions import goto, page, get_elem_by_bid, demo_m
 import os
 from typing import Dict, Union, cast, Literal
 from playwright.sync_api import Page, Download
-from inno.io_utils import read_file
-from inno.environment.mdconvert import _get_page_markdown
-from inno.environment.browser_cookies import convert_cookies_to_python
-from inno.environment.cookies_data import COOKIES_LIST
+from research_agent.inno.io_utils import read_file
+from research_agent.inno.environment.mdconvert import _get_page_markdown
+from research_agent.inno.environment.browser_cookies import convert_cookies_to_python
+from research_agent.inno.environment.cookies_data import COOKIES_LIST
 # from constant import DOCKER_WORKPLACE_NAME, LOCAL_ROOT
 from functools import update_wrapper
 from inspect import signature
@@ -361,8 +362,9 @@ class BrowserEnv:
         self.eval_mode = bool(browsergym_eval_env)
 
         # Initialize browser environment process
-        multiprocessing.set_start_method('spawn', force=True)
-        self.browser_side, self.agent_side = multiprocessing.Pipe()
+        self.browser_side = None
+        self.agent_side = None
+        self.process = None
 
         # tmp_env = gym.make(self.browsergym_eval_env,tags_to_mark='all') if self.eval_mode else gym.make('browsergym/openended',task_kwargs={'start_url': 'about:blank', 'goal': 'PLACEHOLDER_GOAL'},
         #         wait_for_user_message=False,
@@ -395,16 +397,36 @@ class BrowserEnv:
     )
     def init_browser(self):
         debug_print(True, "Starting browser env...", title = "Browser Env", log_path=self.log_path)
+        # A failed attempt closes its pipes. Never pass those closed handles to
+        # the next spawned process, and do not change the global start method.
+        self.close()
+        context = multiprocessing.get_context('spawn')
+        self.browser_side, self.agent_side = context.Pipe()
         try:
-            self.process = multiprocessing.Process(target=self.browser_process)
+            self.process = context.Process(target=self._browser_process_entry)
             self.process.start()
+            startup_timeout = float(os.getenv('BROWSER_STARTUP_TIMEOUT', '180'))
+            if not self.check_alive(timeout=startup_timeout):
+                raise BrowserInitException(
+                    'Browser did not respond during initialization. Check the '
+                    'child-process traceback above for the original browser error.'
+                )
         except Exception as e:
             debug_print(True, f'Failed to start browser process: {e}', title = "Browser Env", log_path=self.log_path)
-            raise
-
-        if not self.check_alive():
             self.close()
-            raise BrowserInitException('Failed to start browser environment.')
+            if isinstance(e, BrowserInitException):
+                raise
+            raise BrowserInitException(f'Failed to start browser environment: {e}') from e
+
+    def _browser_process_entry(self):
+        try:
+            self.browser_side.send(('STARTUP_STAGE', 'Browser worker entered'))
+            self.browser_process()
+        except Exception:
+            details = traceback.format_exc()
+            debug_print(True, details, title="Browser Env", log_path=self.log_path)
+            self.browser_side.send(('STARTUP_ERROR', details))
+            raise
 
     def browser_process(self):
         if self.eval_mode:
@@ -477,6 +499,7 @@ def _local_to_docker(local_path: str):
             )
         
         
+        self.browser_side.send(('STARTUP_STAGE', 'Initializing BrowserGym and Chromium'))
         obs, info = env.reset()
         
         # self.viewport = env.env.viewport if env.env.viewport else env.env.task.viewport
@@ -560,29 +583,48 @@ def _local_to_docker(local_path: str):
 
     def check_alive(self, timeout: float = 60):
         self.agent_side.send(('IS_ALIVE', None))
-        if self.agent_side.poll(timeout=timeout):
-            response_id, _ = self.agent_side.recv()
-            if response_id == 'ALIVE':
-                return True
-            debug_print(True, f'Browser env is not alive. Response ID: {response_id}', title = "Browser Env", log_path=self.log_path)
+        deadline = time.monotonic() + timeout
+        stage = 'Waiting for spawned worker to enter; module imports may still be running'
+        while time.monotonic() < deadline:
+            if self.agent_side.poll(timeout=min(0.1, max(0, deadline - time.monotonic()))):
+                response_id, details = self.agent_side.recv()
+                if response_id == 'ALIVE':
+                    return True
+                if response_id == 'STARTUP_ERROR':
+                    raise BrowserInitException(f'Browser worker failed:\n{details}')
+                if response_id == 'STARTUP_STAGE':
+                    stage = details
+                    debug_print(True, stage, title="Browser Env", log_path=self.log_path)
+            elif not self.process.is_alive():
+                raise BrowserInitException(
+                    f'Browser worker exited with code {self.process.exitcode}. Last stage: {stage}'
+                )
+        raise BrowserInitException(f'Browser initialization timed out after {timeout}s. Last stage: {stage}')
 
     def close(self):
-        if not self.process.is_alive():
-            return
         try:
-            self.agent_side.send(('SHUTDOWN', None))
-            self.process.join(5)  # Wait for the process to terminate
-            if self.process.is_alive():
-                debug_print(True, 'Browser process did not terminate, forcefully terminating...', title = "Browser Env", log_path=self.log_path)
-                self.process.terminate()
+            if self.process is not None and self.process.is_alive():
+                try:
+                    self.agent_side.send(('SHUTDOWN', None))
+                except (OSError, ValueError):
+                    pass  # The child may already have closed its pipe.
                 self.process.join(5)  # Wait for the process to terminate
                 if self.process.is_alive():
-                    self.process.kill()
-                    self.process.join(5)  # Wait for the process to terminate
-            self.agent_side.close()
-            self.browser_side.close()
+                    debug_print(True, 'Browser process did not terminate, forcefully terminating...', title = "Browser Env", log_path=self.log_path)
+                    self.process.terminate()
+                    self.process.join(5)
+                    if self.process.is_alive():
+                        self.process.kill()
+                        self.process.join(5)
         except Exception:
             debug_print(True, 'Encountered an error when closing browser env', exc_info=True, title = "Browser Env", log_path=self.log_path)
+        finally:
+            for connection in (self.agent_side, self.browser_side):
+                if connection is not None:
+                    connection.close()
+            self.agent_side = None
+            self.browser_side = None
+            self.process = None
 
     @staticmethod
     def image_to_png_base64_url(
@@ -642,6 +684,3 @@ def source_to_function(source_code: str, func_name: str):
     finally:
         # 清理临时文件
         os.unlink(temp_path)
-
-    
-    

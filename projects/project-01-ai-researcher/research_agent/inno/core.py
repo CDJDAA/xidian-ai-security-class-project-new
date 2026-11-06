@@ -79,6 +79,15 @@ def should_retry_error(retry_state: RetryCallState):
     ])
 __CTX_VARS_NAME__ = "context_variables"
 logger = LoggerManager.get_logger()
+
+def _configure_deepseek_request(params: dict) -> dict:
+    """Keep forced tool calls compatible with DeepSeek's default thinking mode."""
+    if str(params.get("model", "")).startswith("deepseek/"):
+        params = dict(params)
+        extra_body = dict(params.get("extra_body") or {})
+        extra_body["thinking"] = {"type": "disabled"}
+        params["extra_body"] = extra_body
+    return params
 def truncate_message(message: str) -> str:
     """按比例截断消息"""
     if not message:
@@ -156,7 +165,7 @@ class MetaChain:
         if tools and create_params['model'].startswith("gpt"):
             create_params["parallel_tool_calls"] = agent.parallel_tool_calls
 
-        return completion(**create_params)
+        return completion(**_configure_deepseek_request(create_params))
 
     def handle_function_result(self, result, debug) -> Result:
         match result:
@@ -397,7 +406,7 @@ class MetaChain:
 
             if tools and create_params['model'].startswith("gpt"):
                 create_params["parallel_tool_calls"] = agent.parallel_tool_calls
-            completion_response = await acompletion(**create_params)
+            completion_response = await acompletion(**_configure_deepseek_request(create_params))
         elif create_model in NOT_USE_FN_CALL:
             assert agent.tool_choice == "required", f"Non-function calling mode MUST use tool_choice = 'required' rather than {agent.tool_choice}"
             last_content = messages[-1]["content"]
@@ -426,7 +435,7 @@ class MetaChain:
                 "stream": stream,
                 "base_url": API_BASE_URL,
             }
-            completion_response = await acompletion(**create_params)
+            completion_response = await acompletion(**_configure_deepseek_request(create_params))
             last_message = [{"role": "assistant", "content": completion_response.choices[0].message.content}]
             converted_message = convert_non_fncall_messages_to_fncall_messages(last_message, tools)
             converted_tool_calls = [ChatCompletionMessageToolCall(**tool_call) for tool_call in converted_message[0]["tool_calls"]]

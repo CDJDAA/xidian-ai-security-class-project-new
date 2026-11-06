@@ -8,7 +8,8 @@ import anthropic
 import backoff
 import openai
 
-MAX_NUM_TOKENS = 4096
+MAX_NUM_TOKENS = 8192  # 课程适配：上游为 4096；推理型模型（如校内 DeepSeek）会消耗
+# 大量 reasoning token，4096 时常出现思考写满、正文为空的情况，故上调。
 
 AVAILABLE_LLMS = [
     "claude-3-5-sonnet-20240620",
@@ -70,6 +71,8 @@ AVAILABLE_LLMS = [
     "ollama/deepseek-r1:32b",
     "ollama/deepseek-r1:70b",
     "ollama/deepseek-r1:671b",
+    # 校内 OpenAI 兼容模型服务（课程适配新增，见 README 课程说明）
+    "DeepSeek-V4.1-Flash-1017",
 ]
 
 
@@ -250,6 +253,28 @@ def make_llm_call(client, model, temperature, system_message, prompt):
             n=1,
             seed=0,
         )
+    elif model.startswith("DeepSeek-V4.1-Flash"):
+        # 校内 OpenAI 兼容模型服务（课程适配新增）：不传 seed，避免第三方服务拒收
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_message},
+                *prompt,
+            ],
+            temperature=temperature,
+            max_tokens=MAX_NUM_TOKENS,
+            n=1,
+            stop=None,
+        )
+        if os.getenv("AISCI_DEBUG_LLM", "0") == "1":
+            ch = resp.choices[0]
+            body = ch.message.content or ""
+            print(
+                f"[llm-debug] finish_reason={ch.finish_reason} "
+                f"content_len={len(body)} usage={resp.usage}"
+            )
+            print(f"[llm-debug] content_head={body[:300]!r}")
+        return resp
     
     else:
         raise ValueError(f"Model {model} not supported.")
@@ -434,6 +459,18 @@ def get_response_from_llm(
         )
         content = response.choices[0].message.content
         new_msg_history = new_msg_history + [{"role": "assistant", "content": content}]
+    elif model.startswith("DeepSeek-V4.1-Flash"):
+        # 校内 OpenAI 兼容模型服务（课程适配新增）：按 OpenAI 兼容格式调用
+        new_msg_history = msg_history + [{"role": "user", "content": msg}]
+        response = make_llm_call(
+            client,
+            model,
+            temperature,
+            system_message=system_message,
+            prompt=new_msg_history,
+        )
+        content = response.choices[0].message.content
+        new_msg_history = new_msg_history + [{"role": "assistant", "content": content}]
     else:
         raise ValueError(f"Model {model} not supported.")
 
@@ -478,6 +515,19 @@ def extract_json_between_markers(llm_output: str) -> dict | None:
 
 
 def create_client(model) -> tuple[Any, str]:
+    # 校内 OpenAI 兼容模型服务（课程适配新增）。
+    # 上游只支持写死的几家服务商，这里增加一条通用分支，服务地址由 AISCI_BASE_URL 提供。
+    if model.startswith("DeepSeek-V4.1-Flash"):
+        print(f"Using school OpenAI-compatible endpoint with model {model}.")
+        return (
+            openai.OpenAI(
+                api_key=os.environ["OPENAI_API_KEY"],
+                base_url=os.environ.get(
+                    "AISCI_BASE_URL", "https://hyymodels.xidian.edu.cn/v1"
+                ),
+            ),
+            model,
+        )
     if model.startswith("claude-"):
         print(f"Using Anthropic API with model {model}.")
         return anthropic.Anthropic(), model
