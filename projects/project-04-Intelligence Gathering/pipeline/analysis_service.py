@@ -110,10 +110,30 @@ def _normalize(row: dict[str, Any]) -> dict[str, Any]:
 
 
 def _keywords(text: str, limit: int = 8) -> list[str]:
-    if not text:
+    if not text or limit <= 0:
         return []
-    values = jieba.analyse.extract_tags(text, topK=limit, withWeight=False)
-    return [item for item in values if len(item.strip()) > 1]
+
+    values = jieba.analyse.extract_tags(
+        text, topK=None, withWeight=False
+    )
+
+    keywords = []
+    seen = set()
+
+    for item in values:
+        keyword = item.strip()
+        normalized = keyword.casefold()
+
+        if len(keyword) <= 1 or normalized in seen:
+            continue
+
+        seen.add(normalized)
+        keywords.append(keyword)
+
+        if len(keywords) >= limit:
+            break
+
+    return keywords
 
 
 def _content_type(item: dict[str, Any]) -> str:
