@@ -104,16 +104,36 @@ def _normalize(row: dict[str, Any]) -> dict[str, Any]:
         "author": author[:200],
         "source_url": url[:1000],
         "source_platform": _first(row, "__source_platform"),
-        "published_at": _first(row, "create_time", "publish_time", "time", "date"),
+        "published_at": _first(row, "published_at", "create_time", "publish_time", "time", "date"),
         "raw": row,
     }
 
 
 def _keywords(text: str, limit: int = 8) -> list[str]:
-    if not text:
+    if not text or limit <= 0:
         return []
-    values = jieba.analyse.extract_tags(text, topK=limit, withWeight=False)
-    return [item for item in values if len(item.strip()) > 1]
+
+    values = jieba.analyse.extract_tags(
+        text, topK=None, withWeight=False
+    )
+
+    keywords = []
+    seen = set()
+
+    for item in values:
+        keyword = item.strip()
+        normalized = keyword.casefold()
+
+        if len(keyword) <= 1 or normalized in seen:
+            continue
+
+        seen.add(normalized)
+        keywords.append(keyword)
+
+        if len(keywords) >= limit:
+            break
+
+    return keywords
 
 
 def _content_type(item: dict[str, Any]) -> str:
