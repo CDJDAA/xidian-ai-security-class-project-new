@@ -13,7 +13,7 @@ import re
 import sqlite3
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from pipeline.topic_taxonomy import canonical_topic, topic_catalog
@@ -180,6 +180,22 @@ def _is_curated(item: dict[str, Any]) -> bool:
     )
 
 
+def _collection_file(batch_file: str, item: dict[str, Any]) -> str:
+    batch = batch_file.replace("\\", "/")
+    raw = item.get("raw")
+    if not batch.startswith("analysis/batch_inputs/") or not isinstance(raw, dict):
+        return batch
+    candidate = raw.get("__source_file")
+    if not isinstance(candidate, str) or not candidate.strip():
+        return batch
+    candidate = candidate.replace("\\", "/")
+    path = PurePosixPath(candidate)
+    if (path.is_absolute() or ":" in candidate or ".." in path.parts
+            or len(path.parts) < 2 or path.parts[0] == "analysis"):
+        return batch
+    return path.as_posix()
+
+
 def ingest_analysis(source_file: str, analysis_file: str, items: list[dict[str, Any]], intelligence: dict[str, Any], batch_summaries: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     """Upsert one analyzed crawler batch and refresh its aggregate views."""
     initialize()
@@ -195,14 +211,15 @@ def ingest_analysis(source_file: str, analysis_file: str, items: list[dict[str, 
             fingerprint = hashlib.sha1(f"{title}\n{text}\n{url}".encode("utf-8")).hexdigest()
             document_id = _id("doc", fingerprint)
             is_new = conn.execute("SELECT 1 FROM documents WHERE fingerprint=?", (fingerprint,)).fetchone() is None
-            normalized_item = {**item, "source_file": source_file}
+            collection_file = _collection_file(source_file, item)
+            normalized_item = {**item, "source_file": collection_file}
             if _is_curated(normalized_item):
                 document_ids.append(document_id)
             conn.execute("""INSERT INTO documents(id, fingerprint, title, text, platform, source_url, author, published_at, source_file, source_quality, content_type, created_at, updated_at, first_seen_at, last_crawled_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(fingerprint) DO UPDATE SET title=excluded.title, text=excluded.text, source_file=excluded.source_file, source_quality=excluded.source_quality, content_type=excluded.content_type, published_at=COALESCE(NULLIF(excluded.published_at, ''), documents.published_at), updated_at=excluded.updated_at, last_crawled_at=excluded.last_crawled_at""", (
                 document_id, fingerprint, title, text, str(item.get("source_platform") or "unknown"), url,
-                str(item.get("author") or ""), str(item.get("published_at") or ""), source_file,
+                str(item.get("author") or ""), str(item.get("published_at") or ""), collection_file,
                 float(item.get("source_quality") or 0.4), str(item.get("content_type") or "discussion"), now, now, now, now,
             ))
             conn.execute("""INSERT INTO analyses(document_id, summary, topics_json, keywords_json, domains_json, claims_json, analysis_method, quality_score, analysis_file, updated_at)
@@ -516,7 +533,9 @@ def _raw_comments() -> list[dict[str, Any]]:
 
 
 def _document_note(doc: dict[str, Any], note_type: str) -> str:
-    return _frontmatter({"type": note_type, "source_id": doc["id"], "platform": doc["platform"], "url": doc["source_url"], "created": doc["updated_at"][:10], "tags": ["ai-security", "auto-captured", *doc["domains"]]}) + f"# {doc['title'] or '未命名来源'}\n\n## 自动摘要\n\n{doc.get('summary') or doc['text'][:800]}\n\n## 关键词\n\n{', '.join('#' + item for item in doc['keywords']) or '未提取'}\n\n## 原始链接\n\n- {doc['source_url'] or '未提供'}\n\n## 采集信息\n\n- 平台：{doc['platform']}\n- 采集文件：`{doc['source_file']}`\n- 系统 ID：`{doc['id']}`\n"
+    source_file = str(doc["source_file"] or "")
+    source_label = "分析输入（原始采集文件未知）" if source_file.replace("\\", "/").startswith("analysis/batch_inputs/") else "采集文件"
+    return _frontmatter({"type": note_type, "source_id": doc["id"], "platform": doc["platform"], "url": doc["source_url"], "created": doc["updated_at"][:10], "tags": ["ai-security", "auto-captured", *doc["domains"]]}) + f"# {doc['title'] or '未命名来源'}\n\n## 自动摘要\n\n{doc.get('summary') or doc['text'][:800]}\n\n## 关键词\n\n{', '.join('#' + item for item in doc['keywords']) or '未提取'}\n\n## 原始链接\n\n- {doc['source_url'] or '未提供'}\n\n## 采集信息\n\n- 平台：{doc['platform']}\n- {source_label}：`{source_file}`\n- 系统 ID：`{doc['id']}`\n"
 
 
 def _sync_academic_literature(vault: Path) -> dict[str, Any]:
