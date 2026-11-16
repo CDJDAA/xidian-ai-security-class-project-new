@@ -16,6 +16,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from pipeline.io_utils import atomic_write_text
 from pipeline.topic_taxonomy import canonical_topic, topic_catalog
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -83,7 +84,7 @@ def initialize() -> None:
             text TEXT NOT NULL, platform TEXT NOT NULL, source_url TEXT, author TEXT,
             published_at TEXT, source_file TEXT NOT NULL, source_quality REAL NOT NULL,
             content_type TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
-            first_seen_at TEXT, last_crawled_at TEXT
+            first_seen_at TEXT, last_crawled_at TEXT, linked_repositories_json TEXT NOT NULL DEFAULT '[]'
         );
         CREATE TABLE IF NOT EXISTS analyses (
             document_id TEXT PRIMARY KEY REFERENCES documents(id), summary TEXT, topics_json TEXT NOT NULL,
@@ -109,7 +110,8 @@ def initialize() -> None:
         );
         CREATE TABLE IF NOT EXISTS crawl_observations (
             id TEXT PRIMARY KEY, document_id TEXT NOT NULL REFERENCES documents(id),
-            observed_at TEXT NOT NULL, analysis_run_id TEXT NOT NULL, is_new INTEGER NOT NULL
+            observed_at TEXT NOT NULL, analysis_run_id TEXT NOT NULL, is_new INTEGER NOT NULL,
+            source_file TEXT, platform TEXT
         );
         CREATE TABLE IF NOT EXISTS analysis_runs (
             id TEXT PRIMARY KEY, source_file TEXT NOT NULL, analysis_file TEXT NOT NULL,
@@ -132,10 +134,14 @@ def initialize() -> None:
         """)
         _ensure_column(conn, "documents", "first_seen_at", "TEXT")
         _ensure_column(conn, "documents", "last_crawled_at", "TEXT")
+        _ensure_column(conn, "documents", "linked_repositories_json", "TEXT NOT NULL DEFAULT '[]'")
         _ensure_column(conn, "trend_snapshots", "topic_id", "TEXT")
         _ensure_column(conn, "trend_snapshots", "trend_metrics_json", "TEXT NOT NULL DEFAULT '{}'")
         _ensure_column(conn, "research_candidates", "topic_id", "TEXT")
         _ensure_column(conn, "research_candidates", "taxonomy_version", "TEXT")
+        _ensure_column(conn, "crawl_observations", "source_file", "TEXT")
+        _ensure_column(conn, "crawl_observations", "platform", "TEXT")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_crawl_observations_document ON crawl_observations(document_id)")
         # Backfill stable topic links for records created before this schema.
         rows = conn.execute("SELECT document_id, domains_json FROM analyses").fetchall()
         now = _now_text()
@@ -169,7 +175,7 @@ def _is_curated(item: dict[str, Any]) -> bool:
     quality = float(item.get("source_quality") or 0)
     domains = item.get("research_domains") or []
     is_comment = "comment" in source_file
-    has_research_source = str(item.get("source_platform") or "").lower() in {"arxiv", "github"}
+    has_research_source = str(item.get("source_platform") or "").lower() in {"arxiv", "openalex", "semantic_scholar", "github"}
     return bool(
         item.get("source_url")
         and len(text) >= (320 if is_comment else 180)
@@ -194,16 +200,18 @@ def ingest_analysis(source_file: str, analysis_file: str, items: list[dict[str, 
             url = str(item.get("source_url") or "").strip()[:1000]
             fingerprint = hashlib.sha1(f"{title}\n{text}\n{url}".encode("utf-8")).hexdigest()
             document_id = _id("doc", fingerprint)
+            item_source_file = str(item.get("source_file") or source_file)
             is_new = conn.execute("SELECT 1 FROM documents WHERE fingerprint=?", (fingerprint,)).fetchone() is None
-            normalized_item = {**item, "source_file": source_file}
+            normalized_item = {**item, "source_file": item_source_file}
             if _is_curated(normalized_item):
                 document_ids.append(document_id)
-            conn.execute("""INSERT INTO documents(id, fingerprint, title, text, platform, source_url, author, published_at, source_file, source_quality, content_type, created_at, updated_at, first_seen_at, last_crawled_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(fingerprint) DO UPDATE SET title=excluded.title, text=excluded.text, source_file=excluded.source_file, source_quality=excluded.source_quality, content_type=excluded.content_type, published_at=COALESCE(NULLIF(excluded.published_at, ''), documents.published_at), updated_at=excluded.updated_at, last_crawled_at=excluded.last_crawled_at""", (
+            conn.execute("""INSERT INTO documents(id, fingerprint, title, text, platform, source_url, author, published_at, source_file, source_quality, content_type, created_at, updated_at, first_seen_at, last_crawled_at, linked_repositories_json)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(fingerprint) DO UPDATE SET title=excluded.title, text=excluded.text, source_quality=excluded.source_quality, content_type=excluded.content_type, published_at=COALESCE(NULLIF(excluded.published_at, ''), documents.published_at), updated_at=excluded.updated_at, last_crawled_at=excluded.last_crawled_at, linked_repositories_json=excluded.linked_repositories_json""", (
                 document_id, fingerprint, title, text, str(item.get("source_platform") or "unknown"), url,
-                str(item.get("author") or ""), str(item.get("published_at") or ""), source_file,
+                str(item.get("author") or ""), str(item.get("published_at") or ""), item_source_file,
                 float(item.get("source_quality") or 0.4), str(item.get("content_type") or "discussion"), now, now, now, now,
+                _json(item.get("linked_repositories") or []),
             ))
             conn.execute("""INSERT INTO analyses(document_id, summary, topics_json, keywords_json, domains_json, claims_json, analysis_method, quality_score, analysis_file, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -219,8 +227,8 @@ def ingest_analysis(source_file: str, analysis_file: str, items: list[dict[str, 
                     VALUES (?, ?, ?, ?, 'crawler', 'taxonomy-keyword', 0.85, ?, ?)
                     ON CONFLICT(document_id, topic_id) DO UPDATE SET topic_label=excluded.topic_label, taxonomy_version=excluded.taxonomy_version, source=excluded.source, match_method=excluded.match_method, confidence=excluded.confidence, updated_at=excluded.updated_at""",
                     (document_id, topic["id"], topic["label"], topic["version"], now, now))
-            conn.execute("INSERT INTO crawl_observations VALUES (?, ?, ?, ?, ?)",
-                (_id("obs", f"{document_id}:{run_id}"), document_id, now, run_id, int(is_new)))
+            conn.execute("INSERT INTO crawl_observations (id, document_id, observed_at, analysis_run_id, is_new, source_file, platform) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (_id("obs", f"{document_id}:{run_id}"), document_id, now, run_id, int(is_new), item_source_file, str(item.get("source_platform") or "unknown")))
             for ordinal, statement in enumerate(item.get("evidence") or []):
                 statement = str(statement).strip()[:500]
                 if not statement:
@@ -357,12 +365,21 @@ def context_snapshot(limit: int = 12) -> dict[str, list[dict[str, Any]]]:
         docs = [dict(row) for row in conn.execute("""SELECT d.*, a.summary, a.keywords_json, a.domains_json FROM documents d
             JOIN analyses a ON a.document_id=d.id
             WHERE d.source_url <> '' AND d.source_file NOT LIKE '%comment%' AND LENGTH(d.text) >= 180
-              AND (d.platform IN ('arxiv', 'github') OR d.source_quality >= 0.68)
+              AND (d.platform IN ('arxiv', 'openalex', 'semantic_scholar', 'github') OR d.source_quality >= 0.68)
             ORDER BY d.updated_at DESC LIMIT ?""", (limit,))]
         mappings = defaultdict(list)
         for mapping in conn.execute("SELECT document_id, topic_id, topic_label, taxonomy_version, match_method, confidence FROM document_topics"):
             mapping_dict = dict(mapping)
             mappings[mapping_dict.pop("document_id")].append(mapping_dict)
+        observations: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        doc_ids = [row["id"] for row in docs]
+        if doc_ids:
+            placeholders = ",".join("?" for _ in doc_ids)
+            for observation in conn.execute(
+                f"SELECT document_id, source_file, platform, observed_at, is_new FROM crawl_observations WHERE document_id IN ({placeholders}) AND source_file IS NOT NULL ORDER BY observed_at",
+                doc_ids,
+            ):
+                observations[observation["document_id"]].append(dict(observation))
     for row in trends:
         row["keywords"] = json.loads(row.pop("keywords_json"))
         row["source_document_ids"] = json.loads(row.pop("source_document_ids_json"))
@@ -373,7 +390,30 @@ def context_snapshot(limit: int = 12) -> dict[str, list[dict[str, Any]]]:
     for row in docs:
         row["keywords"] = json.loads(row.pop("keywords_json"))
         row["domains"] = json.loads(row.pop("domains_json"))
+        row["linked_repositories"] = json.loads(row.pop("linked_repositories_json") or "[]")
         row["topic_mappings"] = mappings.get(row["id"], [])
+        sources: dict[tuple[str, str], dict[str, Any]] = {}
+        for observation in observations.get(row["id"], []):
+            key = (str(observation.get("source_file") or ""), str(observation.get("platform") or ""))
+            entry = sources.setdefault(key, {
+                "source_file": key[0],
+                "platform": key[1],
+                "observations": 0,
+                "first_observed_at": observation["observed_at"],
+                "last_observed_at": observation["observed_at"],
+            })
+            entry["observations"] += 1
+            entry["last_observed_at"] = observation["observed_at"]
+        if not sources:
+            sources[(str(row.get("source_file") or ""), str(row.get("platform") or ""))] = {
+                "source_file": str(row.get("source_file") or ""),
+                "platform": str(row.get("platform") or ""),
+                "observations": 0,
+                "first_observed_at": row.get("first_seen_at") or row.get("created_at"),
+                "last_observed_at": row.get("last_crawled_at") or row.get("updated_at"),
+            }
+        row["sources"] = list(sources.values())
+        row["source_count"] = len(row["sources"])
     return {"trends": trends, "candidates": candidates, "documents": docs}
 
 
@@ -400,7 +440,7 @@ def record_generated_ideas(ideas: list[dict[str, Any]], method: str, context: di
 
 ACADEMIC_VAULT_ENV = "OBSIDIAN_ACADEMIC_VAULT_PATH"
 SOCIAL_VAULT_ENV = "OBSIDIAN_SOCIAL_VAULT_PATH"
-ACADEMIC_PLATFORMS = {"github", "arxiv"}
+ACADEMIC_PLATFORMS = {"github", "arxiv", "openalex", "semantic_scholar"}
 
 
 def _vault(env_name: str = "OBSIDIAN_VAULT_PATH") -> Path | None:
@@ -410,11 +450,7 @@ def _vault(env_name: str = "OBSIDIAN_VAULT_PATH") -> Path | None:
 
 
 def _write_note(path: Path, content: str) -> bool:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if path.is_file() and path.read_text(encoding="utf-8", errors="replace") == content:
-        return False
-    path.write_text(content, encoding="utf-8")
-    return True
+    return atomic_write_text(path, content)
 
 
 def _frontmatter(values: dict[str, Any]) -> str:
@@ -438,7 +474,7 @@ def _documents_for_platforms(platforms: set[str], limit: int = 2000) -> list[dic
                 ORDER BY d.updated_at DESC LIMIT ?""",
             (*sorted(platforms), limit),
         ).fetchall()
-    return [{**dict(row), "keywords": json.loads(row["keywords_json"] or "[]"), "domains": json.loads(row["domains_json"] or "[]")} for row in rows]
+    return [{**dict(row), "keywords": json.loads(row["keywords_json"] or "[]"), "domains": json.loads(row["domains_json"] or "[]"), "linked_repositories": json.loads(row["linked_repositories_json"] or "[]")} for row in rows]
 
 
 def _evidence_for_platforms(platforms: set[str], limit: int = 3000) -> list[dict[str, Any]]:
@@ -516,7 +552,14 @@ def _raw_comments() -> list[dict[str, Any]]:
 
 
 def _document_note(doc: dict[str, Any], note_type: str) -> str:
-    return _frontmatter({"type": note_type, "source_id": doc["id"], "platform": doc["platform"], "url": doc["source_url"], "created": doc["updated_at"][:10], "tags": ["ai-security", "auto-captured", *doc["domains"]]}) + f"# {doc['title'] or '未命名来源'}\n\n## 自动摘要\n\n{doc.get('summary') or doc['text'][:800]}\n\n## 关键词\n\n{', '.join('#' + item for item in doc['keywords']) or '未提取'}\n\n## 原始链接\n\n- {doc['source_url'] or '未提供'}\n\n## 采集信息\n\n- 平台：{doc['platform']}\n- 采集文件：`{doc['source_file']}`\n- 系统 ID：`{doc['id']}`\n"
+    repository_lines = [
+        f"- [{repo.get('full_name') or repo.get('url')}]({repo.get('url')})"
+        + (f"：{repo.get('description')}" if repo.get("description") else "")
+        for repo in doc.get("linked_repositories") or []
+        if repo.get("url")
+    ]
+    repository_section = "\n## 关联开源仓库\n\n" + "\n".join(repository_lines) + "\n" if repository_lines else ""
+    return _frontmatter({"type": note_type, "source_id": doc["id"], "platform": doc["platform"], "url": doc["source_url"], "created": doc["updated_at"][:10], "tags": ["ai-security", "auto-captured", *doc["domains"]]}) + f"# {doc['title'] or '未命名来源'}\n\n## 自动摘要\n\n{doc.get('summary') or doc['text'][:800]}\n\n## 关键词\n\n{', '.join('#' + item for item in doc['keywords']) or '未提取'}\n\n## 原始链接\n\n- {doc['source_url'] or '未提供'}\n\n## 采集信息\n\n- 平台：{doc['platform']}\n- 采集文件：`{doc['source_file']}`\n- 系统 ID：`{doc['id']}`\n{repository_section}"
 
 
 def _sync_academic_literature(vault: Path) -> dict[str, Any]:

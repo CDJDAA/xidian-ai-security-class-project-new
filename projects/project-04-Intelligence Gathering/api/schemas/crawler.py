@@ -36,6 +36,7 @@ class PlatformEnum(str, Enum):
     ZHIHU = "zhihu"
     GITHUB = "github"
     ARXIV = "arxiv"
+    OPENALEX = "openalex"
 
 
 class LoginTypeEnum(str, Enum):

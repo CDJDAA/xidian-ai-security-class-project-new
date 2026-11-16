@@ -173,6 +173,7 @@ async def get_platforms():
             {"value": "zhihu", "label": "知乎", "icon": "help-circle"},
             {"value": "github", "label": "GitHub", "icon": "github"},
             {"value": "arxiv", "label": "arXiv", "icon": "book-open"},
+            {"value": "openalex", "label": "OpenAlex", "icon": "library"},
         ]
     }
 

@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -13,7 +14,9 @@ from typing import Any
 import httpx
 import jieba.analyse
 from dotenv import load_dotenv
+from pipeline.io_utils import atomic_write_lines, atomic_write_text
 from pipeline.research_intelligence import ingest_analysis
+from tools.kb_paths import platform_from_relative_path
 from pipeline.topic_taxonomy import TOPIC_TAXONOMY, canonical_topic, topic_catalog
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -23,7 +26,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 AI_SAFETY_TAXONOMY = {label: list(spec["aliases"]) for label, spec in TOPIC_TAXONOMY.items()}
 
-SOURCE_WEIGHTS = {"arxiv": 1.0, "github": 0.9, "bili": 0.7, "zhihu": 0.6, "xhs": 0.5, "dy": 0.5, "wb": 0.4}
+SOURCE_WEIGHTS = {"arxiv": 1.0, "openalex": 1.0, "semantic_scholar": 0.95, "github": 0.9, "bili": 0.7, "zhihu": 0.6, "xhs": 0.5, "dy": 0.5, "wb": 0.4}
 
 
 def _safe_path(relative_path: str) -> Path:
@@ -71,17 +74,15 @@ def prepare_merged_input(relative_paths: list[str], limit_per_file: int = 500) -
     merged: list[dict[str, Any]] = []
     for relative_path in list(dict.fromkeys(relative_paths)):
         path = _safe_path(relative_path)
-        platform = relative_path.replace("\\", "/").split("/")[0]
+        platform = platform_from_relative_path(relative_path)
         for row in _read_rows(path, max(1, min(limit_per_file, 5000))):
             merged.append({**row, "__source_platform": platform, "__source_file": relative_path})
     if not merged:
         raise ValueError("未读取到可合并的采集内容")
     batch_dir = ANALYSIS_DIR / "batch_inputs"
     batch_dir.mkdir(parents=True, exist_ok=True)
-    output = batch_dir / f"merged_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{len(relative_paths)}files.jsonl"
-    with output.open("w", encoding="utf-8") as handle:
-        for row in merged:
-            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+    output = batch_dir / f"merged_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}_{len(relative_paths)}files.jsonl"
+    atomic_write_lines(output, (json.dumps(row, ensure_ascii=False) + "\n" for row in merged))
     return str(output.relative_to(DATA_DIR))
 
 
@@ -104,6 +105,7 @@ def _normalize(row: dict[str, Any]) -> dict[str, Any]:
         "author": author[:200],
         "source_url": url[:1000],
         "source_platform": _first(row, "__source_platform"),
+        "source_file": _first(row, "__source_file", "source_file"),
         "published_at": _first(row, "create_time", "publish_time", "time", "date"),
         "raw": row,
     }
@@ -233,8 +235,8 @@ async def _ai_enrich(item: dict[str, Any]) -> dict[str, Any]:
     api_key = os.getenv("AI_API_KEY", "").strip()
     if not api_key:
         return item
-    base_url = os.getenv("AI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    model = os.getenv("AI_MODEL", "gpt-4o-mini")
+    base_url = os.getenv("AI_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
+    model = os.getenv("AI_MODEL", "deepseek-chat")
     prompt = {
         "title": item["title"],
         "text": item["text"],
@@ -272,14 +274,14 @@ async def _summarize_batch(items: list[dict[str, Any]], batch_number: int) -> di
     try:
         async with httpx.AsyncClient(timeout=httpx.Timeout(35.0, connect=8.0)) as client:
             response = await client.post(
-                f"{os.getenv('AI_BASE_URL', 'https://api.openai.com/v1').rstrip('/')}/chat/completions",
+                f"{os.getenv('AI_BASE_URL', 'https://api.deepseek.com/v1').rstrip('/')}/chat/completions",
                 headers={"Authorization": f"Bearer {api_key}"},
-                json={"model": os.getenv("AI_MODEL", "gpt-4o-mini"), "temperature": 0.1, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": "你是严谨的资料分析助手。"}, {"role": "user", "content": json.dumps(prompt, ensure_ascii=False)}]},
+                json={"model": os.getenv("AI_MODEL", "deepseek-chat"), "temperature": 0.1, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": "你是严谨的资料分析助手。"}, {"role": "user", "content": json.dumps(prompt, ensure_ascii=False)}]},
             )
             response.raise_for_status()
             return json.loads(response.json()["choices"][0]["message"]["content"])
-    except Exception:
-        return {}
+    except Exception as exc:
+        return {"error": f"{type(exc).__name__}: {exc}"[:200]}
 
 
 async def _summarize_batches(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -290,10 +292,29 @@ async def _summarize_batches(items: list[dict[str, Any]]) -> list[dict[str, Any]
     async def summarize(batch: list[dict[str, Any]], number: int) -> dict[str, Any]:
         async with semaphore:
             summary = await _summarize_batch(batch, number)
-            return {"batch": number, "record_count": len(batch), **summary} if summary else {}
+            return {"batch": number, "record_count": len(batch), **summary}
 
-    summaries = await asyncio.gather(*(summarize(batch, number + 1) for number, batch in enumerate(batches)))
-    return [summary for summary in summaries if summary]
+    return list(await asyncio.gather(*(summarize(batch, number + 1) for number, batch in enumerate(batches))))
+
+
+async def _enrich_items(items: list[dict[str, Any]], limit: int) -> tuple[list[dict[str, Any]], int]:
+    """Optionally enrich the highest-quality records one by one, bounded by a semaphore."""
+    if not items or limit <= 0:
+        return items, 0
+    order = sorted(range(len(items)), key=lambda index: float(items[index].get("quality_score") or 0), reverse=True)[:limit]
+    semaphore = asyncio.Semaphore(4)
+
+    async def enrich(index: int) -> tuple[int, dict[str, Any]]:
+        async with semaphore:
+            return index, await _ai_enrich(items[index])
+
+    enriched = list(items)
+    count = 0
+    for index, item in await asyncio.gather(*(enrich(index) for index in order)):
+        enriched[index] = item
+        if item.get("analysis_method") == "ai":
+            count += 1
+    return enriched, count
 
 
 async def analyze_file(
@@ -302,6 +323,7 @@ async def analyze_file(
     selected_themes: list[str] | None = None,
     custom_themes: list[str] | None = None,
 ) -> dict[str, Any]:
+    started = time.perf_counter()
     path = _safe_path(relative_path)
     rows = _read_rows(path, max(1, min(limit, 5000)))
     taxonomy = _analysis_taxonomy(selected_themes, custom_themes)
@@ -309,7 +331,7 @@ async def analyze_file(
         raise ValueError("请至少选择一个固定主题或填写一个自定义主题")
     seen: set[str] = set()
     analyzed: list[dict[str, Any]] = []
-    platform = relative_path.replace("\\", "/").split("/")[0]
+    platform = platform_from_relative_path(relative_path)
     pending: list[dict[str, Any]] = []
     scope_excluded = 0
     for row in rows:
@@ -328,23 +350,31 @@ async def analyze_file(
     # AI works on evenly-sized blocks, then the UI presents the resulting
     # progressive summaries alongside the complete local analysis.
     batch_summaries: list[dict[str, Any]] = []
+    batch_errors: list[dict[str, Any]] = []
+    ai_enriched_count = 0
     if os.getenv("AI_API_KEY", "").strip() and pending:
-        batch_summaries = await _summarize_batches(pending)
+        entries = await _summarize_batches(pending)
+        batch_summaries = [entry for entry in entries if not entry.get("error") and (entry.get("summary") or entry.get("topics") or entry.get("claims"))]
+        batch_errors = [entry for entry in entries if entry.get("error")]
+        if os.getenv("AI_ENRICH_ITEMS", "0") == "1":
+            try:
+                enrich_limit = max(1, int(os.getenv("AI_ENRICH_LIMIT", "100")))
+            except ValueError:
+                enrich_limit = 100
+            pending, ai_enriched_count = await _enrich_items(pending, enrich_limit)
         analyzed = pending
     else:
         analyzed = pending
 
-    ANALYSIS_DIR.mkdir(parents=True, exist_ok=True)
-    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     output_name = f"{path.stem}_analysis_{stamp}.jsonl"
     output_path = ANALYSIS_DIR / output_name
-    with output_path.open("w", encoding="utf-8") as handle:
-        for item in analyzed:
-            handle.write(json.dumps(item, ensure_ascii=False) + "\n")
+    meta_path = output_path.with_suffix(".meta.json")
+    atomic_write_lines(output_path, (json.dumps(item, ensure_ascii=False) + "\n" for item in analyzed))
     intelligence = _build_research_intelligence(analyzed)
-    meta = {"source_file": relative_path, "output_file": str(output_path.relative_to(DATA_DIR)), "input_count": len(rows), "output_count": len(analyzed), "scope_excluded": scope_excluded, "selected_themes": list(taxonomy), "ai_enabled": bool(os.getenv("AI_API_KEY", "").strip()), "batch_size": max(10, min(int(os.getenv("AI_BATCH_SIZE", "50")), 100)), "batch_summaries": batch_summaries, "intelligence": intelligence, "created_at": datetime.now().isoformat(timespec="seconds")
+    meta = {"source_file": relative_path, "output_file": str(output_path.relative_to(DATA_DIR)), "input_count": len(rows), "output_count": len(analyzed), "scope_excluded": scope_excluded, "selected_themes": list(taxonomy), "ai_enabled": bool(os.getenv("AI_API_KEY", "").strip()), "batch_size": max(10, min(int(os.getenv("AI_BATCH_SIZE", "50")), 100)), "batch_summaries": batch_summaries, "batch_errors": batch_errors, "ai_enriched_count": ai_enriched_count, "duration_ms": int((time.perf_counter() - started) * 1000), "intelligence": intelligence, "created_at": datetime.now().isoformat(timespec="seconds")
     }
-    (output_path.with_suffix(".meta.json")).write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+    atomic_write_text(meta_path, json.dumps(meta, ensure_ascii=False, indent=2))
     # Persist the machine-readable research record and update human-readable Obsidian views.
     meta["intelligence_store"] = ingest_analysis(
         source_file=relative_path,
@@ -353,5 +383,5 @@ async def analyze_file(
         intelligence=intelligence,
         batch_summaries=batch_summaries,
     )
-    (output_path.with_suffix(".meta.json")).write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+    atomic_write_text(meta_path, json.dumps(meta, ensure_ascii=False, indent=2))
     return meta

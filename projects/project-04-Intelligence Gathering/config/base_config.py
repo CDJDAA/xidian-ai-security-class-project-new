@@ -28,7 +28,7 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 
 # Basic configuration
-PLATFORM = "xhs"  # Platform, xhs | dy | ks | bili | wb | tieba | zhihu | github | arxiv
+PLATFORM = "xhs"  # Platform, xhs | dy | ks | bili | wb | tieba | zhihu | github | arxiv | openalex
 
 # 是否使用海外版小红书 (rednote.com)
 # 开启后 API 走 webapi.rednote.com，cookie 域使用 .rednote.com
@@ -102,6 +102,10 @@ SAVE_DATA_OPTION = "jsonl"  # csv or db or json or jsonl or sqlite or excel or p
 
 # Data saving path, if not specified by default, it will be saved to the data folder.
 SAVE_DATA_PATH = ""
+
+# Isolated knowledge-base namespace.  Other projects can point at a different
+# namespace while sharing the same crawler and analysis pipeline.
+KB_NAMESPACE = os.getenv("KB_NAMESPACE", "ai-security")
 
 # Browser file configuration cached by the user's browser
 USER_DATA_DIR = "%s_user_data_dir"  # %s will be replaced by platform name

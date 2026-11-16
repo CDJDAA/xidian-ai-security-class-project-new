@@ -1,3 +1,3 @@
-from .core import ArxivCrawler, GithubCrawler
+from .core import ArxivCrawler, GithubCrawler, OpenAlexCrawler
 
-__all__ = ["GithubCrawler", "ArxivCrawler"]
+__all__ = ["GithubCrawler", "ArxivCrawler", "OpenAlexCrawler"]

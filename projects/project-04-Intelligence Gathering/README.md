@@ -9,7 +9,7 @@
 | 功能 | 所需配置 |
 | --- | --- |
 | Web 界面、文件管理、清洗去重、关键词提取 | Python 依赖即可，附带已构建前端 |
-| GitHub / arXiv 检索 | 网络连接；GitHub Token 可选 |
+| GitHub / arXiv / OpenAlex 检索 | 网络连接；GitHub Token 可选，OpenAlex 可留空或填写联系邮箱 |
 | 社交平台采集 | 本机 Chrome/Edge 或 Playwright 浏览器；按平台完成本人账号登录 |
 | AI 内容摘要与 Idea 生成 | OpenAI 兼容模型服务的地址、模型名称和 API Key |
 | 双知识库同步 | 本地可写目录；无需安装 Obsidian 即可生成 Markdown |
@@ -81,6 +81,27 @@ API Key 留空时仍可进行本地清洗、去重与关键词提取；模型生
 - 分析报告：`knowledge/social/30-专题观察/分析报告/<主题>/`。
 
 当前学术知识库同步基于已分析入库的记录，不保证所有原始采集条目均归档。原始 JSONL 保留于 data 目录。主题分类为规则映射，不代表人工审定。
+
+## 知识库隔离与存储
+
+- 通过 `KB_NAMESPACE`（默认 `ai-security`）隔离不同项目共用本平台时的数据，目录为 `data/kb/<namespace>/`。
+- 采集结果按来源分开存放：论文在 `papers/<source>/`，开源项目在 `repositories/<source>/`，其他平台内容在 `platforms/<platform>/`；旧版 `data/<platform>/` 数据仍可浏览和分析。
+- 学术来源包括 arXiv 与 OpenAlex。arXiv 使用布尔查询和多页检索；OpenAlex 补充摘要、DOI、引用数和开放获取信息。
+- 论文标题或摘要明确出现 GitHub/GitLab 地址时，仓库元数据会写入论文记录的 `linked_repositories`，并在 `papers/<source>/linked_repositories/<paper_id>.json` 与论文一同保存。
+
+## 数据可信度与归档
+
+- 同一内容被多个来源采集时，`documents` 保留首次来源，`crawl_observations` 记录每次观测的 `source_file` 与 `platform`；科研记录接口同时返回 `sources` 和 `source_count`，合并分析也会保留每条记录的原始采集文件。
+- 分析产物、元数据和 Obsidian 笔记使用临时文件加原子替换写入，避免中断后留下半截文件；同一秒内的多次分析使用微秒级文件名，不会互相覆盖。
+
+## 内容分析 API 配置
+
+内容分析页提供可视化配置：DeepSeek/OpenAI/Moonshot/智谱/Ollama 等服务商预设、接口地址、模型、API Key、批次大小和“逐条 AI 增强”开关，并支持测试连接。密钥只写入本地 `.env`，接口只返回掩码；未配置密钥时仍可完成规则分析。逐条增强默认关闭，开启后只增强质量分最高的前 100 条。
+
+## MCP 安全检索
+
+- 前端预设新增“MCP 安全”。选择后，GitHub 会按 `mcp in:name security` 以及工具投毒、提示注入、漏洞、攻击、供应链等专项查询检索；arXiv 使用 `all:"Model Context Protocol"` 与安全词组合的布尔查询。
+- 结果会按“MCP 标记 + 安全词”过滤，并排除仅因账号名含 security 的仓库；分析结果归入“MCP 与工具协议安全”主题。已有的历史分析需要重新运行分析后才会使用新主题。
 
 ## AI Scientist 可选接入
 

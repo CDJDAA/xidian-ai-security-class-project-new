@@ -18,11 +18,11 @@ const safetyKeywordGroups = [
   { label: '模型可靠性', keywords: ['AI 对齐', '价值学习', '模型鲁棒性', '可解释性'] },
   { label: '攻击与防御', keywords: ['对抗样本', '机器学习安全', '提示注入', '越狱攻击', '红队测试'] },
   { label: '隐私与数据', keywords: ['隐私保护', '联邦学习安全', '数据投毒', '数据治理', '机器遗忘'] },
-  { label: '生成式 AI', keywords: ['生成式 AI 安全', 'LLM 安全', 'RAG 安全', 'AI Agent 安全', '多模态安全'] },
+  { label: '生成式 AI', keywords: ['生成式 AI 安全', 'LLM 安全', 'RAG 安全', 'AI Agent 安全', 'MCP 安全', '多模态安全'] },
   { label: '治理与评估', keywords: ['AI 风险评估', '模型评测', 'AI 治理', '算法审计', 'AI 伦理'] },
 ]
 
-const academicPlatformValues = new Set(['github', 'arxiv'])
+const academicPlatformValues = new Set(['github', 'arxiv', 'openalex'])
 
 export function CrawlerConfigPanel() {
   const config = useCrawlerStore((state) => state.config)
@@ -66,7 +66,7 @@ export function CrawlerConfigPanel() {
             {safetyKeywordGroups.map((group) => <div key={group.label} className="flex flex-wrap items-center gap-1.5"><span className="w-20 shrink-0 text-[10px] text-cyber-text-muted">{group.label}</span>{group.keywords.map((keyword) => <button key={keyword} type="button" onClick={() => toggleKeyword(keyword)} disabled={running || config.crawler_type !== 'search'} className={`rounded-md border px-2 py-1 text-[11px] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${selectedKeywords.has(keyword) ? 'border-cyber-neon-cyan/70 bg-cyber-neon-cyan/15 text-cyber-neon-cyan' : 'border-cyber-border-DEFAULT text-cyber-text-secondary hover:border-cyber-neon-cyan/50 hover:text-cyber-neon-cyan'}`}>{keyword}</button>)}</div>)}
           </div>
         </Field>
-        <Field label="采集平台" hint="可多选，系统会按选择顺序依次检索并分别保存结果；GitHub 与 arXiv 会自动扩展中文 AI 安全词为英文研究查询">
+        <Field label="采集平台" hint="可多选，系统会按选择顺序依次检索；GitHub、arXiv 与 OpenAlex 会自动扩展中文 AI 安全词，结果按论文、开源项目和平台内容分开存放">
           <div className="space-y-2">
             {[
               { title: '社交媒体', platforms: socialPlatforms },

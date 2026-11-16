@@ -512,7 +512,7 @@ def _basis_preview(theme: str = "") -> dict[str, Any]:
     trends, records, candidates, directions, topics = _filter_idea_context(theme)
     selected = canonical_topic(theme) if theme else None
     crawler_score = round(min(100, 20 + len(records) * 6 + len(trends) * 10 + len(directions) * 8), 1)
-    academic_score = round(min(100, 15 + sum(1 for record in records if str(record.get("platform")) in {"arxiv", "github"}) * 18 + len(candidates) * 7), 1)
+    academic_score = round(min(100, 15 + sum(1 for record in records if str(record.get("platform")) in {"arxiv", "openalex", "semantic_scholar", "github"}) * 18 + len(candidates) * 7), 1)
     fusion_score = round(0.65 * academic_score + 0.35 * crawler_score, 1)
     cards = []
     for trend in trends[:4]:
@@ -613,6 +613,7 @@ def _academic_query(theme: str, directions: list[dict[str, Any]]) -> str:
     hints = {
         "ai-safety.rag-security": "RAG security retrieval augmented generation",
         "ai-safety.prompt-injection": "prompt injection LLM security",
+        "ai-safety.mcp-tool-protocol": "Model Context Protocol MCP security tool poisoning",
         "ai-safety.agent-tool-security": "AI agent tool use security",
         "ai-safety.adversarial-jailbreak": "LLM jailbreak adversarial attacks",
         "ai-safety.alignment-reliability": "AI alignment reliability safety",
@@ -900,11 +901,13 @@ def _idea_repository_query(idea: dict[str, Any]) -> tuple[str, list[str]]:
 
 def _local_repository_recommendations(terms: list[str]) -> list[dict[str, Any]]:
     """Use already-crawled GitHub records when the public API is unavailable."""
-    github_dir = MEDIA_ROOT / "data" / "github"
+    data_root = MEDIA_ROOT / "data"
     candidates: dict[str, dict[str, Any]] = {}
-    if not github_dir.is_dir():
+    if not data_root.is_dir():
         return []
-    for path in github_dir.rglob("*.jsonl"):
+    for path in data_root.rglob("*.jsonl"):
+        if "github" not in {part.casefold() for part in path.parts}:
+            continue
         try:
             for line in path.read_text(encoding="utf-8", errors="replace").splitlines()[:500]:
                 item = json.loads(line)

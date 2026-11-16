@@ -19,14 +19,18 @@
 import os
 import json
 import re
+import time
 from pathlib import Path
 from typing import Optional
 
+import httpx
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from pipeline.analysis_service import analyze_file, available_themes, prepare_merged_input
+from pipeline.io_utils import atomic_write_text
+from tools.kb_paths import kb_namespace, kb_root
 
 router = APIRouter(prefix="/data", tags=["data"])
 
@@ -46,40 +50,149 @@ class BatchAnalysisRequest(BaseModel):
     merge: bool = False
 
 class AnalysisConfigRequest(BaseModel):
-    model: str = Field(min_length=1, max_length=100)
+    model: Optional[str] = Field(default=None, max_length=100)
+    api_key: Optional[str] = Field(default=None, max_length=500)
+    base_url: Optional[str] = Field(default=None, max_length=300)
+    batch_size: Optional[int] = Field(default=None, ge=10, le=100)
+    enrich_items: Optional[bool] = None
+
+
+class AnalysisTestRequest(BaseModel):
+    model: Optional[str] = Field(default=None, max_length=100)
+    api_key: Optional[str] = Field(default=None, max_length=500)
+    base_url: Optional[str] = Field(default=None, max_length=300)
+
 
 AI_MODELS = [
     {"value": "deepseek-chat", "label": "DeepSeek Chat"},
     {"value": "deepseek-reasoner", "label": "DeepSeek Reasoner"},
 ]
 
+PROVIDER_PRESETS = [
+    {"value": "deepseek", "label": "DeepSeek", "base_url": "https://api.deepseek.com/v1", "models": ["deepseek-chat", "deepseek-reasoner"]},
+    {"value": "openai", "label": "OpenAI", "base_url": "https://api.openai.com/v1", "models": ["gpt-4o-mini", "gpt-4o"]},
+    {"value": "moonshot", "label": "Moonshot", "base_url": "https://api.moonshot.cn/v1", "models": ["moonshot-v1-8k", "moonshot-v1-32k"]},
+    {"value": "zhipu", "label": "智谱 GLM", "base_url": "https://open.bigmodel.cn/api/paas/v4", "models": ["glm-4-flash", "glm-4-plus"]},
+    {"value": "ollama", "label": "Ollama 本地", "base_url": "http://127.0.0.1:11434/v1", "models": ["qwen2.5:7b", "llama3.1:8b"]},
+    {"value": "custom", "label": "自定义兼容接口", "base_url": "", "models": []},
+]
+
 DEFAULT_MODEL = "deepseek-chat"
+DEFAULT_BASE_URL = "https://api.deepseek.com/v1"
+
 
 def _env_path() -> Path:
     return DATA_DIR.parent / ".env"
 
+
+def _mask_key(value: str) -> str:
+    value = value.strip()
+    if not value:
+        return ""
+    if len(value) <= 8:
+        return "****"
+    return f"{value[:3]}****{value[-4:]}"
+
+
+def _batch_size() -> int:
+    try:
+        return max(10, min(int(os.getenv("AI_BATCH_SIZE", "50")), 100))
+    except ValueError:
+        return 50
+
+
+def _config_payload() -> dict:
+    key = os.getenv("AI_API_KEY", "").strip()
+    return {
+        "models": AI_MODELS,
+        "providers": PROVIDER_PRESETS,
+        "model": os.getenv("AI_MODEL", DEFAULT_MODEL),
+        "base_url": os.getenv("AI_BASE_URL", DEFAULT_BASE_URL),
+        "api_key_set": bool(key),
+        "api_key_masked": _mask_key(key),
+        "batch_size": _batch_size(),
+        "enrich_items": os.getenv("AI_ENRICH_ITEMS", "0") == "1",
+        "ai_enabled": bool(key),
+        "themes": available_themes(),
+    }
+
+
+def _upsert_env(text: str, updates: dict[str, str]) -> str:
+    for key, value in updates.items():
+        line = f"{key}={value}"
+        if re.search(rf"(?m)^{re.escape(key)}=.*$", text):
+            text = re.sub(rf"(?m)^{re.escape(key)}=.*$", lambda _: line, text)
+        else:
+            text = text.rstrip() + "\n" + line + "\n"
+    return text
+
+
 @router.get("/analysis-config")
 async def get_analysis_config():
-    configured = os.getenv("AI_MODEL", DEFAULT_MODEL)
-    if configured not in {item["value"] for item in AI_MODELS}:
-        configured = DEFAULT_MODEL
-    return {"models": AI_MODELS, "model": configured, "ai_enabled": bool(os.getenv("AI_API_KEY", "").strip()), "themes": available_themes()}
+    return _config_payload()
+
 
 @router.put("/analysis-config")
 async def update_analysis_config(request: AnalysisConfigRequest):
-    allowed = {item["value"] for item in AI_MODELS}
-    if request.model not in allowed:
-        raise HTTPException(status_code=400, detail="不支持的模型")
+    updates: dict[str, str] = {}
+    if request.model is not None:
+        model = request.model.strip()
+        if not model:
+            raise HTTPException(status_code=400, detail="模型名称不能为空")
+        updates["AI_MODEL"] = model
+    if request.base_url is not None:
+        base_url = request.base_url.strip().rstrip("/")
+        if base_url and not base_url.startswith(("http://", "https://")):
+            raise HTTPException(status_code=400, detail="接口地址必须以 http:// 或 https:// 开头")
+        updates["AI_BASE_URL"] = base_url or DEFAULT_BASE_URL
+    if request.api_key is not None:
+        updates["AI_API_KEY"] = request.api_key.strip()
+    if request.batch_size is not None:
+        updates["AI_BATCH_SIZE"] = str(request.batch_size)
+    if request.enrich_items is not None:
+        updates["AI_ENRICH_ITEMS"] = "1" if request.enrich_items else "0"
+    if not updates:
+        return _config_payload()
     path = _env_path()
     text = path.read_text(encoding="utf-8") if path.exists() else ""
-    line = f"AI_MODEL={request.model}"
-    if re.search(r"(?m)^AI_MODEL=.*$", text):
-        text = re.sub(r"(?m)^AI_MODEL=.*$", line, text)
-    else:
-        text = text.rstrip() + "\n" + line + "\n"
-    path.write_text(text, encoding="utf-8")
-    os.environ["AI_MODEL"] = request.model
-    return {"model": request.model}
+    atomic_write_text(path, _upsert_env(text, updates))
+    for key, value in updates.items():
+        os.environ[key] = value
+    return _config_payload()
+
+
+@router.post("/analysis-config/test")
+async def test_analysis_config(request: AnalysisTestRequest):
+    key = (request.api_key if request.api_key is not None else os.getenv("AI_API_KEY", "")).strip()
+    base_url = (request.base_url or os.getenv("AI_BASE_URL", DEFAULT_BASE_URL)).strip().rstrip("/")
+    model = (request.model or os.getenv("AI_MODEL", DEFAULT_MODEL)).strip()
+    if not key:
+        return {"ok": False, "error": "未配置 API Key", "model": model}
+    if not base_url.startswith(("http://", "https://")):
+        return {"ok": False, "error": "接口地址必须以 http:// 或 https:// 开头", "model": model}
+    started = time.perf_counter()
+    try:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(20.0, connect=8.0)) as client:
+            response = await client.post(
+                f"{base_url}/chat/completions",
+                headers={"Authorization": f"Bearer {key}"},
+                json={"model": model, "temperature": 0, "max_tokens": 1, "messages": [{"role": "user", "content": "ping"}]},
+            )
+            response.raise_for_status()
+            payload = response.json()
+            latency_ms = int((time.perf_counter() - started) * 1000)
+            if not payload.get("choices"):
+                return {"ok": False, "error": "接口响应缺少 choices，可能不是 Chat Completions 兼容接口", "model": model, "latency_ms": latency_ms}
+            return {"ok": True, "model": model, "latency_ms": latency_ms}
+    except httpx.HTTPStatusError as exc:
+        detail = ""
+        try:
+            detail = str(exc.response.json().get("error", {}).get("message") or "")[:200]
+        except Exception:
+            detail = exc.response.text[:200]
+        return {"ok": False, "error": f"HTTP {exc.response.status_code}：{detail or '鉴权或模型权限失败'}", "model": model, "latency_ms": int((time.perf_counter() - started) * 1000)}
+    except httpx.RequestError as exc:
+        return {"ok": False, "error": f"无法连接接口：{exc.__class__.__name__}", "model": model, "latency_ms": int((time.perf_counter() - started) * 1000)}
 
 # Data directory
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
@@ -165,6 +278,8 @@ async def list_data_files(platform: Optional[str] = None, file_type: Optional[st
         for filename in filenames:
             file_path = root_path / filename
             if file_path.suffix.lower() not in supported_extensions:
+                continue
+            if "linked_repositories" in file_path.parts:
                 continue
 
             if not include_analysis and {"analysis", "scientist"}.intersection(file_path.relative_to(DATA_DIR).parts):
@@ -329,8 +444,11 @@ async def get_data_stats():
     stats = {
         "total_files": 0,
         "total_size": 0,
+        "namespace": kb_namespace(),
+        "kb_root": str(kb_root()),
         "by_platform": {},
-        "by_type": {}
+        "by_type": {},
+        "by_category": {}
     }
 
     supported_extensions = {".json", ".jsonl", ".csv", ".xlsx", ".xls"}
@@ -341,11 +459,21 @@ async def get_data_stats():
             file_path = root_path / filename
             if file_path.suffix.lower() not in supported_extensions:
                 continue
+            if "linked_repositories" in file_path.parts:
+                continue
 
             try:
                 stat = file_path.stat()
                 stats["total_files"] += 1
                 stats["total_size"] += stat.st_size
+                parts = {part.casefold() for part in file_path.parts}
+                if "papers" in parts or {"arxiv", "openalex"}.intersection(parts):
+                    category = "papers"
+                elif "repositories" in parts or "github" in parts:
+                    category = "repositories"
+                else:
+                    category = "platforms"
+                stats["by_category"][category] = stats["by_category"].get(category, 0) + 1
 
                 # Statistics by type
                 file_type = file_path.suffix[1:].lower()

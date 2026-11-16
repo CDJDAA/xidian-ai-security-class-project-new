@@ -25,6 +25,8 @@ import re
 from typing import Dict, List
 import aiofiles
 import config
+from pipeline.io_utils import atomic_write_text
+from tools.kb_paths import LINKED_REPOSITORY_DIR, kb_namespace, kb_source_dir, safe_segment, source_category
 from tools.utils import utils
 from tools.words import AsyncWordCloudGenerator
 
@@ -36,10 +38,7 @@ class AsyncFileWriter:
         self.wordcloud_generator = AsyncWordCloudGenerator() if config.ENABLE_GET_WORDCLOUD else None
 
     def _get_file_path(self, file_type: str, item_type: str) -> str:
-        if config.SAVE_DATA_PATH:
-            base_path = f"{config.SAVE_DATA_PATH}/{self.platform}/{file_type}"
-        else:
-            base_path = f"data/{self.platform}/{file_type}"
+        base_path = str(kb_source_dir(self.platform, file_type))
         pathlib.Path(base_path).mkdir(parents=True, exist_ok=True)
         # Include the configured search terms so multiple runs are easy to tell
         # apart in the result browser. Keep the name Windows-safe and bounded.
@@ -48,7 +47,15 @@ class AsyncFileWriter:
         file_name = f"{self.crawler_type}_{keyword_label}_{item_type}_{utils.get_current_date()}.{file_type}"
         return f"{base_path}/{file_name}"
 
+    def _enrich(self, item: Dict) -> Dict:
+        category = source_category(self.platform)
+        record = dict(item)
+        record.setdefault("record_type", {"papers": "paper", "repositories": "repository"}.get(category, "platform_content"))
+        record.setdefault("kb_namespace", kb_namespace())
+        return record
+
     async def write_to_csv(self, item: Dict, item_type: str):
+        item = self._enrich(item)
         file_path = self._get_file_path('csv', item_type)
         async with self.lock:
             file_exists = os.path.exists(file_path)
@@ -59,12 +66,14 @@ class AsyncFileWriter:
                 await writer.writerow(item)
 
     async def write_to_jsonl(self, item: Dict, item_type: str):
+        item = self._enrich(item)
         file_path = self._get_file_path('jsonl', item_type)
         async with self.lock:
             async with aiofiles.open(file_path, 'a', encoding='utf-8') as f:
                 await f.write(json.dumps(item, ensure_ascii=False) + '\n')
 
     async def write_single_item_to_json(self, item: Dict, item_type: str):
+        item = self._enrich(item)
         file_path = self._get_file_path('json', item_type)
         async with self.lock:
             existing_data = []
@@ -83,6 +92,12 @@ class AsyncFileWriter:
 
             async with aiofiles.open(file_path, 'w', encoding='utf-8') as f:
                 await f.write(json.dumps(existing_data, ensure_ascii=False, indent=4))
+
+    async def write_linked_paper(self, paper_id: str, payload: Dict) -> None:
+        """Store a paper's linked open-source repositories next to the paper files."""
+        path = kb_source_dir(self.platform, LINKED_REPOSITORY_DIR) / f"{safe_segment(paper_id)}.json"
+        content = json.dumps(payload, ensure_ascii=False, indent=2)
+        await asyncio.to_thread(atomic_write_text, path, content)
 
     async def generate_wordcloud_from_comments(self):
         """
@@ -137,10 +152,7 @@ class AsyncFileWriter:
                 return
 
             # Generate wordcloud
-            if config.SAVE_DATA_PATH:
-                words_base_path = f"{config.SAVE_DATA_PATH}/{self.platform}/words"
-            else:
-                words_base_path = f"data/{self.platform}/words"
+            words_base_path = str(kb_source_dir(self.platform, "words"))
             pathlib.Path(words_base_path).mkdir(parents=True, exist_ok=True)
             keyword_label = re.sub(r'[<>:"/\\|?*\r\n]+', '_', str(config.KEYWORDS or 'all')).strip(' ._')
             keyword_label = re.sub(r"_+", "_", keyword_label)[:80] or "all"

@@ -7,7 +7,7 @@ import re
 from typing import Any
 
 
-TAXONOMY_VERSION = "2026-08"
+TAXONOMY_VERSION = "2026-11"
 
 # `id` is deliberately stable; labels and aliases may evolve without breaking
 # longitudinal trend data or links from an idea back to its evidence.
@@ -15,6 +15,7 @@ TOPIC_TAXONOMY: dict[str, dict[str, list[str] | str]] = {
     "模型对齐与可靠性": {"id": "ai-safety.alignment-reliability", "aliases": ["对齐", "鲁棒性", "可解释", "价值学习", "可信", "alignment", "reliability"]},
     "对抗攻击与越狱": {"id": "ai-safety.adversarial-jailbreak", "aliases": ["对抗样本", "越狱", "jailbreak", "攻击", "红队", "adversarial"]},
     "Prompt Injection": {"id": "ai-safety.prompt-injection", "aliases": ["提示注入", "prompt injection", "提示攻击", "越权"]},
+    "MCP 与工具协议安全": {"id": "ai-safety.mcp-tool-protocol", "aliases": ["mcp", "model context protocol", "模型上下文协议", "mcp server", "mcp client", "tool poisoning", "工具投毒", "工具描述注入", "tool description injection", "mcp security", "mcp 安全", "tool supply chain", "工具供应链"]},
     "Agent 与工具调用安全": {"id": "ai-safety.agent-tool-security", "aliases": ["agent", "智能体", "工具调用", "tool", "浏览器", "agentic"]},
     "数据投毒与供应链安全": {"id": "ai-safety.data-supply-chain", "aliases": ["数据投毒", "投毒", "供应链", "后门", "data poisoning"]},
     "隐私泄露与机器遗忘": {"id": "ai-safety.privacy-unlearning", "aliases": ["隐私", "成员推断", "机器遗忘", "数据泄露", "privacy", "unlearning"]},

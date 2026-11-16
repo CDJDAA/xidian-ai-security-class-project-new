@@ -53,6 +53,41 @@ export interface FilePreviewResponse {
   columns?: string[]
 }
 
+export interface AnalysisProviderPreset {
+  value: string
+  label: string
+  base_url: string
+  models: string[]
+}
+
+export interface AnalysisConfig {
+  models: { value: string; label: string }[]
+  providers: AnalysisProviderPreset[]
+  model: string
+  base_url: string
+  api_key_set: boolean
+  api_key_masked: string
+  batch_size: number
+  enrich_items: boolean
+  ai_enabled: boolean
+  themes: string[]
+}
+
+export interface AnalysisConfigUpdate {
+  model?: string
+  api_key?: string
+  base_url?: string
+  batch_size?: number
+  enrich_items?: boolean
+}
+
+export interface AnalysisTestResult {
+  ok: boolean
+  model?: string
+  latency_ms?: number
+  error?: string
+}
+
 export interface AnalysisResult {
   output_file: string
   input_count: number
@@ -60,7 +95,10 @@ export interface AnalysisResult {
   scope_excluded?: number
   ai_enabled: boolean
   batch_size?: number
-  batch_summaries?: { batch: number; record_count: number; summary?: string; topics?: string[] }[]
+  duration_ms?: number
+  ai_enriched_count?: number
+  batch_errors?: { batch: number; record_count: number; error?: string }[]
+  batch_summaries?: { batch: number; record_count: number; summary?: string; topics?: string[]; claims?: string[] }[]
   intelligence?: {
     topics: { topic: string; content_count: number; platforms: Record<string, number>; representative_terms: string[]; recent_count: number; trend: string; evidence_count: number; quality_score: number }[]
     research_directions: { research_direction: string; score: number; topic: string; why_now: string; research_questions: string[]; recommended_methods: string[]; evidence_topics: string[] }[]
@@ -122,8 +160,9 @@ export const dataApi = {
       return { data: { results, completed, failed: results.length - completed } }
     }
   },
-  getAnalysisConfig: () => api.get<{ models: { value: string; label: string }[]; model: string; ai_enabled: boolean; themes: string[] }>('/data/analysis-config'),
-  setAnalysisModel: (model: string) => api.put<{ model: string }>('/data/analysis-config', { model }),
+  getAnalysisConfig: () => api.get<AnalysisConfig>('/data/analysis-config'),
+  setAnalysisConfig: (payload: AnalysisConfigUpdate) => api.put<AnalysisConfig>('/data/analysis-config', payload),
+  testAnalysisConfig: (payload: AnalysisConfigUpdate) => api.post<AnalysisTestResult>('/data/analysis-config/test', payload),
 }
 
 export const configApi = {
