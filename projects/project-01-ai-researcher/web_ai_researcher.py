@@ -12,6 +12,7 @@ import threading
 import queue
 import re  # For regular expression operations
 import random
+import html
 import global_state
 import base64
 
@@ -946,6 +947,43 @@ def create_ui():
         global CURRENT_PROCESS
 
         result_queue = queue.Queue()
+        progress_state = {
+            "progress": 0,
+            "stage": "Starting",
+            "detail": "Preparing the research workflow",
+        }
+
+        while not global_state.PROGRESS_QUEUE.empty():
+            try:
+                global_state.PROGRESS_QUEUE.get_nowait()
+            except queue.Empty:
+                break
+
+        global_state.report_progress(0, "Starting", "Preparing the research workflow")
+
+        def update_progress_state():
+            while True:
+                try:
+                    progress_state.update(global_state.PROGRESS_QUEUE.get_nowait())
+                except queue.Empty:
+                    break
+
+        def render_progress():
+            percent = progress_state["progress"]
+            stage = html.escape(str(progress_state["stage"]))
+            detail = html.escape(str(progress_state["detail"]))
+            return f"""
+                <div role="progressbar" aria-valuenow="{percent}" aria-valuemin="0" aria-valuemax="100">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                        <strong>{stage}</strong><span>{percent}%</span>
+                    </div>
+                    <div style="height:12px;background:#e5e7eb;border-radius:8px;overflow:hidden">
+                        <div style="width:{percent}%;height:100%;background:#f59e0b;transition:width .3s"></div>
+                    </div>
+                    <div style="margin-top:6px;color:#6b7280">{detail}</div>
+                    <div style="margin-top:4px;color:#9ca3af;font-size:12px">Progress reflects workflow stages, not an estimated remaining time.</div>
+                </div>
+            """
 
         def process_in_background():
             try:
@@ -989,6 +1027,7 @@ def create_ui():
 
         # 在等待处理完成的同时，每秒更新一次日志
         while bg_thread.is_alive():
+            update_progress_state()
             # 更新对话记录显示
             logs2, updated_index = get_latest_logs(500, state, LOG_QUEUE, last_index)
             # 过滤空内容的对话记录
@@ -997,7 +1036,8 @@ def create_ui():
             # 始终更新状态
             yield (
                 state,
-                "<span class='status-indicator status-running'></span> Processing...",
+                f"<span class='status-indicator status-running'></span> {html.escape(str(progress_state['stage']))}",
+                render_progress(),
                 filtered_logs,
                 scroll_script, 
                 updated_index
@@ -1009,6 +1049,7 @@ def create_ui():
         if not result_queue.empty():
             result = result_queue.get()
             answer, token_count, status = result
+            update_progress_state()
 
             # 最后一次更新对话记录
             logs2, updated_index = get_latest_logs(500, state, LOG_QUEUE, last_index)
@@ -1016,24 +1057,34 @@ def create_ui():
             filtered_logs = filter_empty_conversations(logs2)
 
             # 根据状态设置不同的指示器
-            if "错误" in status:
+            if "错误" in status or "Error" in status or "❌" in status:
                 status_with_indicator = (
-                    f"<span class='status-indicator status-error'></span> {status}"
+                    f"<span class='status-indicator status-error'></span> {html.escape(status)}"
                 )
+                progress_state["stage"] = "Failed"
+                progress_state["detail"] = status
             else:
                 status_with_indicator = (
-                    f"<span class='status-indicator status-success'></span> {status}"
+                    f"<span class='status-indicator status-success'></span> {html.escape(status)}"
                 )
+                progress_state.update({
+                    "progress": 100,
+                    "stage": "Completed",
+                    "detail": "The workflow finished successfully",
+                })
 
-            yield token_count, status_with_indicator, filtered_logs, scroll_script, updated_index
-            # yield token_count, status_with_indicator, logs2
+            yield state, status_with_indicator, render_progress(), filtered_logs, scroll_script, updated_index
         else:
+            update_progress_state()
+            progress_state["stage"] = "Terminated"
+            progress_state["detail"] = "The worker stopped without returning a result"
             logs2, updated_index = get_latest_logs(500, state, LOG_QUEUE, last_index)
             # 过滤空内容的对话记录
             filtered_logs = filter_empty_conversations(logs2)
             yield (
                 state,
                 "<span class='status-indicator status-error'></span> Terminated",
+                render_progress(),
                 filtered_logs,
                 None, 
                 updated_index
@@ -1452,6 +1503,21 @@ def create_ui():
                     value="<span class='status-indicator status-success'></span> Ready",
                     label="状态",
                 )
+                progress_output = gr.HTML(
+                    value="""
+                    <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                            <strong>Ready</strong><span>0%</span>
+                        </div>
+                        <div style="height:12px;background:#e5e7eb;border-radius:8px;overflow:hidden">
+                            <div style="width:0;height:100%;background:#f59e0b"></div>
+                        </div>
+                        <div style="margin-top:6px;color:#6b7280">Submit a task to begin</div>
+                        <div style="margin-top:4px;color:#9ca3af;font-size:12px">Progress reflects workflow stages, not an estimated remaining time.</div>
+                    </div>
+                    """,
+                    label="Progress",
+                )
                 # token_count_output = gr.Textbox(
                 #     label="令牌计数", interactive=False, elem_classes="token-count"
                 # )
@@ -1610,7 +1676,7 @@ def create_ui():
             fn=process_with_live_logs,
             inputs=[question_input, reference_input, module_dropdown, state, last_index],
             # outputs=[token_count_output, status_output, log_display2, scroll_trigger],
-            outputs=[state, status_output, log_display2, scroll_trigger, last_index],
+            outputs=[state, status_output, progress_output, log_display2, scroll_trigger, last_index],
         )
 
         module_dropdown.change(

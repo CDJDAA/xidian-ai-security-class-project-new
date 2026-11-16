@@ -24,6 +24,7 @@ from typing import List, Dict, Any, Union
 from research_agent.inno.logger import MetaChainLogger
 import importlib
 from research_agent.inno.environment.utils import setup_dataset
+import global_state
 # instance_path = "benchmark/gnn.json"
 # task_level = "task1"
 def warp_source_papers(source_papers):
@@ -111,12 +112,14 @@ class InnoFlow(FlowModule):
         self.survey_agent = AgentModule(get_survey_agent(model=CHEEP_MODEL, file_env=file_env, code_env=code_env), self.client, cache_path)
         self.exp_analyser = AgentModule(get_exp_analyser_agent(model=CHEEP_MODEL, file_env=file_env, code_env=code_env), self.client, cache_path)
     async def forward(self, instance_path: str, task_level: str, local_root: str, workplace_name: str, max_iter_times: int, category: str, ideas: str, references: str, *args, **kwargs):
+        global_state.report_progress(8, "加载研究任务", "读取 benchmark 实例和参考论文")
         metadata = self.load_ins({"instance_path": instance_path, "task_level": task_level})
         context_variables = {
             "working_dir": workplace_name, # TODO: change to the codebase path
             "date_limit": metadata["date_limit"],
         }
 
+        global_state.report_progress(12, "检索论文与代码", "根据参考论文搜索相关 GitHub 仓库")
         github_result = self.git_search({"metadata": metadata})
         
         
@@ -134,11 +137,13 @@ innovative ideas:
 Your task is to choose at least 5 repositories as the reference codebases.
 """
         messages = [{"role": "user", "content": query}]
+        global_state.report_progress(18, "准备参考资源", "筛选代码库并准备论文材料")
         prepare_messages, context_variables = await self.prepare_agent(messages, context_variables)
         prepare_res = prepare_messages[-1]["content"]
         prepare_dict = extract_json_from_output(prepare_res)
         paper_list = prepare_dict["reference_papers"]
         download_res = self.download_papaer({"paper_list": paper_list, "local_root": local_root, "workplace_name": workplace_name})
+        global_state.report_progress(25, "调研研究想法", "结合参考论文和代码资源形成调研")
         survey_query = f"""\
 I have an innovative ideas related to machine learning:
 {ideas}
@@ -195,6 +200,7 @@ We have already selected the following datasets as experimental datasets:
 Your task is to carefully review the existing resources and understand the task, and give me a detailed plan for the implementation.
 """
         messages = [{"role": "user", "content": plan_query}]
+        global_state.report_progress(38, "制定实现计划", "结合调研、数据集和基线生成实验计划")
         plan_messages, context_variables = await self.coding_plan_agent(messages, context_variables)
         plan_res = plan_messages[-1]["content"]
 
@@ -316,6 +322,7 @@ Remember:
 - MUST complete 2 epochs of training and testing
 """
         messages = [{"role": "user", "content": ml_dev_query}]
+        global_state.report_progress(50, "生成并运行实验代码", "Agent 正在实现模型和训练/测试流程")
         ml_dev_messages, context_variables = await self.ml_agent(messages, context_variables)
         ml_dev_res = ml_dev_messages[-1]["content"]
 
@@ -344,11 +351,17 @@ Your task is to evaluate the implementation, and give a suggestion about the imp
             "role": "user",
             "content": query
         }]
+        global_state.report_progress(64, "评审实现", "检查实现与研究计划的一致性")
         judge_messages, context_variables = await self.judge_agent(input_messages, context_variables)
         judge_res = judge_messages[-1]["content"]
 
         MAX_ITER_TIMES = max_iter_times
         for i in range(MAX_ITER_TIMES):
+            global_state.report_progress(
+                min(70, 65 + i),
+                "根据评审修改",
+                f"正在进行第 {i + 1}/{MAX_ITER_TIMES} 轮实现修改",
+            )
             query = f"""\
 You are given an innovative idea:
 {ideas}
@@ -424,11 +437,17 @@ Note that if your last implementation is not runable, you should finalize the su
 After you get the result, you should return the result with your analysis and suggestions about the implementation with `case_resolved` function.
 """
         judge_messages.append({"role": "user", "content": ml_submit_query})
+        global_state.report_progress(74, "运行实验", "执行训练和测试并收集实验指标")
         judge_messages, context_variables = await self.ml_agent(judge_messages, context_variables, iter_times="submit")
         submit_res = judge_messages[-1]["content"]
 
         EXP_ITER_TIMES = 2
         for i in range(EXP_ITER_TIMES):
+            global_state.report_progress(
+                82 + i * 7,
+                "分析实验结果",
+                f"正在分析实验结果并规划后续实验（第 {i + 1}/{EXP_ITER_TIMES} 轮）",
+            )
             exp_planner_query = f"""\
 You are given an innovative idea:
 {ideas}
@@ -470,6 +489,11 @@ Your task is to refine the experimental results according to the analysis report
 Note that you should fully utilize the existing code in the directory `/{workplace_name}/project` as much as possible. If you want to add more experiments, you should add the python script in the directory `/{workplace_name}/project/`, like `run_training_testing.py`. Select and output the important results during the experiments into the log files, do NOT output them all in the terminal.
 """
             judge_messages.append({"role": "user", "content": refine_query})
+            global_state.report_progress(
+                87 + i * 7,
+                "改进实验",
+                f"根据分析建议调整实验（第 {i + 1}/{EXP_ITER_TIMES} 轮）",
+            )
             judge_messages, context_variables = await self.ml_agent(judge_messages, context_variables, iter_times=f"refine_{i+1}")
             refine_res = judge_messages[-1]["content"]
 
@@ -514,7 +538,9 @@ def main(args, ideas, references):
                               )
     
     code_env = DockerEnv(env_config)
+    global_state.report_progress(4, "初始化执行环境", "创建 Docker 容器并准备数据集")
     code_env.init_container()
+    global_state.report_progress(7, "准备实验数据", "设置当前类别的数据集")
     setup_dataset(args.category, code_env.local_workplace)
     web_env = BrowserEnv(browsergym_eval_env = None, local_root=env_config.local_root, workplace_name=env_config.workplace_name)
     file_env = RequestsMarkdownBrowser(viewport_size=1024 * 4, local_root=env_config.local_root, workplace_name=env_config.workplace_name, downloads_folder=os.path.join(env_config.local_root, env_config.workplace_name, "downloads"))

@@ -41,6 +41,7 @@ def main_ai_researcher(input, reference, mode):
     #     main_autoagent.mode = mode
     #     global_state.INIT_FLAG = False
     load_dotenv()
+    global_state.report_progress(1, "准备任务", f"运行模式：{mode}")
     category = os.getenv("CATEGORY")
     instance_id = os.getenv("INSTANCE_ID")
     task_level = os.getenv("TASK_LEVEL")
@@ -56,6 +57,7 @@ def main_ai_researcher(input, reference, mode):
             # global INIT_FLAG
             if global_state.INIT_FLAG is False:
                 global_state.INIT_FLAG = True
+                global_state.report_progress(3, "初始化研究环境", "启动研究工作流和执行环境")
                 current_file_path = os.path.realpath(__file__)
                 current_dir = os.path.dirname(current_file_path)
                 sub_dir = os.path.join(current_dir, "research_agent")
@@ -78,11 +80,13 @@ def main_ai_researcher(input, reference, mode):
                 args.category = category
 
                 run_infer_plan.main(args, input, reference)
+                global_state.report_progress(100, "任务完成", "研究流程已结束")
                 global_state.INIT_FLAG = False
         case 'Reference-Based Ideation':
             # clear_screen()
             if global_state.INIT_FLAG is False:
                 global_state.INIT_FLAG = True
+                global_state.report_progress(3, "初始化研究环境", "启动研究工作流和执行环境")
                 current_file_path = os.path.realpath(__file__)
                 current_dir = os.path.dirname(current_file_path)
                 sub_dir = os.path.join(current_dir, "research_agent")
@@ -115,11 +119,13 @@ def main_ai_researcher(input, reference, mode):
                 args.category = category
 
                 run_infer_idea.main(args, reference)
+                global_state.report_progress(100, "任务完成", "研究流程已结束")
                 global_state.INIT_FLAG = False
         case 'Paper Generation Agent':
             # clear_screen()
             if global_state.INIT_FLAG is False:
                 global_state.INIT_FLAG = True
+                global_state.report_progress(3, "准备论文生成", "初始化论文写作流程")
 
                 from paper_agent import writing
                 args = get_args_paper()
@@ -130,4 +136,5 @@ def main_ai_researcher(input, reference, mode):
                 args.instance_id = instance_id
 
                 asyncio.run(writing.writing(args.research_field, args.instance_id))
+                global_state.report_progress(100, "任务完成", "论文生成流程已结束")
                 global_state.INIT_FLAG = False

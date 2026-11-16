@@ -1,6 +1,16 @@
 # global_state.py
+import queue
 
 LOG_PATH = ""
+PROGRESS_QUEUE = queue.Queue()
+
+
+def report_progress(progress: int, stage: str, detail: str = "") -> None:
+    PROGRESS_QUEUE.put({
+        "progress": max(0, min(100, int(progress))),
+        "stage": stage,
+        "detail": detail,
+    })
 
 START_FLAG = False
 FIRST_MAIN = False
