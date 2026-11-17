@@ -174,7 +174,7 @@ data/
 templates/*/run_0/
 templates/*/*.png
 results/
-# logs/
+logs/
 
 # data folders under review_iclr_bench/
 review_iclr_bench/iclr_papers/
@@ -194,3 +194,12 @@ final_papers/
 # HF
 cache/
 huggingface/
+
+# Local course credentials; only the blank template is versioned.
+course.env
+course.env.*
+!course.env.example
+
+# Locally trained model artifacts.
+*.pt
+*.pth

@@ -1,0 +1,72 @@
+# Course initial run: explicitly selected by course_tools/run_course.py.
+# These reduce the run size; they are not a guarantee of total API cost.
+data_dir: data
+preprocess_data: false
+goal: null
+eval: null
+log_dir: logs
+workspace_dir: workspaces
+copy_data: true
+exp_name: course_smoke
+exec:
+  timeout: 180
+  agent_file_name: runfile.py
+  format_tb_ipython: false
+generate_report: false
+report:
+  model: deepseek-flash
+  temp: 0.3
+  thinking: {type: disabled}
+  betas: ""
+experiment:
+  num_syn_datasets: 1
+debug:
+  stage4: false
+agent:
+  type: parallel
+  num_workers: 1
+  steps: 1
+  stages:
+    stage1_max_iters: 1
+    stage2_max_iters: 1
+    stage3_max_iters: 1
+    stage4_max_iters: 1
+  k_fold_validation: 1
+  multi_seed_eval:
+    num_seeds: 1
+  expose_prediction: false
+  data_preview: false
+  code:
+    model: deepseek-flash
+    temp: 0.3
+    thinking: {type: disabled}
+    betas: ""
+    max_tokens: 4096
+  feedback:
+    model: deepseek-flash
+    temp: 0.2
+    thinking: {type: disabled}
+    betas: ""
+    max_tokens: 2048
+  vlm_feedback:
+    model: deepseek-flash
+    temp: 0.2
+    thinking: {type: disabled}
+    betas: ""
+    max_tokens: 2048
+  summary:
+    model: deepseek-flash
+    temp: 0.2
+    thinking: {type: disabled}
+    betas: ""
+    max_tokens: 2048
+  select_node:
+    model: deepseek-flash
+    temp: 0.2
+    thinking: {type: disabled}
+    betas: ""
+    max_tokens: 2048
+  search:
+    max_debug_depth: 1
+    debug_prob: 0.2
+    num_drafts: 1

@@ -1,0 +1,11 @@
+{
+  "requested_model": "deepseek-flash",
+  "returned_model": "deepseek-flash",
+  "literature_mode": "supplied_local_pdf_reading",
+  "external_novelty_search": false,
+  "model_requests_sent": 1,
+  "usage": {
+    "prompt_tokens": 3714,
+    "completion_tokens": 2472
+  }
+}

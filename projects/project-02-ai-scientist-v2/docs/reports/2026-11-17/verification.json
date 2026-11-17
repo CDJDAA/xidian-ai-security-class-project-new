@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "deployment_date": "2026-11-17",
+  "structure_verified_at": "2026-11-17T20:43:34+08:00",
+  "scope": "Curated deployment and offline relocation evidence; not a full research experiment.",
+  "environment_check": {
+    "status": "passed",
+    "python": "3.11.18",
+    "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "model_requests_sent": 0,
+    "versions": {
+      "torch": "2.10.0+cu126",
+      "torchvision": "0.25.0+cu126",
+      "openai": "3.52.0",
+      "anthropic": "2.9.0",
+      "numpy": "2.4.6",
+      "transformers": "5.23.0",
+      "jsonschema": "4.26.0"
+    },
+    "optional_paper_tools": {
+      "pdfinfo": true,
+      "pdftoppm": true,
+      "chktex": true,
+      "pdflatex": false
+    },
+    "idea_schema": {
+      "status": "passed",
+      "count": 3,
+      "names": [
+        "compute_matched_checkpoint_spatial_diversity",
+        "lpaa_initialization_budget_audit",
+        "pr_permutation_residual_mechanism_audit"
+      ]
+    },
+    "gpu": {
+      "available": true,
+      "torch_cuda": "12.6",
+      "device": "NVIDIA GeForce GTX 1660 Ti",
+      "capability": [
+        7,
+        5
+      ],
+      "wheel_architectures": [
+        "sm_50",
+        "sm_60",
+        "sm_70",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_90"
+      ],
+      "tensor_gradient_step": "passed",
+      "reviewed_interpreter_gpu": "passed",
+      "interpreter_seconds": 1.803
+    }
+  },
+  "api_connectivity_probe": {
+    "requested_model": "deepseek-flash",
+    "status": "passed",
+    "model_requests_sent": 1,
+    "returned_model": "deepseek-flash",
+    "answer_is_ok": true,
+    "usage": {
+      "prompt_tokens": 9,
+      "completion_tokens": 1
+    },
+    "seconds": 1.076
+  },
+  "course_configuration_check": {
+    "status": "passed",
+    "models": {
+      "code": "deepseek-flash",
+      "feedback": "deepseek-flash",
+      "vlm_feedback": "deepseek-flash",
+      "summary": "deepseek-flash",
+      "select_node": "deepseek-flash"
+    },
+    "workers": 1,
+    "model_requests_sent": 0
+  },
+  "relocation_tests": {
+    "command": ".venv/bin/python -m pytest tests/test_course_model_compat.py tests/test_course_runner.py -q",
+    "passed": 22,
+    "subtests_passed": 12,
+    "summary": "22 passed, 12 subtests passed in 3.88s",
+    "model_requests_sent": 0
+  },
+  "generated_idea": {
+    "file": "ideation.json",
+    "provenance": "ideation.provenance.json"
+  },
+  "not_verified": [
+    "formal CIFAR-10 experiments",
+    "complete paper generation",
+    "external novelty search",
+    "live vision-task accuracy"
+  ]
+}

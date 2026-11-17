@@ -7,10 +7,18 @@ import openai
 import os
 from PIL import Image
 from ai_scientist.utils.token_tracker import track_token_usage
+from ai_scientist.llm import (
+    DEEPSEEK_MODELS,
+    DEEPSEEK_VISION_MODELS,
+    deepseek_client_kwargs,
+    deepseek_request_kwargs,
+    validate_deepseek_messages,
+)
 
 MAX_NUM_TOKENS = 4096
 
 AVAILABLE_VLMS = [
+    "deepseek-flash",
     "gpt-4o-2024-05-13",
     "gpt-4o-2024-08-06",
     "gpt-4o-2024-11-20",
@@ -51,7 +59,14 @@ def encode_image_to_base64(image_path: str) -> str:
 
 @track_token_usage
 def make_llm_call(client, model, temperature, system_message, prompt):
-    if model.startswith("ollama/"):
+    if model in DEEPSEEK_MODELS:
+        messages = [{"role": "system", "content": system_message}, *prompt]
+        validate_deepseek_messages(messages, model)
+        return client.chat.completions.create(
+            model=model, messages=messages, temperature=temperature,
+            max_tokens=MAX_NUM_TOKENS, **deepseek_request_kwargs(model),
+        )
+    elif model.startswith("ollama/"):
         return client.chat.completions.create(
             model=model.replace("ollama/", ""),
             messages=[
@@ -94,7 +109,16 @@ def make_llm_call(client, model, temperature, system_message, prompt):
 
 @track_token_usage
 def make_vlm_call(client, model, temperature, system_message, prompt):
-    if model.startswith("ollama/"):
+    if model in DEEPSEEK_MODELS:
+        if model not in DEEPSEEK_VISION_MODELS:
+            raise ValueError(f"{model} is not a supported vision model.")
+        messages = [{"role": "system", "content": system_message}, *prompt]
+        validate_deepseek_messages(messages, model)
+        return client.chat.completions.create(
+            model=model, messages=messages, temperature=temperature,
+            max_tokens=MAX_NUM_TOKENS, **deepseek_request_kwargs(model),
+        )
+    elif model.startswith("ollama/"):
         return client.chat.completions.create(
             model=model.replace("ollama/", ""),
             messages=[
@@ -194,7 +218,9 @@ def get_response_from_vlm(
 
 def create_client(model: str) -> tuple[Any, str]:
     """Create client for vision-language model."""
-    if model in [
+    if model in DEEPSEEK_VISION_MODELS:
+        return openai.OpenAI(**deepseek_client_kwargs()), model
+    elif model in [
         "gpt-4o-2024-05-13",
         "gpt-4o-2024-08-06",
         "gpt-4o-2024-11-20",
@@ -301,7 +327,20 @@ def get_batch_responses_from_vlm(
         # Construct message with all images
         new_msg_history = msg_history + [{"role": "user", "content": content}]
 
-        if model.startswith("ollama/"):
+        if model in DEEPSEEK_VISION_MODELS:
+            contents = []
+            for _ in range(n_responses):
+                response = make_vlm_call(
+                    client, model, temperature,
+                    system_message=system_message, prompt=new_msg_history,
+                )
+                contents.append(response.choices[0].message.content)
+            new_msg_histories = [
+                new_msg_history + [{"role": "assistant", "content": answer}]
+                for answer in contents
+            ]
+            return contents, new_msg_histories
+        elif model.startswith("ollama/"):
             response = client.chat.completions.create(
                 model=model.replace("ollama/", ""),
                 messages=[

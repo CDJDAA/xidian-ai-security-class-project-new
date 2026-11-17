@@ -4,6 +4,8 @@
 
 [课程任务](COURSE.md) · [课程总说明](../../README.md) · [上游原始 README](README.original.md) · [许可证](LICENSE)
 
+课程开发入口：[文档导航](docs/README.md) · [WSL2 安装与运行](docs/guides/wsl2-setup.md) · [论文阅读与课程 Idea](docs/research/transfer-attack-budget.md) · [2026-11-17 部署验证报告](docs/reports/2026-11-17/deployment.md)。操作方法、研究方案和执行证据分别维护。
+
 ## 1. 环境要求
 
 - 上游面向 **Linux + NVIDIA GPU + CUDA/PyTorch**；Windows 用户使用具备 GPU 支持的 Linux 环境或服务器。

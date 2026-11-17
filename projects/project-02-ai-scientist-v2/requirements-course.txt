@@ -1,0 +1,6 @@
+# CUDA PyTorch is installed separately using the official wheel index.
+-r requirements.txt
+psutil
+python-dotenv
+# Verification only; not needed for production inference.
+pytest
