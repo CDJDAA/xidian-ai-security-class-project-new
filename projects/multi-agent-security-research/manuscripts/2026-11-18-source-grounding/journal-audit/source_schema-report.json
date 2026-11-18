@@ -4,7 +4,7 @@
   "summary": {
     "errors": 0,
     "kind": "source",
-    "records": 8,
+    "records": 11,
     "warnings": 0
   },
   "tool": "validate_manifest"

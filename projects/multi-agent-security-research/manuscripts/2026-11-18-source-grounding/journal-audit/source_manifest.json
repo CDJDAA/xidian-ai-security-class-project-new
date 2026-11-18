@@ -215,6 +215,86 @@
         "verified_by": "",
         "verified_on": ""
       }
+    },
+    {
+      "evidence_id": "E009",
+      "title": "Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection",
+      "authors": [
+        "Kai Greshake",
+        "Sahar Abdelnabi",
+        "Shailesh Mishra",
+        "Christoph Endres",
+        "Thorsten Holz",
+        "Mario Fritz"
+      ],
+      "year": 2023,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "10.48550/arXiv.2302.12173",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://arxiv.org/abs/2302.12173v2"
+      },
+      "locator": "Abstract and metadata",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E010",
+      "title": "InjecAgent: Benchmarking Indirect Prompt Injections in Tool-Integrated Large Language Model Agents",
+      "authors": [
+        "Qiusi Zhan",
+        "Zhixiang Liang",
+        "Zifan Ying",
+        "Daniel Kang"
+      ],
+      "year": 2024,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "10.18653/v1/2024.findings-acl.624",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://aclanthology.org/2024.findings-acl.624/"
+      },
+      "locator": "Abstract and bibliographic record",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E011",
+      "title": "来源核验的定向边界实验",
+      "authors": [
+        "董俊逸"
+      ],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://github.com/RoseLYi/xidian-ai-security-class-project-new/blob/3006475/projects/multi-agent-security-research/experiments/source_tracking/BOUNDARY_PROBES.md"
+      },
+      "locator": "boundary-probe-20261118.json: cases, handoffs, evidence_export; boundary_probe.py",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
     }
   ]
 }

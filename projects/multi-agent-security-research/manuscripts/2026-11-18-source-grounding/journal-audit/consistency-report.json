@@ -3,9 +3,9 @@
   "status": "pass",
   "summary": {
     "errors": 0,
-    "methods": 2,
-    "numeric_facts": 37,
-    "results": 4,
+    "methods": 3,
+    "numeric_facts": 50,
+    "results": 6,
     "warnings": 0
   },
   "tool": "check_consistency"

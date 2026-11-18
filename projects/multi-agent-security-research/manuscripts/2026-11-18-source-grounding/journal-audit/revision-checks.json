@@ -1,17 +1,36 @@
 {
-  "manuscript_sha256": "9bad7392a3576f70d142f8f5d44aa3fa3c7bc7b1f25d3d2d02a0168ba9adda8f",
-  "reference_count": 8,
-  "table_2_rows_matched_to_data": 8,
-  "table_3_values_matched_to_data": 4,
-  "upstream_files_identical": 31,
-  "upstream_commit": "ec59a29a03d5c40f73ab40878df04860bc00e876",
+  "manuscript_sha256": "d133e3c471fce4f65ca2f60ff53175a63d8921b6691a3f4cbc1c90c76cb4b164",
+  "reference_count": 11,
+  "evidence_to_reference_number": {
+    "E001": 1,
+    "E002": 2,
+    "E009": 3,
+    "E003": 4,
+    "E004": 5,
+    "E010": 6,
+    "E011": 7,
+    "E007": 8,
+    "E005": 9,
+    "E006": 10,
+    "E008": 11
+  },
+  "numeric_registry_entries": 50,
+  "historical_table_rows_matched": 8,
+  "handoff_table_rows_matched": 4,
+  "mechanism_cases": 18,
+  "verifier_evaluations": 36,
+  "scripted_chains": 6,
+  "scripted_role_responses": 18,
+  "new_model_api_calls": 0,
+  "current_regression_tests_passed": 28,
+  "probe_commit": "3006475",
   "human_source_verification": false,
   "full_claim_audit": false,
   "submission_ready": false,
   "limitations": [
-    "Reference syntax does not resolve citations or establish entailment.",
-    "Consistency checker validates a curated registry; explicit table comparisons separately match the manuscript to stored JSON.",
-    "Language lint mainly covers English; Chinese text was reviewed by the assistant.",
-    "No human verification, authorship approval, target-journal policy review, or submission-readiness claim."
+    "Purpose-designed deterministic cases do not estimate model susceptibility.",
+    "Scripted responses are not model API calls.",
+    "Source registry and English lint do not establish scientific accuracy.",
+    "The 28 current tests overlap prior tests and must not be added to the historical 96."
   ]
 }

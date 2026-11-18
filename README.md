@@ -157,3 +157,7 @@ Intelligence Gathering 以源码副本加入，已排除本地密钥、虚拟环
 ## 通用期刊论文写作与修订
 
 新增 [scientific-writing 2.3](.agents/skills/scientific-writing/SKILL.md)，固定上游版本并保留 MIT 许可，支持方法、结果、引用和声明核对。参见[技能来源](.agents/skills/scientific-writing/PROVENANCE.md)和[论文修订说明](projects/multi-agent-security-research/manuscripts/2026-11-18-source-grounding/REVISION_NOTES.md)。本轮按通用期刊规范修订中文正文，补英文题名、摘要及三线表；作者核实与声明仍待确认。
+
+## 多智能体论文研究深化
+
+论文已深化至 18 页，新增来源约束的条件推导、18 个确定性边界案例、6 条脚本化交接链、2 幅图和后续对照设计。见[研究深化说明](projects/multi-agent-security-research/manuscripts/2026-11-18-source-grounding/REVISION_NOTES.md)及[可复现实验](projects/multi-agent-security-research/experiments/source_tracking/BOUNDARY_PROBES.md)。本轮模型 API 调用为零，历史实验与新增机制实验分别报告。

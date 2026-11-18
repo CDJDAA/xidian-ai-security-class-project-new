@@ -1,7 +1,7 @@
 {
   "code_commit": "79a53db",
   "tests_passed": 96,
-  "references_declared": 8,
+  "references_declared": 11,
   "four_project_execution": {
     "completed": true,
     "references": 4,
@@ -49,15 +49,15 @@
   },
   "journal_revision": {
     "date": "2026-11-18",
-    "format": "general journal structure; Chinese body with English title and abstract",
+    "format": "General journal research draft; Chinese body and English abstract",
     "skill": "scientific-writing 2.3",
     "skill_commit": "ec59a29a03d5c40f73ab40878df04860bc00e876",
-    "references_syntax_checked": 8,
-    "numeric_registry_entries_checked": 37,
+    "references_syntax_checked": 11,
+    "numeric_registry_entries_checked": 50,
     "table_2_conditions_matched": 8,
-    "docx_pages": 9,
+    "docx_pages": 18,
     "render_backend": "Microsoft Word PDF export; PDFium rasterization",
-    "visual_review": "all nine page images inspected",
+    "visual_review": "all eighteen page images inspected",
     "report_directory": "journal-audit",
     "new_model_evaluation_calls": 0,
     "human_source_verification": false,
@@ -70,6 +70,27 @@
       "Target-journal policy and applicable ethics requirements"
     ],
     "lint_warning": "CONFIDENTIALITY_GATE_NOT_CHECKED: no human policy-review record; public repository update explicitly requested by user",
-    "historical_checks_note": "The 96 code checks and original citation check belong to the preceding four-project run; they were not rerun for this editorial revision."
+    "historical_checks_note": "The 96 code checks and original citation check belong to the preceding four-project run; they were not rerun for this editorial revision.",
+    "figures": 2,
+    "tables": 5
+  },
+  "research_deepening": {
+    "date": "2026-11-18",
+    "probe_commit": "3006475",
+    "mechanism_cases": 18,
+    "verifier_evaluations": 36,
+    "scripted_chains": 6,
+    "scripted_role_responses": 18,
+    "model_api_calls": 0,
+    "regression_tests_passed_this_revision": 28,
+    "tests_overlap_historical": true,
+    "human_verified": false,
+    "submission_ready": false,
+    "language_warning_review": "See journal-audit/claim-map.md",
+    "proposal_not_implemented": [
+      "versioned source mapping",
+      "general semantic relevance gate",
+      "tool capability authorization"
+    ]
   }
 }

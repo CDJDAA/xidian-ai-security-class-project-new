@@ -1,8 +1,8 @@
-# 本轮期刊规范修订核对
+# 研究深化稿的核对记录
 
-本目录记录结构化编辑检查，不是投稿认证。`source_manifest.json` 中 8 条来源的人工核实状态全部保留为 `unverified`；AI 已核对的公开元数据不能代填人工审核。
+本目录记录结构化检查，不是投稿认证。11 条来源的人工核实状态均为 unverified；AI 核对公开元数据和本地记录不代替作者审查。关键论点见 [claim-map.md](claim-map.md)。
 
-从仓库根目录使用 Python 3.11 或更新版本执行：
+在仓库根目录使用 Python 3.11+：
 
 ```powershell
 $skill = '.agents/skills/scientific-writing/scripts'
@@ -13,8 +13,8 @@ python "$skill/validate_manifest.py" "$audit/source_manifest.json" --kind source
 python "$skill/lint_manuscript.py" "$audit/../paper.md"
 ```
 
-一致性登记包含 37 项数值、2 类方法和 4 类结果；检查的是已登记项目的内部一致性。`revision-checks.json` 另记录正文表格与历史 JSON 的比对，以及引入技能与上游的文件一致性。参考文献检查仅验证本地标识语法和重复项，不访问网络，也不证明来源支持相应论点。
+一致性登记为 50 项数值、3 类方法和 6 类结果。独立核对历史表 8 行、脚本交接表 4 行及 4 个代码文件哈希，结果见 revision-checks.json。E 证据编号保持稳定，正文参考文献按首次出现重新编号，映射亦在该文件中。
 
-语言检查保留 `CONFIDENTIALITY_GATE_NOT_CHECKED` 提示：未提供人工政策审核记录，且检查器主要使用英文规则。用户已明确要求更新公开项目；此提示不等于新增发布审批要求。中文内容经过 AI 编辑复核，仍待作者审定。
+语言检查有两项提示：未登记人工政策审查，以及英文摘要使用 guarantees 一词。后者指本文研究的局部保证与限制，AI 复核未发现普遍有效性主张，保留原文并待作者核实。引用检查仅检查语法及重复标识，不解析网络或自动验证语义支持。完整逐论点人工审计及作者审核尚未完成，submission_ready 为 false。
 
-未执行完整逐论点人工审计或作者资格审核。`submission_ready` 保持 `false`。不得将上述局部通过状态表述为全部科学内容已核实或满足任何目标期刊的全部要求。
+本轮 28 项代码回归实际通过；它们与此前 96 项有重叠。定向机制实验和真实模型历史实验分别记录，不混合分母。
