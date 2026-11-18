@@ -1,0 +1,17 @@
+{
+  "code_commit": "79a53db26c9ae9cd3a6b383bd0ea89754e9544af",
+  "files": {
+    "paper.md": {
+      "sha256": "0f2e628755f65af30630ef208981e436e1dd5acda953c7398318a4a5dc0ebccc",
+      "bytes": 22374
+    },
+    "paper.docx": {
+      "sha256": "480e59a086d87b24f6bba1dcb4c34bdeb3d600887b6ac193c0570c523fa5eea8",
+      "bytes": 49459
+    },
+    "validation.json": {
+      "sha256": "8a62dd75bbbbc43825b23171ec25ec672761cccb9666b59b3d9746f2241d8afa",
+      "bytes": 1295
+    }
+  }
+}

@@ -156,3 +156,7 @@ npm run dev
 - [实验报告与真实结果](../multi-agent-security-research/experiments/source_tracking/REPORT.md)
 
 正式实验为 240 次三角色运行，未观察到两组攻击成功率的差异，正常任务完成率下降 5 个百分点。原文匹配不等于事实核验或安全保证。
+
+## 2026 年 11 月 18 日模块更新
+
+新增按需 CSV 读取、已完成实验离线汇总及恢复记录校验；证据导出器只交接来源与通过原文匹配的摘录。本次交接核验 4 条摘录，未重新执行历史模型攻击实验。见[性能优化实测](../multi-agent-security-research/experiments/source_tracking/OPTIMIZATION_20261118.md)、[四项目复现说明](../multi-agent-security-research/experiments/source_tracking/PAPER_WORKFLOW.md)及[课程论文](../multi-agent-security-research/manuscripts/2026-11-18-source-grounding/README.md)。

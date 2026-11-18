@@ -1,0 +1,50 @@
+{
+  "code_commit": "79a53db",
+  "tests_passed": 96,
+  "references_declared": 7,
+  "citation_check": {
+    "valid_citations": [
+      "CIT-1-01",
+      "CIT-1-02",
+      "CIT-1-01",
+      "CIT-1-02",
+      "CIT-1-03",
+      "CIT-1-04",
+      "CIT-1-07",
+      "CIT-1-05",
+      "CIT-1-06",
+      "CIT-1-07",
+      "CIT-1-05",
+      "CIT-1-01",
+      "CIT-1-02",
+      "CIT-1-03",
+      "CIT-1-04",
+      "CIT-1-05",
+      "CIT-1-06",
+      "CIT-1-07",
+      "CIT-1-07"
+    ],
+    "invalid_citations": [],
+    "is_valid": true,
+    "total_found": 19
+  },
+  "four_project_execution": {
+    "completed": true,
+    "references": 4,
+    "metadata_requests": 4,
+    "model_calls_this_run": 0,
+    "historical_evaluation_sha256": "0cb3ec72ce7cc60169ee0b9f771ac1824c89631632324be10fe3c9d3b51b0a3c",
+    "execution_scope": {
+      "01": "live metadata lookup and checkpointing",
+      "02": "offline pre-writeup experiment audit",
+      "03": "citation persistence and reference validation",
+      "04": "program-bound extractive evidence export"
+    },
+    "full_autonomous_frameworks_executed": false
+  },
+  "limitations": [
+    "Citation existence is not semantic entailment.",
+    "Historical model experiments were not rerun.",
+    "Only independent modules of the four projects were executed."
+  ]
+}

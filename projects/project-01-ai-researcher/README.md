@@ -84,3 +84,7 @@ python web_ai_researcher.py
 ## 6. 课程交付与版本
 
 在个人分支提交改动，报告写清输入、配置（不含密钥）、运行步骤与实际验证结果。分支和 PR 流程见课程总说明。本课程源码整理时的上游版本为 `f9a6f8480860c193afff600eeffe3defcee8a978`。本次文献模块的改动及验证记录见[模块报告](coursework/README.md)。本版上游根目录无独立 LICENSE，使用与分发前核实授权。
+
+## 2026 年 11 月 18 日模块更新
+
+文献入口新增批次规范化去重与逐篇检查点，后续查询中断时保留已取得资料。本次四项目流程真实获取并核对 4 篇固定版本文献。见[复现说明](../multi-agent-security-research/experiments/source_tracking/PAPER_WORKFLOW.md)与[课程论文](../multi-agent-security-research/manuscripts/2026-11-18-source-grounding/README.md)。

@@ -91,3 +91,7 @@ python launch_scientist_bfts.py \
 ## 6. 课程提交
 
 提交配置变更（不含密钥）、代码、实验记录摘要及复现说明，保留 [许可证](LICENSE)。本项目与项目 04 的实验适配层没有完成兼容验证，不能直接假设可互接。本课程源码整理时的上游版本为 `96bd51617cfdbb494a9fc283af00fe090edfae48`；本说明经源码核对，未执行完整实验。
+
+## 2026 年 11 月 18 日模块更新
+
+新增 `ai_scientist/evidence_audit.py`，为课程两协议实验汇总提供独立写作前审核：检查计数、比例、条件完整性和配对配置，并标出结论边界。该模块已实际核对历史汇总；未运行 GPU 实验树搜索。见[复现说明](../multi-agent-security-research/experiments/source_tracking/PAPER_WORKFLOW.md)与[课程论文](../multi-agent-security-research/manuscripts/2026-11-18-source-grounding/README.md)。
