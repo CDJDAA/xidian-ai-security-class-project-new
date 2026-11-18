@@ -1,8 +1,27 @@
 {
   "code_commit": "79a53db",
   "tests_passed": 96,
-  "references_declared": 7,
-  "citation_check": {
+  "references_declared": 8,
+  "four_project_execution": {
+    "completed": true,
+    "references": 4,
+    "metadata_requests": 4,
+    "model_calls_this_run": 0,
+    "historical_evaluation_sha256": "0cb3ec72ce7cc60169ee0b9f771ac1824c89631632324be10fe3c9d3b51b0a3c",
+    "execution_scope": {
+      "01": "live metadata lookup and checkpointing",
+      "02": "offline pre-writeup experiment audit",
+      "03": "citation persistence and reference validation",
+      "04": "program-bound extractive evidence export"
+    },
+    "full_autonomous_frameworks_executed": false
+  },
+  "limitations": [
+    "Citation existence is not semantic entailment.",
+    "Historical model experiments were not rerun.",
+    "Only independent modules of the four projects were executed."
+  ],
+  "pre_revision_citation_check": {
     "valid_citations": [
       "CIT-1-01",
       "CIT-1-02",
@@ -28,23 +47,29 @@
     "is_valid": true,
     "total_found": 19
   },
-  "four_project_execution": {
-    "completed": true,
-    "references": 4,
-    "metadata_requests": 4,
-    "model_calls_this_run": 0,
-    "historical_evaluation_sha256": "0cb3ec72ce7cc60169ee0b9f771ac1824c89631632324be10fe3c9d3b51b0a3c",
-    "execution_scope": {
-      "01": "live metadata lookup and checkpointing",
-      "02": "offline pre-writeup experiment audit",
-      "03": "citation persistence and reference validation",
-      "04": "program-bound extractive evidence export"
-    },
-    "full_autonomous_frameworks_executed": false
-  },
-  "limitations": [
-    "Citation existence is not semantic entailment.",
-    "Historical model experiments were not rerun.",
-    "Only independent modules of the four projects were executed."
-  ]
+  "journal_revision": {
+    "date": "2026-11-18",
+    "format": "general journal structure; Chinese body with English title and abstract",
+    "skill": "scientific-writing 2.3",
+    "skill_commit": "ec59a29a03d5c40f73ab40878df04860bc00e876",
+    "references_syntax_checked": 8,
+    "numeric_registry_entries_checked": 37,
+    "table_2_conditions_matched": 8,
+    "docx_pages": 9,
+    "render_backend": "Microsoft Word PDF export; PDFium rasterization",
+    "visual_review": "all nine page images inspected",
+    "report_directory": "journal-audit",
+    "new_model_evaluation_calls": 0,
+    "human_source_verification": false,
+    "full_claim_audit": false,
+    "submission_ready": false,
+    "pending": [
+      "Author affiliation and correspondence",
+      "Author contributions and final scientific approval",
+      "Funding and conflict declarations",
+      "Target-journal policy and applicable ethics requirements"
+    ],
+    "lint_warning": "CONFIDENTIALITY_GATE_NOT_CHECKED: no human policy-review record; public repository update explicitly requested by user",
+    "historical_checks_note": "The 96 code checks and original citation check belong to the preceding four-project run; they were not rerun for this editorial revision."
+  }
 }

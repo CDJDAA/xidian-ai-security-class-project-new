@@ -153,3 +153,7 @@ Intelligence Gathering 以源码副本加入，已排除本地密钥、虚拟环
 - [四项目模块流程与复现方法](projects/multi-agent-security-research/experiments/source_tracking/PAPER_WORKFLOW.md)
 
 本次运行的是独立模块，不代表四套完整自治研究平台均已部署；论文中的 480 次模型调用来自历史实验，本次未重新执行。
+
+## 通用期刊论文写作与修订
+
+新增 [scientific-writing 2.3](.agents/skills/scientific-writing/SKILL.md)，固定上游版本并保留 MIT 许可，支持方法、结果、引用和声明核对。参见[技能来源](.agents/skills/scientific-writing/PROVENANCE.md)和[论文修订说明](projects/multi-agent-security-research/manuscripts/2026-11-18-source-grounding/REVISION_NOTES.md)。本轮按通用期刊规范修订中文正文，补英文题名、摘要及三线表；作者核实与声明仍待确认。

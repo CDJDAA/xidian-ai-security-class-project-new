@@ -1,0 +1,17 @@
+{
+  "manuscript_sha256": "9bad7392a3576f70d142f8f5d44aa3fa3c7bc7b1f25d3d2d02a0168ba9adda8f",
+  "reference_count": 8,
+  "table_2_rows_matched_to_data": 8,
+  "table_3_values_matched_to_data": 4,
+  "upstream_files_identical": 31,
+  "upstream_commit": "ec59a29a03d5c40f73ab40878df04860bc00e876",
+  "human_source_verification": false,
+  "full_claim_audit": false,
+  "submission_ready": false,
+  "limitations": [
+    "Reference syntax does not resolve citations or establish entailment.",
+    "Consistency checker validates a curated registry; explicit table comparisons separately match the manuscript to stored JSON.",
+    "Language lint mainly covers English; Chinese text was reviewed by the assistant.",
+    "No human verification, authorship approval, target-journal policy review, or submission-readiness claim."
+  ]
+}

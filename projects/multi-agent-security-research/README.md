@@ -62,4 +62,4 @@ experiments/   课程自建原型、实际运行汇总及局限说明
 
 ## 2026 年 11 月 18 日论文交付
 
-已形成[多智能体协同人工智能系统的来源约束与安全评测](manuscripts/2026-11-18-source-grounding/README.md)，提供可浏览正文、Word 版本和验证记录。配套[四项目模块流程](experiments/source_tracking/PAPER_WORKFLOW.md)先完善证据交接，再实际获取文献、核对历史汇总并登记引用。相关检查共 96 项通过；本次未重跑历史模型安全实验。
+已形成[多智能体研究协作中的程序绑定来源与证据核验](manuscripts/2026-11-18-source-grounding/README.md)，提供可浏览正文、Word 版本和验证记录。配套[四项目模块流程](experiments/source_tracking/PAPER_WORKFLOW.md)先完善证据交接，再实际获取文献、核对历史汇总并登记引用。相关检查共 96 项通过；本次未重跑历史模型安全实验。

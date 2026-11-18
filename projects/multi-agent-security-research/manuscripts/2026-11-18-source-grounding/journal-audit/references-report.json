@@ -1,0 +1,11 @@
+{
+  "issues": [],
+  "status": "pass",
+  "summary": {
+    "errors": 0,
+    "network_used": false,
+    "sources_checked": 8,
+    "warnings": 0
+  },
+  "tool": "check_references"
+}

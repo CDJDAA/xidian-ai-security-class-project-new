@@ -1,0 +1,220 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "evidence_id": "E001",
+      "title": "Prompt Infection: LLM-to-LLM Prompt Injection within Multi-Agent Systems",
+      "authors": [
+        "Donghyun Lee",
+        "Mo Tiwari"
+      ],
+      "year": 2024,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://arxiv.org/abs/2410.07283v1"
+      },
+      "locator": "Metadata and abstract",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "title": "AgentDojo: A Dynamic Environment to Evaluate Attacks and Defenses for LLM Agents",
+      "authors": [
+        "Edoardo Debenedetti",
+        "Jie Zhang",
+        "Mislav Balunović",
+        "Luca Beurer-Kellner",
+        "Marc Fischer",
+        "Florian Tramèr"
+      ],
+      "year": 2024,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://arxiv.org/abs/2406.13352v1"
+      },
+      "locator": "Metadata and abstract",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "title": "Defeating Prompt Injections by Design",
+      "authors": [
+        "Edoardo Debenedetti",
+        "Ilia Shumailov",
+        "Tianqi Fan",
+        "Jamie Hayes",
+        "Nicholas Carlini",
+        "Daniel Fabian",
+        "Christoph Kern",
+        "Chongyang Shi",
+        "Andreas Terzis",
+        "Florian Tramèr"
+      ],
+      "year": 2025,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://arxiv.org/abs/2503.18813v2"
+      },
+      "locator": "Metadata and abstract",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "title": "Can CaMeLs Talk? Securing Multi-Agent Systems Against Indirect Prompt Injection Attacks",
+      "authors": [
+        "James Peters-Gill",
+        "Avi Semler",
+        "Henning Bartsch",
+        "Ilia Shumailov",
+        "Christian Schroeder de Witt"
+      ],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://arxiv.org/abs/2610.05640v1"
+      },
+      "locator": "Metadata and abstract",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "title": "项目 04 后续改进报告及两协议实验汇总",
+      "authors": [
+        "董俊逸"
+      ],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://github.com/RoseLYi/xidian-ai-security-class-project-new/blob/f6394d6/projects/multi-agent-security-research/experiments/source_tracking/REPORT_V2.md"
+      },
+      "locator": "Project report and linked data",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "title": "任务 01 与 04 运行效率与恢复完整性优化",
+      "authors": [
+        "董俊逸"
+      ],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://github.com/RoseLYi/xidian-ai-security-class-project-new/blob/f6394d6/projects/multi-agent-security-research/experiments/source_tracking/OPTIMIZATION_20261118.md"
+      },
+      "locator": "Project report and linked data",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "title": "四项目论文证据交接流程",
+      "authors": [
+        "董俊逸"
+      ],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://github.com/RoseLYi/xidian-ai-security-class-project-new/blob/79a53db/projects/multi-agent-security-research/experiments/source_tracking/PAPER_WORKFLOW.md"
+      },
+      "locator": "Project report and linked data",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E008",
+      "title": "Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents",
+      "authors": [
+        "Timothy Kassis",
+        "Vinayak Agarwal",
+        "Yuhuan He",
+        "Darshil Patel",
+        "Aubrey M. Brueckner"
+      ],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "doi": "10.48550/arXiv.2609.00065",
+        "isbn": "",
+        "pmcid": "",
+        "pmid": "",
+        "url": "https://arxiv.org/abs/2609.00065"
+      },
+      "locator": "Software provenance and metadata",
+      "verification": {
+        "source_opened": false,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    }
+  ]
+}

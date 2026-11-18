@@ -1,17 +1,57 @@
 {
   "code_commit": "79a53db26c9ae9cd3a6b383bd0ea89754e9544af",
   "files": {
-    "paper.md": {
-      "sha256": "0f2e628755f65af30630ef208981e436e1dd5acda953c7398318a4a5dc0ebccc",
-      "bytes": 22374
+    "journal-audit/consistency-report.json": {
+      "sha256": "1d06c233ebe58f062938746eaa5d831f59409148f998795d189dbcd3bded97f1",
+      "bytes": 186
+    },
+    "journal-audit/consistency_manifest.json": {
+      "sha256": "146608810d1632598981444f4aabb38cd6a0e3fca4f6ba31c46faf7c05fc95e0",
+      "bytes": 13698
+    },
+    "journal-audit/language-report.json": {
+      "sha256": "7d3505aaba5bf573067b83376f92b7ab75db7a7456efe7628e49ed2c45799ea2",
+      "bytes": 302
+    },
+    "journal-audit/README.md": {
+      "sha256": "9b4752a061c0df912c3e5ebc9cfdb5c33810663199cddbcd8e9a8520f6c0bee2",
+      "bytes": 1605
+    },
+    "journal-audit/references-report.json": {
+      "sha256": "4754270715207ed06d567cf8ea5db16c2c3b734bd23b2883498c88e90abdc429",
+      "bytes": 177
+    },
+    "journal-audit/revision-checks.json": {
+      "sha256": "1276c7a77de6e4cf7b7aba9c5bb4413499a1044ad5d84d5ebd5b2f30e0b9010c",
+      "bytes": 820
+    },
+    "journal-audit/source_manifest.json": {
+      "sha256": "06d43dbf136977e5b1ed49d051acf3151797fe94b224c3954b7c2773ec81a124",
+      "bytes": 6012
+    },
+    "journal-audit/source_schema-report.json": {
+      "sha256": "eb79b3fc2cb53695ea9ead0a0015403959912f5e1d3c3f8065ddc9655b2cbb96",
+      "bytes": 165
     },
     "paper.docx": {
-      "sha256": "480e59a086d87b24f6bba1dcb4c34bdeb3d600887b6ac193c0570c523fa5eea8",
-      "bytes": 49459
+      "sha256": "c0590584bdf639cc9d357e6688720a8ba9826550e4a127760236bacf9f4fcd18",
+      "bytes": 52826
+    },
+    "paper.md": {
+      "sha256": "9bad7392a3576f70d142f8f5d44aa3fa3c7bc7b1f25d3d2d02a0168ba9adda8f",
+      "bytes": 29045
+    },
+    "README.md": {
+      "sha256": "651278a35c2f091c331b96d7b485bc5000a0e8966530fc4144bdf7d75f7a5237",
+      "bytes": 2379
+    },
+    "REVISION_NOTES.md": {
+      "sha256": "29c35ae5689c7346cfd422a19f60746989991db6a84f4f44e1a5981c50e780f8",
+      "bytes": 2463
     },
     "validation.json": {
-      "sha256": "8a62dd75bbbbc43825b23171ec25ec672761cccb9666b59b3d9746f2241d8afa",
-      "bytes": 1295
+      "sha256": "c2066ff3dd41ca96938c4635cec05250aa16bb8d9f936dd09705f5bcd7c7aa0f",
+      "bytes": 2553
     }
   }
 }
