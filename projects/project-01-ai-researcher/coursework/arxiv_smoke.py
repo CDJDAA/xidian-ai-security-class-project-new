@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def lookup_references(identifiers, lookup, normalize):
+def lookup_references(identifiers, lookup, normalize, *, on_result=None):
     """Deduplicate one batch by canonical ID, preserving order and revisions.
 
     Cache only successful results for this invocation; never retain a stale
@@ -35,6 +35,8 @@ def lookup_references(identifiers, lookup, normalize):
             if result is not None:
                 cache[identifier] = deepcopy(result)
         results.append((result, reused, round(time.perf_counter() - started, 3)))
+        if on_result is not None:
+            on_result(len(results) - 1, *results[-1])
     return results
 
 
@@ -57,9 +59,9 @@ def main():
     except ValueError as exc:
         parser.error(str(exc))
     args.output.mkdir(parents=True)
-    fetched = lookup_references(identifiers, module.get_arxiv_paper_meta, normalize_arxiv_id)
     results = []
-    for index, (identifier, (result, reused, seconds)) in enumerate(zip(args.id, fetched)):
+    def checkpoint(index, result, reused, seconds):
+        identifier = args.id[index]
         if result:
             (args.output / f"paper-{index + 1}.json").write_text(json.dumps(result, ensure_ascii=False, default=str, indent=2), encoding="utf-8")
         results.append({"requested": identifier, "status": "retrieved" if result else "failed",
@@ -67,12 +69,18 @@ def main():
                         "title": result["title"] if result else None,
                         "response_sha256": result["provenance"]["response_sha256"] if result else None,
                         "reused_in_batch": reused, "seconds": seconds})
+        temporary = args.output / "progress.json.tmp"
+        temporary.write_text(json.dumps({"complete": False, "results": results}, ensure_ascii=False, indent=2), encoding="utf-8")
+        temporary.replace(args.output / "progress.json")
+
+    lookup_references(identifiers, module.get_arxiv_paper_meta, normalize_arxiv_id, on_result=checkpoint)
     summary = {"run_at_utc": datetime.now(timezone.utc).isoformat(), "python": platform.python_version(),
                "system": platform.system(), "module": "inno/tools/inno_tools/paper_search.py",
                "docker_cli_available": shutil.which("docker") is not None,
                "model_calls": 0, "metadata_requests": sum(not row["reused_in_batch"] for row in results),
                "full_research_workflow_executed": False, "results": results}
     (args.output / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    (args.output / "progress.json").unlink(missing_ok=True)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     if any(row["status"] != "retrieved" for row in results):
         raise SystemExit(1)

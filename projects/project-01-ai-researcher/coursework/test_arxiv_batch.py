@@ -57,3 +57,17 @@ def test_cache_does_not_survive_batches():
     for _ in range(2):
         smoke.lookup_references(["2410.07283"], lambda value: calls.append(value) or {}, normalize_arxiv_id)
     assert len(calls) == 2
+
+
+def test_completed_result_checkpoint_survives_later_interruption(monkeypatch):
+    monkeypatch.setattr(smoke.time, "sleep", lambda _: None)
+    saved = []
+    def lookup(value):
+        if value.endswith("v2"):
+            raise KeyboardInterrupt
+        return {"id": value}
+    with pytest.raises(KeyboardInterrupt):
+        smoke.lookup_references(["2410.07283v1", "2410.07283v2"], lookup, normalize_arxiv_id,
+                                on_result=lambda *row: saved.append(row))
+    assert len(saved) == 1
+    assert saved[0][1]["id"] == "2410.07283v1"
