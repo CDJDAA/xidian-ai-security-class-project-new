@@ -1,5 +1,7 @@
 # 项目 01：文献模块最小运行
 
+2026-11-18 更新：入口新增批次内规范化去重，保留版本与输入顺序，减少重复请求和等待。详见[优化报告](../../multi-agent-security-research/experiments/source_tracking/OPTIMIZATION_20261118.md)及[真实运行汇总](optimization-results-20261118.json)。
+
 学号 / 姓名：26241215025 / 董俊逸。日期：2026-11-01。
 
 本次完成 AI-Researcher 参考文献元数据模块的小规模真实运行，验证了两篇论文的固定版本获取、来源记录和错误处理。

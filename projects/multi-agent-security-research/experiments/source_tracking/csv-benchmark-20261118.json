@@ -1,0 +1,18 @@
+{
+  "python": "3.11.9",
+  "system": "Windows",
+  "fixture_rows": 100000,
+  "requested_rows": 500,
+  "repeats": 3,
+  "equal_output": true,
+  "baseline": {
+    "median_seconds": 1.250349,
+    "peak_python_bytes": 49324762
+  },
+  "bounded": {
+    "median_seconds": 0.005745,
+    "peak_python_bytes": 280375
+  },
+  "network_calls": 0,
+  "model_calls": 0
+}

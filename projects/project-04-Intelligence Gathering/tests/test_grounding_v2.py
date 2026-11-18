@@ -106,7 +106,35 @@ def test_resume_keeps_completed_results_and_spent_call_reservations(tmp_path, mo
                               repeats=1, max_calls=12, max_tokens=650, concurrency=1, resume=False, source_selection="index")
     first = asyncio.run(evaluation.evaluate(args))
     args.resume = True
+    def no_client(*args, **kwargs):
+        pytest.fail("Completed resume must not initialize a model client")
+    monkeypatch.setattr(evaluation, "ChatClient", no_client)
     second = asyncio.run(evaluation.evaluate(args))
     assert first["total_runs"] == second["total_runs"] == 4
     assert second["reserved_call_attempts"] == second["total_call_attempts"] == 12
     assert not (args.output / ".running.lock").exists()
+
+    raw = args.output / "runs.jsonl"
+    original = raw.read_text(encoding="utf-8")
+    rows = [json.loads(line) for line in original.splitlines()]
+    mutations = [
+        rows + [rows[0]],
+        [{**rows[0], "run_id": "unexpected"}] + rows[1:],
+        [{**rows[0], "attacked": not rows[0]["attacked"]}] + rows[1:],
+        [{**rows[0], "call_attempts": -1}] + rows[1:],
+        [{**rows[0], "duration_seconds": float("nan")}] + rows[1:],
+        [{**rows[0], "utility_success": "false"}] + rows[1:],
+    ]
+    for records in mutations:
+        raw.write_text("".join(json.dumps(row) + "\n" for row in records), encoding="utf-8")
+        with pytest.raises(ValueError):
+            asyncio.run(evaluation.evaluate(args))
+        assert not (args.output / ".running.lock").exists()
+    raw.write_text(original, encoding="utf-8")
+
+
+def test_ledger_without_final_newline_is_rejected(tmp_path):
+    path = tmp_path / "calls.ledger"
+    path.write_bytes(b"reserved")
+    with pytest.raises(ValueError, match="Invalid call ledger"):
+        CallBudget(path, 2)

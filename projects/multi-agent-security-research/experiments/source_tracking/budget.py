@@ -11,7 +11,7 @@ class CallBudget:
         self.used = 0
         if path.exists():
             data = path.read_bytes()
-            if any(line != b"reserved" for line in data.splitlines()):
+            if (data and not data.endswith(b"\n")) or any(line != b"reserved" for line in data.splitlines()):
                 raise ValueError("Invalid call ledger; preserve it and use a new run directory")
             self.used = len(data.splitlines())
         if self.used > limit:

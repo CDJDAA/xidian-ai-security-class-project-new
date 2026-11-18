@@ -8,6 +8,7 @@ import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
+from itertools import islice
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -37,6 +38,8 @@ def _safe_path(relative_path: str) -> Path:
 
 
 def _read_rows(path: Path, limit: int) -> list[dict[str, Any]]:
+    if limit <= 0:
+        return []
     suffix = path.suffix.lower()
     rows: list[dict[str, Any]] = []
     if suffix == ".jsonl":
@@ -57,7 +60,7 @@ def _read_rows(path: Path, limit: int) -> list[dict[str, Any]]:
         rows = [item if isinstance(item, dict) else {"value": item} for item in values[:limit]]
     elif suffix == ".csv":
         with path.open(encoding="utf-8-sig", newline="") as handle:
-            rows = list(csv.DictReader(handle))[:limit]
+            rows = list(islice(csv.DictReader(handle), limit))
     elif suffix in {".xlsx", ".xls"}:
         import pandas as pd
 

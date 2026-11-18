@@ -1,0 +1,39 @@
+{
+  "run_at_utc": "2026-11-18T07:15:06.225549+00:00",
+  "python": "3.11.9",
+  "system": "Windows",
+  "module": "inno/tools/inno_tools/paper_search.py",
+  "docker_cli_available": false,
+  "model_calls": 0,
+  "metadata_requests": 1,
+  "full_research_workflow_executed": false,
+  "results": [
+    {
+      "requested": "2410.07283v1",
+      "status": "retrieved",
+      "returned_id": "2410.07283v1",
+      "title": "Prompt Infection: LLM-to-LLM Prompt Injection within Multi-Agent Systems",
+      "response_sha256": "774c433fd8255aa8976ca3ddd0e8920bbd7c492125a0a4c540de498e13a5eca7",
+      "reused_in_batch": false,
+      "seconds": 0.844
+    },
+    {
+      "requested": "https://arxiv.org/pdf/2410.07283v1.pdf",
+      "status": "retrieved",
+      "returned_id": "2410.07283v1",
+      "title": "Prompt Infection: LLM-to-LLM Prompt Injection within Multi-Agent Systems",
+      "response_sha256": "774c433fd8255aa8976ca3ddd0e8920bbd7c492125a0a4c540de498e13a5eca7",
+      "reused_in_batch": true,
+      "seconds": 0.0
+    },
+    {
+      "requested": "2410.07283v1",
+      "status": "retrieved",
+      "returned_id": "2410.07283v1",
+      "title": "Prompt Infection: LLM-to-LLM Prompt Injection within Multi-Agent Systems",
+      "response_sha256": "774c433fd8255aa8976ca3ddd0e8920bbd7c492125a0a4c540de498e13a5eca7",
+      "reused_in_batch": true,
+      "seconds": 0.0
+    }
+  ]
+}

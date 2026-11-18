@@ -6,6 +6,8 @@ import argparse
 import asyncio
 import hashlib
 import json
+import math
+import os
 import platform
 import statistics
 from datetime import datetime, timezone
@@ -67,6 +69,8 @@ def summarize(records: list[dict], config: dict) -> dict:
 
 
 async def _evaluate_locked(args: argparse.Namespace) -> dict:
+    if args.concurrency < 1 or args.cases < 1 or args.repeats < 1 or args.offset < 0:
+        raise ValueError("Invalid evaluation dimensions or concurrency")
     content = args.corpus.read_bytes()
     corpus = [json.loads(line) for line in content.decode("utf-8").splitlines() if line.strip()][args.offset:args.offset + args.cases]
     if not corpus or len({row["case_id"] for row in corpus}) != len(corpus):
@@ -94,13 +98,55 @@ async def _evaluate_locked(args: argparse.Namespace) -> dict:
         if raw_file.exists() or (args.output / "calls.ledger").exists():
             raise ValueError("Orphaned outputs exist; preserve them and use a new directory")
         config_file.write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
-    done = {row["run_id"] for row in records}
+    expected = {
+        f"{row['case_id']}-a{int(attacked)}-g{int(guarded)}-r{repeat}":
+        (row['case_id'], attacked, guarded, repeat)
+        for _, row, attacked, guarded, repeat in jobs
+    }
+    done = set()
+    for row in records:
+        if not isinstance(row, dict):
+            raise ValueError("Invalid saved run record")
+        run_id = row.get("run_id")
+        if not isinstance(run_id, str) or run_id not in expected or run_id in done:
+            raise ValueError("Duplicate or unexpected saved run ID")
+        identity = (row.get("case_id"), row.get("attacked"), row.get("guarded"), row.get("repeat"))
+        if (identity != expected[run_id] or type(row.get("attacked")) is not bool
+                or type(row.get("guarded")) is not bool or type(row.get("repeat")) is not int):
+            raise ValueError("Saved run identity does not match the planned job")
+        if row.get("status") not in {"completed", "model-error"}:
+            raise ValueError("Invalid saved run status")
+        for key in ("call_attempts", "total_tokens", "claim_count", "checked_claim_count"):
+            if type(row.get(key)) is not int or row[key] < 0:
+                raise ValueError("Invalid saved run counters")
+        if row["call_attempts"] > 3 or row["checked_claim_count"] > row["claim_count"]:
+            raise ValueError("Inconsistent saved run counters")
+        seconds = row.get("duration_seconds")
+        if type(seconds) not in (int, float) or not math.isfinite(seconds) or seconds < 0:
+            raise ValueError("Invalid saved run duration")
+        if any(type(row.get(key)) is not bool for key in ("attack_success", "utility_success")):
+            raise ValueError("Invalid saved run outcomes")
+        done.add(run_id)
     ledger = args.output / "calls.ledger"
     if records and not ledger.exists():
         raise ValueError("Legacy run has no call ledger and cannot safely resume; use a new directory")
     budget = CallBudget(ledger, args.max_calls)
     if sum(row["call_attempts"] for row in records) > budget.used:
         raise ValueError("Run records exceed the call ledger")
+    def save_summary():
+        summary = summarize(records, config)
+        summary["reserved_call_attempts"] = budget.used
+        summary["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
+        temporary = args.output / "summary.json.tmp"
+        with temporary.open("w", encoding="utf-8") as handle:
+            handle.write(json.dumps(summary, ensure_ascii=False, indent=2))
+            handle.flush()
+            os.fsync(handle.fileno())
+        temporary.replace(args.output / "summary.json")
+        return summary
+
+    if len(done) == len(jobs):
+        return save_summary()
     client = ChatClient(args.model, max_calls=args.max_calls, max_tokens=args.max_tokens, budget=budget)
     semaphore = asyncio.Semaphore(args.concurrency)
 
@@ -133,6 +179,8 @@ async def _evaluate_locked(args: argparse.Namespace) -> dict:
             records.append(record)
             with raw_file.open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+                handle.flush()
+                os.fsync(handle.fileno())
             if len(records) % 8 == 0 or len(records) == len(jobs):
                 print(json.dumps({"completed_runs": len(records), "planned_runs": len(jobs),
                                   "call_attempts": client.calls, "errors": sum(row["status"] != "completed" for row in records)}), flush=True)
@@ -141,11 +189,7 @@ async def _evaluate_locked(args: argparse.Namespace) -> dict:
         await asyncio.gather(*(one(*job) for job in jobs))
     finally:
         await client.close()
-    summary = summarize(records, config)
-    summary["reserved_call_attempts"] = budget.used
-    summary["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
-    (args.output / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
-    return summary
+    return save_summary()
 
 
 async def evaluate(args: argparse.Namespace) -> dict:
