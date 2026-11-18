@@ -1,0 +1,22 @@
+{
+  "issues": [
+    {
+      "code": "CONFIDENTIALITY_GATE_NOT_CHECKED",
+      "location": "manifest",
+      "severity": "warning"
+    },
+    {
+      "code": "POTENTIAL_OVERSTATEMENT",
+      "location": "line:19",
+      "severity": "warning"
+    }
+  ],
+  "status": "pass",
+  "summary": {
+    "errors": 0,
+    "lines_checked": 428,
+    "raw_text_echoed": false,
+    "warnings": 2
+  },
+  "tool": "lint_manuscript"
+}

@@ -1,0 +1,27 @@
+{
+  "run_at_utc": "2026-11-01T12:56:02.422665+00:00",
+  "python": "3.11.9",
+  "system": "Windows",
+  "module": "inno/tools/inno_tools/paper_search.py",
+  "docker_cli_available": false,
+  "model_calls": 0,
+  "full_research_workflow_executed": false,
+  "results": [
+    {
+      "requested": "2410.07283v1",
+      "status": "retrieved",
+      "returned_id": "2410.07283v1",
+      "title": "Prompt Infection: LLM-to-LLM Prompt Injection within Multi-Agent Systems",
+      "response_sha256": "32d5b36109a8a2f4a3d96eeeb28ad95db29a3486473f89e0e69358eff16569fe",
+      "seconds": 2.285
+    },
+    {
+      "requested": "2406.13352v1",
+      "status": "retrieved",
+      "returned_id": "2406.13352v1",
+      "title": "AgentDojo: A Dynamic Environment to Evaluate Attacks and Defenses for LLM Agents",
+      "response_sha256": "06c994d47a8785bf0428808d7ac9ed1cc070dd387246a6e9be4d50e8f3f709fb",
+      "seconds": 0.604
+    }
+  ]
+}

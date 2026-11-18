@@ -13,6 +13,10 @@
 | 03 | DeepTutor（HKUDS） | 智能辅导、知识问答与学习代理 | [README](projects/project-03-deeptutor/README.md) | [COURSE](projects/project-03-deeptutor/COURSE.md) |
 | 04 | Intelligence Gathering | 多源采集、内容分析、知识库归档与研究想法生成 | [README](projects/project-04-Intelligence%20Gathering/README.md) | [COURSE](projects/project-04-Intelligence%20Gathering/COURSE.md) |
 
+## 个人研究项目
+
+本 Fork 另收录个人的[多智能体系统安全研究项目](projects/multi-agent-security-research/README.md)，内容包括文献库、阅读笔记、威胁建模与协作安全评测框架。项目完整保存在 `projects/multi-agent-security-research/` 文件夹中；来源及导入版本见[整合说明](projects/multi-agent-security-research/SOURCE.md)。已新增项目 04 的[三角色来源追踪实验及报告](projects/multi-agent-security-research/experiments/source_tracking/REPORT.md)，完成 240 次真实运行；本次自建原型不代表目录中 25 篇论文已完成复现。
+
 ## 目录结构
 
 ```text
@@ -23,7 +27,8 @@ xidian-ai-security-class-project/
     ├── project-01-ai-researcher/
     ├── project-02-ai-scientist-v2/
     ├── project-03-deeptutor/
-    └── project-04-Intelligence Gathering/
+    ├── project-04-Intelligence Gathering/
+    └── multi-agent-security-research/
 ```
 
 每个项目都包含中文使用 README.md 和课程任务 COURSE.md。README 按环境准备、依赖安装、模型配置、启动、首次演示与排错组织；整理前的说明保存在各项目 README.original.md。各自的依赖、示例与原始许可文件保存在对应目录内。
@@ -139,3 +144,20 @@ PR 标题为 `[项目编号] 学号 - 姓名`，按自动显示的作业模板�
 AI-Researcher 有 182 个文件名为兼容 Windows 做了字符替换，当前目录未保留名称对照文件，可对照原始压缩包检查名称。文件内容未因此修改；按原名访问资源的代码可能需要适配。原始压缩包和上游 Git 元数据保存在本机课程目录旁的“课程项目下载备份”，不会随课程源码自动发布。
 
 Intelligence Gathering 以源码副本加入，已排除本地密钥、虚拟环境、生成数据、知识库、日志和旧发布目录；原始本地项目保留。本仓库发布课程源码与使用说明，尚未统一安装依赖或完成四个项目的运行验收。上传前已将发现的上游示例硬编码密钥改为环境变量读取或占位符，运行时请自行配置凭据。
+
+## 2026 年 11 月 18 日四项目进展
+
+四项目独立模块已完成文献检查点、实验汇总审核、引用可靠保存和来源证据交接优化。相关检查共 96 项通过；实际获取并核对 4 篇固定版本文献，形成课程论文。
+
+- [论文与交付清单](projects/multi-agent-security-research/manuscripts/2026-11-18-source-grounding/README.md)
+- [四项目模块流程与复现方法](projects/multi-agent-security-research/experiments/source_tracking/PAPER_WORKFLOW.md)
+
+本次运行的是独立模块，不代表四套完整自治研究平台均已部署；论文中的 480 次模型调用来自历史实验，本次未重新执行。
+
+## 通用期刊论文写作与修订
+
+新增 [scientific-writing 2.3](.agents/skills/scientific-writing/SKILL.md)，固定上游版本并保留 MIT 许可，支持方法、结果、引用和声明核对。参见[技能来源](.agents/skills/scientific-writing/PROVENANCE.md)和[论文修订说明](projects/multi-agent-security-research/manuscripts/2026-11-18-source-grounding/REVISION_NOTES.md)。本轮按通用期刊规范修订中文正文，补英文题名、摘要及三线表；作者核实与声明仍待确认。
+
+## 多智能体论文研究深化
+
+论文已深化至 18 页，新增来源约束的条件推导、18 个确定性边界案例、6 条脚本化交接链、2 幅图和后续对照设计。见[研究深化说明](projects/multi-agent-security-research/manuscripts/2026-11-18-source-grounding/REVISION_NOTES.md)及[可复现实验](projects/multi-agent-security-research/experiments/source_tracking/BOUNDARY_PROBES.md)。本轮模型 API 调用为零，历史实验与新增机制实验分别报告。

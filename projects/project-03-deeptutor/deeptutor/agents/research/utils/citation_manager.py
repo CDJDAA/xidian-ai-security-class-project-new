@@ -8,11 +8,19 @@ import asyncio
 from datetime import datetime
 import html
 import json
+import os
+import tempfile
 from pathlib import Path
 from typing import Any
 
-from deeptutor.services.path_service import get_path_service
-from deeptutor.utils.json_parser import parse_json_response
+def get_path_service():
+    from deeptutor.services.path_service import get_path_service as factory
+    return factory()
+
+
+def parse_json_response(text):
+    from deeptutor.utils.json_parser import parse_json_response as parse
+    return parse(text)
 
 _RAG_SOURCE_FIELDS = ("chunks", "documents", "sources", "context", "retrieved_docs")
 
@@ -155,26 +163,28 @@ class CitationManager:
         return citation_id in self._citations
 
     def _load_citations(self):
-        """Load citation information from JSON file and restore counters"""
-        if self.citations_file.exists():
-            try:
-                with open(self.citations_file, encoding="utf-8") as f:
-                    data = json.load(f)
-                    self._citations = data.get("citations", {})
-
-                    # Try to restore counters from saved state first
-                    counters = data.get("counters", {})
-                    if counters:
-                        self._plan_counter = counters.get("plan_counter", 0)
-                        self._block_counters = counters.get("block_counters", {})
-                    else:
-                        # Fallback: restore counters from existing citations
-                        self._restore_counters_from_citations()
-            except Exception as e:
-                print(f"⚠️ Failed to load citation file: {e}")
-                self._citations = {}
-        else:
-            self._citations = {}
+        """Fail closed on damaged archives; never silently discard evidence."""
+        if not self.citations_file.exists():
+            return
+        try:
+            data = json.loads(self.citations_file.read_text(encoding="utf-8"))
+            citations = data["citations"]
+            if not isinstance(citations, dict) or any(not isinstance(v, dict) for v in citations.values()):
+                raise ValueError("Invalid citation records")
+            if data.get("research_id") != self.research_id:
+                raise ValueError("Citation archive belongs to another research task")
+            counters = data.get("counters", {})
+            plan = counters.get("plan_counter", 0)
+            blocks = counters.get("block_counters", {})
+            if (type(plan) is not int or plan < 0 or not isinstance(blocks, dict)
+                    or any(type(v) is not int or v < 0 for v in blocks.values())):
+                raise ValueError("Invalid citation counters")
+            self._citations = citations
+            self._plan_counter = plan
+            self._block_counters = blocks
+            self._restore_counters_from_citations()
+        except (ValueError, KeyError, TypeError, AttributeError) as exc:
+            raise ValueError("Invalid citation archive; preserve it before recovery") from exc
 
     def _restore_counters_from_citations(self):
         """Restore citation counters from existing citations to avoid ID conflicts"""
@@ -200,21 +210,22 @@ class CitationManager:
                     pass
 
     def _save_citations(self):
-        """Save citation information to JSON file"""
-        try:
-            data = {
-                "research_id": self.research_id,
-                "updated_at": datetime.now().isoformat(),
+        """Replace a complete archive atomically; propagate write failures."""
+        data = {"research_id": self.research_id, "updated_at": datetime.now().isoformat(),
                 "citations": self._citations,
-                "counters": {
-                    "plan_counter": self._plan_counter,
-                    "block_counters": self._block_counters,
-                },
-            }
-            with open(self.citations_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, ensure_ascii=False, indent=2)
-        except Exception as e:
-            print(f"⚠️ Failed to save citation file: {e}")
+                "counters": {"plan_counter": self._plan_counter, "block_counters": self._block_counters}}
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=self.cache_dir,
+                                             suffix=".tmp", delete=False) as handle:
+                temporary = Path(handle.name)
+                json.dump(data, handle, ensure_ascii=False, indent=2)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary, self.citations_file)
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
 
     def validate_citation_references(self, text: str) -> dict[str, Any]:
         """
@@ -234,7 +245,7 @@ class CitationManager:
         import re
 
         # Find all citation references in the text
-        pattern = r"\[\[([A-Z]+-\d+-?\d*)\]\]"
+        pattern = r"\[\[((?:CIT|PLAN)-[^\]\n]*)\]\]"
         found_refs = re.findall(pattern, text)
 
         valid = []
@@ -323,8 +334,16 @@ class CitationManager:
                 citation_info = self._extract_generic_citation(citation_id, tool_type, tool_trace)
 
             if citation_info:
+                previous = self._citations.get(citation_id)
                 self._citations[citation_id] = citation_info
-                self._save_citations()
+                try:
+                    self._save_citations()
+                except OSError:
+                    if previous is None:
+                        self._citations.pop(citation_id, None)
+                    else:
+                        self._citations[citation_id] = previous
+                    raise
                 return True
             return False
         except Exception as e:

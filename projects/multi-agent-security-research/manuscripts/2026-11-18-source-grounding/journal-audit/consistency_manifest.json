@@ -1,0 +1,817 @@
+{
+  "schema_version": "1.0",
+  "numeric_facts": [
+    {
+      "fact_id": "N001",
+      "concept": "total_runs",
+      "section": "摘要",
+      "value": 160,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N002",
+      "concept": "total_runs",
+      "section": "Abstract",
+      "value": 160,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N003",
+      "concept": "total_runs",
+      "section": "4.1",
+      "value": 160,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N004",
+      "concept": "total_runs",
+      "section": "5.1",
+      "value": 160,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N005",
+      "concept": "historical_calls",
+      "section": "摘要",
+      "value": 480,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N006",
+      "concept": "historical_calls",
+      "section": "Abstract",
+      "value": 480,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N007",
+      "concept": "historical_calls",
+      "section": "4.1",
+      "value": 480,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N008",
+      "concept": "historical_calls",
+      "section": "5.3",
+      "value": 480,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N009",
+      "concept": "id_a0_g0_utility",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N010",
+      "concept": "id_a0_g0_citations",
+      "section": "table 3",
+      "value": 95.0,
+      "unit": "percent",
+      "numerator": 19,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N011",
+      "concept": "id_a0_g1_utility",
+      "section": "table 3",
+      "value": 95.0,
+      "unit": "percent",
+      "numerator": 19,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N012",
+      "concept": "id_a0_g1_citations",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 19,
+      "denominator": 19,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N013",
+      "concept": "id_a1_g0_utility",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N014",
+      "concept": "id_a1_g0_citations",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N015",
+      "concept": "id_a1_g0_attack",
+      "section": "table 3",
+      "value": 0.0,
+      "unit": "percent",
+      "numerator": 0,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N016",
+      "concept": "id_a1_g1_utility",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N017",
+      "concept": "id_a1_g1_citations",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N018",
+      "concept": "id_a1_g1_attack",
+      "section": "table 3",
+      "value": 0.0,
+      "unit": "percent",
+      "numerator": 0,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N019",
+      "concept": "id_tokens",
+      "section": "5.2",
+      "value": 154255,
+      "unit": "tokens",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N020",
+      "concept": "index_a0_g0_utility",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N021",
+      "concept": "index_a0_g0_citations",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N022",
+      "concept": "index_a0_g1_utility",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N023",
+      "concept": "index_a0_g1_citations",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N024",
+      "concept": "index_a1_g0_utility",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N025",
+      "concept": "index_a1_g0_citations",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N026",
+      "concept": "index_a1_g0_attack",
+      "section": "table 3",
+      "value": 0.0,
+      "unit": "percent",
+      "numerator": 0,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N027",
+      "concept": "index_a1_g1_utility",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N028",
+      "concept": "index_a1_g1_citations",
+      "section": "table 3",
+      "value": 100.0,
+      "unit": "percent",
+      "numerator": 20,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N029",
+      "concept": "index_a1_g1_attack",
+      "section": "table 3",
+      "value": 0.0,
+      "unit": "percent",
+      "numerator": 0,
+      "denominator": 20,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N030",
+      "concept": "index_tokens",
+      "section": "5.2",
+      "value": 156693,
+      "unit": "tokens",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N031",
+      "concept": "token_increase",
+      "section": "5.2",
+      "value": 1.58,
+      "unit": "percent",
+      "numerator": 2438,
+      "denominator": 154255,
+      "sample_size": 20,
+      "analysis_set": "fixed 20-task historical set",
+      "evidence_ids": [
+        "E005"
+      ]
+    },
+    {
+      "fact_id": "N032",
+      "concept": "baseline_median_seconds",
+      "section": "table 4",
+      "value": 1.250349,
+      "unit": "seconds",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 3,
+      "analysis_set": "100000-row CSV, 500-row prefix, 3 repetitions",
+      "evidence_ids": [
+        "E006"
+      ]
+    },
+    {
+      "fact_id": "N033",
+      "concept": "baseline_peak_python_bytes",
+      "section": "table 4",
+      "value": 49324762,
+      "unit": "bytes",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 3,
+      "analysis_set": "100000-row CSV, 500-row prefix, 3 repetitions",
+      "evidence_ids": [
+        "E006"
+      ]
+    },
+    {
+      "fact_id": "N034",
+      "concept": "bounded_median_seconds",
+      "section": "table 4",
+      "value": 0.005745,
+      "unit": "seconds",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 3,
+      "analysis_set": "100000-row CSV, 500-row prefix, 3 repetitions",
+      "evidence_ids": [
+        "E006"
+      ]
+    },
+    {
+      "fact_id": "N035",
+      "concept": "bounded_peak_python_bytes",
+      "section": "table 4",
+      "value": 280375,
+      "unit": "bytes",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": 3,
+      "analysis_set": "100000-row CSV, 500-row prefix, 3 repetitions",
+      "evidence_ids": [
+        "E006"
+      ]
+    },
+    {
+      "fact_id": "N036",
+      "concept": "mechanism_cases",
+      "section": "摘要",
+      "value": 18,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N037",
+      "concept": "mechanism_cases",
+      "section": "Abstract",
+      "value": 18,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N038",
+      "concept": "mechanism_cases",
+      "section": "4.3",
+      "value": 18,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N039",
+      "concept": "mechanism_cases",
+      "section": "5.4",
+      "value": 18,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N040",
+      "concept": "mechanism_cases",
+      "section": "8",
+      "value": 18,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N041",
+      "concept": "verifier_calls",
+      "section": "4.3",
+      "value": 36,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N042",
+      "concept": "scripted_chains",
+      "section": "摘要",
+      "value": 6,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N043",
+      "concept": "scripted_chains",
+      "section": "Abstract",
+      "value": 6,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N044",
+      "concept": "scripted_chains",
+      "section": "4.3",
+      "value": 6,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N045",
+      "concept": "scripted_chains",
+      "section": "5.6",
+      "value": 6,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N046",
+      "concept": "scripted_chains",
+      "section": "8",
+      "value": 6,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N047",
+      "concept": "scripted_role_responses",
+      "section": "4.3",
+      "value": 18,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N048",
+      "concept": "scripted_role_responses",
+      "section": "5.6",
+      "value": 18,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N049",
+      "concept": "new_model_calls",
+      "section": "4.3",
+      "value": 0,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    },
+    {
+      "fact_id": "N050",
+      "concept": "new_model_calls",
+      "section": "supplement",
+      "value": 0,
+      "unit": "count",
+      "numerator": null,
+      "denominator": null,
+      "sample_size": null,
+      "analysis_set": "deterministic hand-crafted probes, not model observations",
+      "evidence_ids": [
+        "E011"
+      ]
+    }
+  ],
+  "methods": [
+    {
+      "method_id": "M001",
+      "name": "Descriptive secondary analysis of fixed regression tasks",
+      "analysis_intent": "descriptive",
+      "protocol_status": "post_hoc",
+      "outcome_ids": [
+        "O001",
+        "O002",
+        "O003"
+      ]
+    },
+    {
+      "method_id": "M002",
+      "name": "Local CSV prefix benchmark",
+      "analysis_intent": "descriptive",
+      "protocol_status": "not_applicable",
+      "outcome_ids": [
+        "O004"
+      ]
+    },
+    {
+      "method_id": "M003",
+      "name": "Deterministic verifier probes and scripted handoff echoes",
+      "analysis_intent": "descriptive",
+      "protocol_status": "post_hoc",
+      "outcome_ids": [
+        "O005",
+        "O006"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "result_id": "R001",
+      "method_id": "M001",
+      "outcome_id": "O001",
+      "analysis_intent": "descriptive",
+      "sample_size": 20,
+      "evidence_ids": [
+        "E005"
+      ],
+      "reported_sections": [
+        "5.1"
+      ]
+    },
+    {
+      "result_id": "R002",
+      "method_id": "M001",
+      "outcome_id": "O002",
+      "analysis_intent": "descriptive",
+      "sample_size": 20,
+      "evidence_ids": [
+        "E005"
+      ],
+      "reported_sections": [
+        "5.2"
+      ]
+    },
+    {
+      "result_id": "R003",
+      "method_id": "M001",
+      "outcome_id": "O003",
+      "analysis_intent": "descriptive",
+      "sample_size": 20,
+      "evidence_ids": [
+        "E005"
+      ],
+      "reported_sections": [
+        "5.2"
+      ]
+    },
+    {
+      "result_id": "R004",
+      "method_id": "M002",
+      "outcome_id": "O004",
+      "analysis_intent": "descriptive",
+      "sample_size": 3,
+      "evidence_ids": [
+        "E006"
+      ],
+      "reported_sections": [
+        "5.3"
+      ]
+    },
+    {
+      "result_id": "R005",
+      "method_id": "M003",
+      "outcome_id": "O005",
+      "analysis_intent": "descriptive",
+      "sample_size": 18,
+      "evidence_ids": [
+        "E011"
+      ],
+      "reported_sections": [
+        "5.4"
+      ]
+    },
+    {
+      "result_id": "R006",
+      "method_id": "M003",
+      "outcome_id": "O006",
+      "analysis_intent": "descriptive",
+      "sample_size": 6,
+      "evidence_ids": [
+        "E011"
+      ],
+      "reported_sections": [
+        "5.6"
+      ]
+    }
+  ]
+}

@@ -90,3 +90,7 @@ deeptutor kb list
 | 文档入库失败 | 检查解析和嵌入模型配置，先用小型纯文本资料排查 |
 
 更多安装方案和可选扩展见原始 README。作业提交要求见 COURSE.md；本课程源码整理时的上游版本为 `f07029cfcf2c8dfccdb671cdfc343db8334f5741`。本次文档依据当前源码编写，未安装或启动服务验证。
+
+## 2026 年 11 月 18 日模块更新
+
+引用模块支持独立加载，损坏档案明确报错，采用原子保存、写入失败回滚和恢复编号校正。本次实际登记并检查引用，原有引用测试 4 项通过；未启动完整 DeepTutor 服务。见[复现说明](../multi-agent-security-research/experiments/source_tracking/PAPER_WORKFLOW.md)与[课程论文](../multi-agent-security-research/manuscripts/2026-11-18-source-grounding/README.md)。
