@@ -6,6 +6,10 @@
 
 课程开发入口：[文档导航](docs/README.md) · [WSL2 安装与运行](docs/guides/wsl2-setup.md) · [论文阅读与课程 Idea](docs/research/transfer-attack-budget.md) · [2026-11-17 部署验证报告](docs/reports/2026-11-17/deployment.md)。操作方法、研究方案和执行证据分别维护。
 
+V1 固定实验：[运行指南](docs/guides/v1-experiments.md) · [2026-11-18 首轮结果](docs/reports/2026-11-18/v1-budget/report.md)。已完成 200 张 CIFAR-10 的 MI-FGSM / BSR 对照；该固定程序不调用模型服务，与上游自动科研流程分别运行。
+
+V1 完整批量实验已完成：1,000 张固定图片、BSR 三个种子、MobileNetV2/VGG11-BN 两目标，以及 G=20/40/80 预算矩阵。见[完整实验报告](docs/reports/2026-11-18/v1-full/report.md)、[汇报讲稿](docs/reports/2026-11-18/v1-full/briefing.md)和[冻结协议](docs/research/v1-full-protocol.md)。原始结果保存在 E 盘 `experiments/v1_full_20261118_121450/`，运行计算仍在 Ubuntu 执行。
+
 ## 1. 环境要求
 
 - 上游面向 **Linux + NVIDIA GPU + CUDA/PyTorch**；Windows 用户使用具备 GPU 支持的 Linux 环境或服务器。

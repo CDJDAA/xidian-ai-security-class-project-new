@@ -1,0 +1,31 @@
+{
+  "schema_version": 2,
+  "stage": "exploratory_sweep",
+  "dataset": "CIFAR10",
+  "selection_source": "docs/reports/2026-11-18/v1-budget/selection.json",
+  "selection_sha256": "91c819cb10029eec0587605c8e4160f21dee376bc01a96168caae513d924b37c",
+  "sample_count": 1000,
+  "source_model": "cifar10_resnet20",
+  "target_models": ["cifar10_mobilenetv2_x1_0"],
+  "epsilon": 0.03137254901960784,
+  "gradient_budgets": [20, 24, 28, 32, 36, 40],
+  "views": [1, 2],
+  "mi_step_rules": ["fixed"],
+  "bsr_seeds": [42, 142, 242],
+  "batch_size": 20,
+  "momentum_decay": 1.0,
+  "blocks": 2,
+  "rotation_degrees": 10.0,
+  "fixed_step_denominator": 10,
+  "bootstrap_seed": 20261117,
+  "bootstrap_replicates": 2000,
+  "clean_accuracy_floor": 0.85,
+  "notes": {
+    "purpose": "Exploratory budget crossover scan after observing the original V1 results; not an independent confirmation",
+    "selection": "Reuse the same 1000 image IDs and their exact order; new800 only excludes the initial pilot200, and is now already evaluated",
+    "budget": "Every budget must be divisible by every BSR view count; no rounding or unused gradient budget",
+    "alpha": "BSR uses epsilon/steps; MI fixed uses epsilon/fixed_step_denominator",
+    "randomness": "Geometry shared within each fixed batch; actual seed is base seed plus batch index",
+    "api_calls": 0
+  }
+}

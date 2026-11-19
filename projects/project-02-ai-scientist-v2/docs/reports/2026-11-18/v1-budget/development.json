@@ -1,0 +1,89 @@
+{
+  "stage": "development_only",
+  "completed_at": "2026-11-18T00:10:46+08:00",
+  "images": 50,
+  "source_clean_accuracy": 1.0,
+  "source_transformed_clean_accuracies": [
+    0.6,
+    0.84,
+    0.62,
+    0.6
+  ],
+  "profile_images_per_method": 8,
+  "profiles": {
+    "mi10_g10": {
+      "sample_view_gradient_evaluations": 80,
+      "backward_calls": 10,
+      "gradient_evaluations_per_image": 10,
+      "attack_seconds": 0.1189392999986012,
+      "images_per_second": 67.26119962110157,
+      "peak_cuda_allocated_mib": 32.1669921875,
+      "peak_cuda_reserved_mib": 80.0,
+      "linf_max": 0.03137257695198059,
+      "linf_mean": 0.03137257695198059,
+      "all_constraints_passed": true,
+      "batch_seeds": [
+        42
+      ],
+      "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+    },
+    "mi40_g40": {
+      "sample_view_gradient_evaluations": 320,
+      "backward_calls": 40,
+      "gradient_evaluations_per_image": 40,
+      "attack_seconds": 0.4001966979994904,
+      "images_per_second": 19.990169933911314,
+      "peak_cuda_allocated_mib": 32.1669921875,
+      "peak_cuda_reserved_mib": 80.0,
+      "linf_max": 0.03137257695198059,
+      "linf_mean": 0.03137257695198059,
+      "all_constraints_passed": true,
+      "batch_seeds": [
+        42
+      ],
+      "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+    },
+    "bsr10x4_g40": {
+      "sample_view_gradient_evaluations": 320,
+      "backward_calls": 40,
+      "gradient_evaluations_per_image": 40,
+      "attack_seconds": 0.5221652979998908,
+      "images_per_second": 15.320818964115983,
+      "peak_cuda_allocated_mib": 32.52001953125,
+      "peak_cuda_reserved_mib": 80.0,
+      "linf_max": 0.03137257695198059,
+      "linf_mean": 0.03137257695198059,
+      "all_constraints_passed": true,
+      "batch_seeds": [
+        42
+      ],
+      "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+    },
+    "mi40_g40_large_step": {
+      "sample_view_gradient_evaluations": 320,
+      "backward_calls": 40,
+      "gradient_evaluations_per_image": 40,
+      "attack_seconds": 0.418425299001683,
+      "images_per_second": 19.11930282200222,
+      "peak_cuda_allocated_mib": 32.1669921875,
+      "peak_cuda_reserved_mib": 80.0,
+      "linf_max": 0.03137257695198059,
+      "linf_mean": 0.03137257695198059,
+      "all_constraints_passed": true,
+      "batch_seeds": [
+        42
+      ],
+      "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+    }
+  },
+  "warmup": {
+    "original_view_batches": 2,
+    "bsr_batches": 1,
+    "images_per_batch": 20,
+    "sample_view_gradient_evaluations": 120,
+    "included_in_attack_budget": false
+  },
+  "target_access": "none",
+  "api_calls": 0,
+  "interpretation": "Implementation and timing diagnostic on train development subset; no transfer claims"
+}

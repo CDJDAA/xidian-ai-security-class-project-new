@@ -1,0 +1,3 @@
+# Optional, read-only multiplicity analysis; not required for attack generation.
+# Keep existing NumPy/PyTorch versions when adding this to the deployed venv.
+scipy==1.16.3

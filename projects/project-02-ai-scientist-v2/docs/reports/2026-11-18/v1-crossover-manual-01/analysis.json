@@ -1,0 +1,705 @@
+{
+  "run": "/mnt/e/SecAI-code/xidian-ai-security-class-project-new/projects/project-02-ai-scientist-v2/experiments/v1_crossover_manual_01",
+  "completed_at": "2026-11-18T17:45:49+08:00",
+  "source": "cifar10_resnet20",
+  "targets": [
+    "cifar10_mobilenetv2_x1_0",
+    "cifar10_vgg11_bn"
+  ],
+  "target_names": {
+    "cifar10_mobilenetv2_x1_0": "MobileNetV2",
+    "cifar10_vgg11_bn": "VGG11-BN"
+  },
+  "subset_names": {
+    "full1000": "全部1000张",
+    "pilot200": "原预实验200张",
+    "new800": "排除原预实验的800张"
+  },
+  "gradient_budgets": [
+    20,
+    24,
+    28,
+    32,
+    36,
+    40,
+    80
+  ],
+  "views": [
+    1,
+    2,
+    4
+  ],
+  "mi_step_rules": [
+    "fixed",
+    "epsilon_over_steps"
+  ],
+  "bsr_seeds": [
+    42,
+    142,
+    242
+  ],
+  "sample_count": 1000,
+  "epsilon": 0.03137254901960784,
+  "batch_size": 20,
+  "method_count": 28,
+  "job_count": 56,
+  "sample_view_gradients": 2080000,
+  "row_counts": {
+    "summary.csv": 168,
+    "per_seed.csv": 336,
+    "comparisons.csv": 168,
+    "predictions.csv": 112000
+  },
+  "all_pair_comparison_rows": 252,
+  "family_size_per_subset": 84,
+  "total_generation_seconds": 1645.5157789119112,
+  "original_completion_sha256": {
+    "results.json": "e6b47d5fcaeb85eca42b41ce041af3c169cf72339c0beb3287fae91f122e724f",
+    "summary.csv": "0a45b0f90c18292314e61db10a374163dc249399baeaf5cbe1b6cd458633cf00",
+    "per_seed.csv": "de19aa1146e9d453006e77163118710ba9bdcdccc9faee5cfa5da51720330838",
+    "predictions.csv": "ff4b03375c2f66e3082829d055aeb043c349ae1555226175087fecb83356a375",
+    "comparisons.csv": "463ff670a83743df6d02e14b5f43918a29bf83839cf9221c315b54b4b548867f",
+    "inputs.pt": "85727009871700632164f6c079273e2d68b7097ec85650b75f0e75a0a27bdaaa"
+  },
+  "additional_image_bootstrap_pairs": 84,
+  "bootstrap_replicates": 10000,
+  "postprocessing_model_calls": 0,
+  "postprocessing_attack_runs": 0,
+  "postprocessing_api_calls": 0,
+  "headers_cn": {
+    "target": "目标模型",
+    "subset": "图片集合",
+    "method": "方法编号",
+    "steps": "更新步数T",
+    "views": "每步视图数M",
+    "gradient_budget": "每图梯度预算G",
+    "alpha": "单步像素步长",
+    "alpha_kind": "步长规则",
+    "sample_count": "集合图片数",
+    "attack_seed_count": "攻击种子数",
+    "clean_accuracy": "原图准确率",
+    "robust_accuracy": "攻击后准确率",
+    "asr_numerator": "攻击成功图片数_种子均值",
+    "asr_denominator": "目标原图认对数量",
+    "asr": "条件攻击成功率",
+    "asr_seed_min": "种子成功率最低值",
+    "asr_seed_max": "种子成功率最高值",
+    "asr_seed_std": "种子成功率样本标准差",
+    "source_asr": "代理白盒攻击成功率",
+    "mean_attack_seconds": "完整1000张每种子平均生成秒数",
+    "timing_scope": "计时口径",
+    "seed_index": "种子序号",
+    "seed": "攻击基础种子",
+    "attack_seconds": "该种子完整1000张生成秒数",
+    "method_a": "方法A编号",
+    "method_b": "方法B编号",
+    "attack_seed_count_a": "方法A种子数",
+    "attack_seed_count_b": "方法B种子数",
+    "asr_a": "方法A成功率",
+    "asr_b": "方法B成功率",
+    "difference_a_minus_b": "成功率差_A减B_比例",
+    "bootstrap_seed": "统计重采样种子",
+    "bootstrap_requested": "计划统计重采样次数",
+    "bootstrap_valid": "有效统计重采样次数",
+    "bootstrap_skipped_zero_denominator": "分母为零而跳过的次数",
+    "resampling_unit": "统计抽样单位",
+    "ci95_lower": "图片配对95%区间下限_比例",
+    "ci95_upper": "图片配对95%区间上限_比例",
+    "test_id": "原测试集图片编号",
+    "label": "真实类别编号",
+    "clean_prediction": "目标原图预测类别",
+    "adversarial_prediction": "目标攻击后预测类别",
+    "source_clean_prediction": "代理原图预测类别",
+    "source_adversarial_prediction": "代理攻击后预测类别",
+    "linf": "最大绝对像素扰动",
+    "in_pilot200": "属于原200张预实验"
+  },
+  "crossovers": [
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [
+        {
+          "lower_budget": 24,
+          "upper_budget": 28,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 20,
+          "upper_budget": 24,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [
+        {
+          "lower_budget": 40,
+          "upper_budget": 80,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 32,
+          "upper_budget": 36,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "BSR四视图",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "MI固定步长",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "BSR四视图",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "full1000",
+      "subset_cn": "全部1000张",
+      "method_a_cn": "MI固定步长",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 20,
+          "upper_budget": 24,
+          "direction": "正转负",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [
+        {
+          "lower_budget": 24,
+          "upper_budget": 28,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 20,
+          "upper_budget": 24,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [
+        {
+          "lower_budget": 36,
+          "upper_budget": 40,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 32,
+          "upper_budget": 36,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "BSR四视图",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "MI固定步长",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "BSR四视图",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "new800",
+      "subset_cn": "排除原预实验的800张",
+      "method_a_cn": "MI固定步长",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 20,
+          "upper_budget": 24,
+          "direction": "正转负",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [
+        {
+          "lower_budget": 20,
+          "upper_budget": 24,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        },
+        {
+          "lower_budget": 32,
+          "upper_budget": 36,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 20,
+          "upper_budget": 24,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [
+        {
+          "lower_budget": 40,
+          "upper_budget": 80,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 24,
+          "upper_budget": 28,
+          "direction": "负转正",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "BSR四视图",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "target_cn": "MobileNetV2",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "MI固定步长",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI固定步长",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR四视图",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "BSR双视图",
+      "method_b_cn": "BSR四视图",
+      "flips": [],
+      "all_sampled_means_positive": true,
+      "all_sampled_means_negative": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "target_cn": "VGG11-BN",
+      "subset": "pilot200",
+      "subset_cn": "原预实验200张",
+      "method_a_cn": "MI固定步长",
+      "method_b_cn": "MI按步数缩放",
+      "flips": [
+        {
+          "lower_budget": 40,
+          "upper_budget": 80,
+          "direction": "正转负",
+          "both_endpoint_image_intervals_exclude_zero": false,
+          "interpretation": "仅采样均值变号；端点区间不足以确定稳定换优"
+        }
+      ],
+      "all_sampled_means_positive": false,
+      "all_sampled_means_negative": false
+    }
+  ],
+  "method_labels": {
+    "mi_g20_fixed_step": "MI固定步长",
+    "mi_g20": "MI按步数缩放",
+    "bsr_m2_g20": "BSR双视图",
+    "bsr_m4_g20": "BSR四视图",
+    "mi_g24_fixed_step": "MI固定步长",
+    "mi_g24": "MI按步数缩放",
+    "bsr_m2_g24": "BSR双视图",
+    "bsr_m4_g24": "BSR四视图",
+    "mi_g28_fixed_step": "MI固定步长",
+    "mi_g28": "MI按步数缩放",
+    "bsr_m2_g28": "BSR双视图",
+    "bsr_m4_g28": "BSR四视图",
+    "mi_g32_fixed_step": "MI固定步长",
+    "mi_g32": "MI按步数缩放",
+    "bsr_m2_g32": "BSR双视图",
+    "bsr_m4_g32": "BSR四视图",
+    "mi_g36_fixed_step": "MI固定步长",
+    "mi_g36": "MI按步数缩放",
+    "bsr_m2_g36": "BSR双视图",
+    "bsr_m4_g36": "BSR四视图",
+    "mi_g40_fixed_step": "MI固定步长",
+    "mi_g40": "MI按步数缩放",
+    "bsr_m2_g40": "BSR双视图",
+    "bsr_m4_g40": "BSR四视图",
+    "mi_g80_fixed_step": "MI固定步长",
+    "mi_g80": "MI按步数缩放",
+    "bsr_m2_g80": "BSR双视图",
+    "bsr_m4_g80": "BSR四视图"
+  },
+  "statistics": {
+    "full1000": {
+      "family_size": 84,
+      "holm_reject_count": 47,
+      "joint_across_subsets": false,
+      "numpy": "2.4.6",
+      "scipy": "1.16.3"
+    },
+    "new800": {
+      "family_size": 84,
+      "holm_reject_count": 45,
+      "joint_across_subsets": false,
+      "numpy": "2.4.6",
+      "scipy": "1.16.3"
+    },
+    "pilot200": {
+      "family_size": 84,
+      "holm_reject_count": 19,
+      "joint_across_subsets": false,
+      "numpy": "2.4.6",
+      "scipy": "1.16.3"
+    }
+  },
+  "limitations": [
+    "全部1000张已参与探索；新增800张与全1000张重叠，不是独立确认。",
+    "图片配对区间条件于当前模型和三个已实现攻击种子；共享batch几何和训练不确定性不在该区间内。",
+    "Holm采用按原batch聚类的t近似，并在每个集合全部84个方法对上事后统一校正；不是精确有限样本或独立确认。",
+    "BH仅作探索，其依赖条件未在本实验中验证；Bonferroni聚类t近似同时区间另列，不称Holm区间。",
+    "采样均值翻转区间不是交叉点的置信区间，不保证连续性、单调性或唯一阈值。",
+    "MI固定步长与按步数缩放均保留；BSR使用ε/T，预算改变同时影响其步长日程。",
+    "耗时为完整1000张每种子的单次观察，跨目标和子集复用；不同模型结果行不可重复加总。",
+    "当前共同M2/M4预算需为4的倍数，原notes中最细间隔2不会自动执行，单独M2才可细化到2。"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "purpose": "Parameter teaching tools and read-only multiplicity sensitivity analysis",
+  "runtime": "Existing Ubuntu project venv; numpy 2.4.6 preserved, scipy 1.16.3 added",
+  "dependency_check": "uv pip check passed; 137 packages compatible",
+  "tests": {
+    "functions_passed": 58,
+    "subtests_passed": 61,
+    "junit_cases": 119,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sweep": {
+    "plan_executed": true,
+    "new_budget_attack_run_executed": false,
+    "generation_jobs_planned": 20,
+    "sample_view_gradients_planned": 600000
+  },
+  "multiplicity": {
+    "analysis_executed": true,
+    "family": "bsr_vs_mi",
+    "comparisons_per_subset": 24,
+    "subsets": [
+      "full1000",
+      "new800"
+    ],
+    "joint_family_control_claimed": false,
+    "new_model_or_attack_runs": 0
+  },
+  "original_report_artifact_hashes_preserved": 34,
+  "original_frozen_source_hashes_preserved": 7,
+  "source_sha256": {
+    "course_tools/run_v1_sweep.py": "0b2f7d600c04b8cb4eb94744c6b317d52aacd84fca3fad682932e662646c5ae9",
+    "course_tools/v1_multiplicity.py": "b6bd19ec56ba4379b3f0dbe8fce0e7ddd8fd7c31e29187953f7d8f5c8b6ef40c",
+    "configs/v1_crossover.json": "f0a824ace1c11a89680c27b167df81834a69308ea6c8340aad015fe6794ab0fe",
+    "requirements-v1-analysis.txt": "fabf813054d1228dd161cc7196c4244a6118aed49c4aadf90c2bf5af4fb0f97d"
+  },
+  "artifact_sha256": {
+    "crossover-plan.json": "6aac2cf14c8b405ac8eeaa1e49293c1f213b91857470334a5f3e5e064c4a83cc",
+    "full1000/multiplicity.csv": "4091bde46c6c86180a89423d7872b3e0f87dd8c493712ac2f400a442a8d3b5f6",
+    "full1000/multiplicity.json": "92bcf39fc964eb1e2b5aa1ea0d260f1e4b79f9fa4fe325c76396b93ebc377c5c",
+    "full1000/report.md": "2d4baaec03553ed64014f2cbe1d2daf399f66d37886f607c8b196ff5895d2831",
+    "new800/multiplicity.csv": "6d5b3d6915a0b73d870b5a7cfbd81128e63209e9a2a648479b1a29bff7b837ed",
+    "new800/multiplicity.json": "ea8936b350bcbaa331207e748e559e1fb201e029d32b993e67d3d1ca793c3a93",
+    "new800/report.md": "e1afd2063bf5af56a07b6f97d7f9c0abae5618d7672ff528d78304bca29a95a1",
+    "README.md": "6095d474829982eccae70c02779023c6825c0bf6bcbb2a82adf72bee2111af93",
+    "tests.xml": "958ba6a2852fdd99a8bcb8e0b32c018ceb70f3ae5a6f2ddfd2c612f083262f81"
+  }
+}

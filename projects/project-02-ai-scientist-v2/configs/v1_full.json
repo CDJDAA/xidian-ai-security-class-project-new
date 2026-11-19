@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "dataset": "CIFAR10",
+  "selection_source": "docs/reports/2026-11-18/v1-budget/selection.json",
+  "selection_sha256": "91c819cb10029eec0587605c8e4160f21dee376bc01a96168caae513d924b37c",
+  "sample_count": 1000,
+  "source_model": "cifar10_resnet20",
+  "target_models": ["cifar10_mobilenetv2_x1_0", "cifar10_vgg11_bn"],
+  "epsilon": 0.03137254901960784,
+  "gradient_budgets": [20, 40, 80],
+  "views": [1, 2, 4],
+  "bsr_seeds": [42, 142, 242],
+  "batch_size": 20,
+  "momentum_decay": 1.0,
+  "blocks": 2,
+  "rotation_degrees": 10.0,
+  "fixed_step_denominator": 10,
+  "bootstrap_seed": 20261117,
+  "bootstrap_replicates": 2000,
+  "clean_accuracy_floor": 0.85,
+  "notes": {
+    "purpose": "V1 fixed-gradient-budget resource allocation study on CIFAR10",
+    "start": "zero",
+    "loss": "cross_entropy",
+    "prior_access": "The pilot200 have already had attack effects evaluated; full10000 target clean accuracy was checked in the pilot. new800 means not in initial attack-effect evaluation, not never queried.",
+    "normalization": "Model wrapper normalizes raw [0,1] pixels",
+    "seed_mean": "Mean success per image across BSR seeds; never best-of-seeds",
+    "randomness": "BSR geometry shared within each fixed batch. Seed is base+batch index; CUDA rotation backward may be nondeterministic.",
+    "fixed_step_sensitivity": "Every budget additionally uses MI alpha=epsilon/10; all comparisons predeclared and fully reported",
+    "api_calls": 0
+  }
+}

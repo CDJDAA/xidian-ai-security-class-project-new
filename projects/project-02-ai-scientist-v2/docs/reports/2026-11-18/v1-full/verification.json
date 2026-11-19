@@ -1,0 +1,97 @@
+{
+  "exporter_sha256": "e49a575a15bb92c516d89e0db4eece7ded94f7805a6d328d5f19f8f5075bcdad",
+  "api_calls_during_export": 0,
+  "artifacts_sha256": {
+    "asr_vs_budget_full1000.png": "99aa0c87e2c6a08640602cde213df10eea34599dc593290d57f9442ab29c0f5d",
+    "asr_vs_budget_full1000.svg": "98d8dfa5ea83e1e253642283020cb362c959a9ccfa4c28b292c22e4de1310f34",
+    "asr_vs_budget_new800.png": "bdceef974a52925759bbe7535208f19687232b60e4b974e2248ef0b798813021",
+    "asr_vs_budget_new800.svg": "da89961e5c4179ac6e44359a7ab829a2170310ca64def8776ae4a4719d35b93d",
+    "asr_vs_time_full1000.png": "a6b6ccba18a5df25dd02277fb4007dad457638581d5cc25fd4e9cb7d9e57444b",
+    "asr_vs_time_full1000.svg": "0cb10e6a6f3024cc42545065d64eb380c927942580e1581ec57cbd2567c8bbd9",
+    "asr_vs_time_new800.png": "73b2da321f09c61f3ee3fee0cdb7892ce041aff2bdb46d5ecf897d3a742aa134",
+    "asr_vs_time_new800.svg": "27fc9c951d469a8b7ca907119ccb0584d5958ecc8317b2b5e07a8421afe24dcb",
+    "briefing.md": "a9d73be7ab26a216cd07ff5b01e4ccdcf32482a5984fd8abd02c7c47ebc84f44",
+    "comparisons.csv": "a112d310b6e40c7bc98759c9793ea6661779d561295e1a16643a4c00510bb2bb",
+    "config.frozen.json": "84969b088a342739101250219f4060d19e88df802e33d9752401194488a2eb30",
+    "examples.png": "ff0a2767fcdac21cfe591457eddcf477be2e1fed664380fa3212ec1527090dc8",
+    "examples.svg": "95b33623e1f6642486f85f26954650412f3093dbcca87112aae67c4e11bb1148",
+    "g40_seeds_full1000.png": "816b65f25813be733329fe9a186a23d195ff4cad7badc2b02009a485e1cb018a",
+    "g40_seeds_full1000.svg": "7b38c553694d4acf202de46ef0c91ecbb1974159431dcc83cc1034aad08b9fd4",
+    "g40_seeds_new800.png": "133a181b0b16505c55f58f31bf2c30ea0e943445b3dcbbe972d1f5ee7d22b317",
+    "g40_seeds_new800.svg": "30070302f42c2f9bed8a748c7c5143a19e453a01bb0ca0072647377d69df6cee",
+    "paired_differences_full1000.png": "338b3df7685fe7649667064a015885eb6ccccd7043954dd4e5f9885e4b4d4061",
+    "paired_differences_full1000.svg": "4cba30fd63c458f96398092076c685b975114ec65880526fc0b1308422b89226",
+    "paired_differences_new800.png": "5d81168a711f018ea92011607885dde890606532ccb2cb0d85a211bdc081e622",
+    "paired_differences_new800.svg": "f40df0dd506bee257a5b1a5bacf099f94cca3b05d4c4a59d2650139c33bb47d1",
+    "per_seed.csv": "5554928191c397c770830548cd64980d9badbba7ead3f9d23489b67a9ec9b0e1",
+    "predictions.csv": "3c8ccaa5a1144124671b7f9effcaa057bf5112867427a1d7b3604bef2d7d7f23",
+    "provenance.json": "9b811976bbb661e00448dfd684f210b6cee32a7a78241056d7e89e20eee32526",
+    "report.md": "90cd688116a66aee0945f08e91491774196beb1b112d61448f04a5567fecd171",
+    "results.json": "d33b90ea65634b2cd974f878733c40f6f90e936c164e40a793ca2308665e5947",
+    "selection.json": "1719dc8924843d6c9d3e4cf539a2a65712bf6667cfb2b04e77a6f71570cf11eb",
+    "summary.csv": "0face926ac9c3413e6744beee0897ce92d5f30f6238f82e112bffb2e8184e47c",
+    "independent-audit.json": "60c375dda8fe8a4304de1c22df726d9e7edb43d971a31183d2e8c18fc20206aa",
+    "independent-audit.py": "39c1e443eefc172d8a688d5f99aa9a9fa5bd82e1e88d8b562fe4e9d765e8ae55",
+    "bsr_gain_vs_budget_full1000.png": "1e57d215c08b92b2b2378ca2ad4a9540db8e87ab8013ee9fa786f9334c17b1ba",
+    "bsr_gain_vs_budget_full1000.svg": "11b381fffc4a3a9d7f36f40280766cdec16616c50c1ad1fbe83402c7dddb900b",
+    "bsr_gain_vs_budget_new800.png": "f83110cdb4043fde46f5dd389648a9bb0ed0fb0397098e9fdf6238ac3eb09a10",
+    "bsr_gain_vs_budget_new800.svg": "a2a925f3dc3d411ee630777728306ad23e6cef1c6d92b818d54be3f9fa537310"
+  },
+  "raw_run_directory": "experiments/v1_full_20261118_121450",
+  "pytest_junit": {
+    "tests": 127,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "figure_post_render": {
+    "renderer": "course_tools/render_v1_full_figures.py",
+    "renderer_sha256": "4318e2e9a24577525777a85ac900659ec04882493158bddec6cdf4145b3c4fc2",
+    "rendered_at_utc": "2026-11-18T04:47:57.536176+00:00",
+    "artifacts": [
+      "asr_vs_budget_full1000.png",
+      "asr_vs_budget_full1000.svg",
+      "asr_vs_time_full1000.png",
+      "asr_vs_time_full1000.svg",
+      "asr_vs_budget_new800.png",
+      "asr_vs_budget_new800.svg",
+      "asr_vs_time_new800.png",
+      "asr_vs_time_new800.svg"
+    ],
+    "scope": "Legend and label placement only; recorded metrics/predictions/frozen experiment code unchanged",
+    "model_calls": 0
+  },
+  "pytest_summary": {
+    "test_functions_passed": 72,
+    "subtests_passed": 55,
+    "junit_test_count_includes_subtests": true
+  },
+  "independent_audit": {
+    "status": "passed",
+    "prediction_rows": 50000,
+    "summary_rows": 78,
+    "paired_point_differences": 90,
+    "independently_resampled_intervals": 8,
+    "adversarial_caches_checked": 25,
+    "model_queries": 0,
+    "attacks_generated": 0
+  },
+  "completed_resume_verified": true,
+  "curation": {
+    "scope": "Added cross-budget interpretation and exact reproduction paths to report/briefing; attached independent audit. Recorded numerical artifacts match the original run byte-for-byte.",
+    "frozen_experiment_sources_changed": false
+  },
+  "gain_visualization": {
+    "renderer": "course_tools/plot_v1_gains.py",
+    "sha256": "a3c6c2aa60b3d738cb0c020b88beb3bea9785b67ae773793e868d5f13750c0b7",
+    "scope": "Recorded paired differences and confidence intervals; all targets, views, budgets and MI baselines",
+    "artifacts": [
+      "bsr_gain_vs_budget_full1000.png",
+      "bsr_gain_vs_budget_full1000.svg",
+      "bsr_gain_vs_budget_new800.png",
+      "bsr_gain_vs_budget_new800.svg"
+    ],
+    "model_queries": 0,
+    "attacks_generated": 0
+  }
+}

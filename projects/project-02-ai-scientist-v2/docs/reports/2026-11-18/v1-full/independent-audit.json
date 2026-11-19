@@ -1,0 +1,1221 @@
+{
+  "audit": "passed",
+  "model_queries_during_audit": 0,
+  "attacks_generated_during_audit": 0,
+  "metric_implementation_imported": false,
+  "image_count": 1000,
+  "pilot_count": 200,
+  "new_count": 800,
+  "prediction_rows": 50000,
+  "targets": [
+    "cifar10_mobilenetv2_x1_0",
+    "cifar10_vgg11_bn"
+  ],
+  "method_count": 13,
+  "seeded_generation_count": 25,
+  "summary_rows_checked": 78,
+  "comparisons_checked": 90,
+  "total_sample_view_gradient_evaluations": 1130000,
+  "paired_point_differences": [
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": -1.1554621848739455,
+      "stored_ci95": [
+        -0.03280510156039818,
+        0.009743540365512223
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": -2.941176470588236,
+      "stored_ci95": [
+        -0.05079440188272997,
+        -0.007082248169610091
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": -4.9369747899159595,
+      "stored_ci95": [
+        -0.07225161491339835,
+        -0.02679192762700071
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": -6.72268907563025,
+      "stored_ci95": [
+        -0.0906578822464165,
+        -0.04324780581824974
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g20",
+      "method_b": "bsr_m2_g20",
+      "difference_percentage_points": -3.7815126050420145,
+      "stored_ci95": [
+        -0.04982497069821956,
+        -0.026045794142595877
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 4.796918767506996,
+      "stored_ci95": [
+        0.02687609075043629,
+        0.06897909268309832
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 2.170868347338928,
+      "stored_ci95": [
+        0.0021052631578947294,
+        0.04245176783338136
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 2.5210084033613467,
+      "stored_ci95": [
+        0.0034828438054648253,
+        0.04672352129418756
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": -0.10504201680672232,
+      "stored_ci95": [
+        -0.02147244896628917,
+        0.020023302845262058
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "bsr_m2_g40",
+      "difference_percentage_points": -2.27591036414565,
+      "stored_ci95": [
+        -0.031782193933608316,
+        -0.013361462728551337
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 9.488795518207294,
+      "stored_ci95": [
+        0.07407115317209954,
+        0.11696783966888974
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 6.547619047619058,
+      "stored_ci95": [
+        0.04516688233530557,
+        0.08721792733501622
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 7.2478991596638735,
+      "stored_ci95": [
+        0.05252011388497004,
+        0.0943797975851612
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 4.306722689075637,
+      "stored_ci95": [
+        0.02252314676454462,
+        0.06450943862949632
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g80",
+      "method_b": "bsr_m2_g80",
+      "difference_percentage_points": -2.2408963585434205,
+      "stored_ci95": [
+        -0.03030382274629137,
+        -0.014567429391665011
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": -2.083333333333337,
+      "stored_ci95": [
+        -0.06250000000000001,
+        0.024836645426071852
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": -2.604166666666663,
+      "stored_ci95": [
+        -0.07193570265870863,
+        0.020838815789473646
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": -4.6875,
+      "stored_ci95": [
+        -0.09573298429319373,
+        -9.155304646102672e-18
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": -5.208333333333326,
+      "stored_ci95": [
+        -0.10582010582010584,
+        -9.090997078526195e-18
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g20",
+      "method_b": "bsr_m2_g20",
+      "difference_percentage_points": -2.604166666666663,
+      "stored_ci95": [
+        -0.049915260498924016,
+        -0.0034359855493876143
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 4.861111111111116,
+      "stored_ci95": [
+        0.0033447822408592632,
+        0.09424735970925313
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 1.215277777777779,
+      "stored_ci95": [
+        -0.03125000000000001,
+        0.05556282722513085
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 2.77777777777779,
+      "stored_ci95": [
+        -0.02140833606169741,
+        0.07639243197278908
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": -0.8680555555555469,
+      "stored_ci95": [
+        -0.0564109347442681,
+        0.03819444444444444
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g40",
+      "method_b": "bsr_m2_g40",
+      "difference_percentage_points": -2.083333333333326,
+      "stored_ci95": [
+        -0.03993055555555556,
+        -0.001754385964912281
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 9.548611111111116,
+      "stored_ci95": [
+        0.04478823787579547,
+        0.14795008912655971
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 7.986111111111116,
+      "stored_ci95": [
+        0.02777417962003454,
+        0.13227581410571101
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 7.118055555555558,
+      "stored_ci95": [
+        0.019702886247877756,
+        0.12170062182948777
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 5.555555555555558,
+      "stored_ci95": [
+        0.0034904013961605546,
+        0.10535626167565469
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g80",
+      "method_b": "bsr_m2_g80",
+      "difference_percentage_points": -2.430555555555558,
+      "stored_ci95": [
+        -0.042735042735042736,
+        -0.008503401360544218
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": -0.9210526315789447,
+      "stored_ci95": [
+        -0.03250342297656877,
+        0.016467603625056483
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": -3.026315789473677,
+      "stored_ci95": [
+        -0.05483207904571752,
+        -0.0053110351741912625
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": -5.000000000000004,
+      "stored_ci95": [
+        -0.075401376146789,
+        -0.023587853334006367
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": -7.105263157894736,
+      "stored_ci95": [
+        -0.09799351189315156,
+        -0.044063441235037096
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "bsr_m2_g20",
+      "difference_percentage_points": -4.07894736842106,
+      "stored_ci95": [
+        -0.05416295352722037,
+        -0.027627391562685687
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 4.780701754385963,
+      "stored_ci95": [
+        0.02327471134818446,
+        0.07227332457293034
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 2.412280701754388,
+      "stored_ci95": [
+        0.002170996816219063,
+        0.04793342413417965
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 2.4561403508771895,
+      "stored_ci95": [
+        -0.00043687199650503075,
+        0.04960881375911458
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 0.08771929824561431,
+      "stored_ci95": [
+        -0.022194663923557487,
+        0.02393542187834628
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "bsr_m2_g40",
+      "difference_percentage_points": -2.3245614035087736,
+      "stored_ci95": [
+        -0.0344203490574974,
+        -0.012197670087033102
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 9.473684210526311,
+      "stored_ci95": [
+        0.07130283136055189,
+        0.11974078600651825
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 6.184210526315792,
+      "stored_ci95": [
+        0.04089281980842388,
+        0.08619702703328239
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 7.280701754385966,
+      "stored_ci95": [
+        0.04844265611257695,
+        0.09849226600205707
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 3.9912280701754455,
+      "stored_ci95": [
+        0.017491974359778728,
+        0.06493013740929438
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "bsr_m2_g80",
+      "difference_percentage_points": -2.1929824561403466,
+      "stored_ci95": [
+        -0.03077790568809061,
+        -0.013704686118479222
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": 5.296610169491522,
+      "stored_ci95": [
+        0.0322009907997169,
+        0.07234350909651555
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": 4.23728813559322,
+      "stored_ci95": [
+        0.021845793957849153,
+        0.06285811689091418
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": 4.6610169491525415,
+      "stored_ci95": [
+        0.025638297872340416,
+        0.06652661064425769
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": 3.601694915254239,
+      "stored_ci95": [
+        0.014672038365449653,
+        0.05760482187907048
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g20",
+      "method_b": "bsr_m2_g20",
+      "difference_percentage_points": -0.6355932203389814,
+      "stored_ci95": [
+        -0.01595787166066209,
+        0.003538664428455067
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 11.61723163841808,
+      "stored_ci95": [
+        0.09397098343179495,
+        0.1381180254522031
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 13.418079096045199,
+      "stored_ci95": [
+        0.1092373457689692,
+        0.15884902992635608
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 9.56920903954802,
+      "stored_ci95": [
+        0.073601227257706,
+        0.11733615221987313
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 11.37005649717514,
+      "stored_ci95": [
+        0.08967115757902616,
+        0.13786003437046396
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "bsr_m2_g40",
+      "difference_percentage_points": -2.0480225988700584,
+      "stored_ci95": [
+        -0.029982363315696647,
+        -0.011287477954144622
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 16.80790960451977,
+      "stored_ci95": [
+        0.1443262411347518,
+        0.19159788782392612
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 21.151129943502823,
+      "stored_ci95": [
+        0.18405219633733721,
+        0.23855748758049636
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 15.183615819209034,
+      "stored_ci95": [
+        0.12817323565520036,
+        0.17525686206660998
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 19.526836158192083,
+      "stored_ci95": [
+        0.16880742720090972,
+        0.2216378281243096
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g80",
+      "method_b": "bsr_m2_g80",
+      "difference_percentage_points": -1.6242937853107375,
+      "stored_ci95": [
+        -0.024991860725573065,
+        -0.007446216240608293
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": 8.596491228070175,
+      "stored_ci95": [
+        0.035837502156287726,
+        0.13405662501407173
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": 4.912280701754384,
+      "stored_ci95": [
+        -0.0017100694444444522,
+        0.09845359176101831
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": 7.8947368421052655,
+      "stored_ci95": [
+        0.029659302303281353,
+        0.12807017543859647
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": 4.210526315789476,
+      "stored_ci95": [
+        -0.005209015052356029,
+        0.08829462274774771
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g20",
+      "method_b": "bsr_m2_g20",
+      "difference_percentage_points": -0.7017543859649089,
+      "stored_ci95": [
+        -0.02821869488536155,
+        0.014186293472901722
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 14.736842105263154,
+      "stored_ci95": [
+        0.090905124543868,
+        0.2003454231433506
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 14.210526315789473,
+      "stored_ci95": [
+        0.0877170374389582,
+        0.19630116959064323
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 12.456140350877194,
+      "stored_ci95": [
+        0.06527410446015723,
+        0.17801653740982348
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 11.929824561403512,
+      "stored_ci95": [
+        0.06449897048730266,
+        0.17526225357207448
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g40",
+      "method_b": "bsr_m2_g40",
+      "difference_percentage_points": -2.280701754385961,
+      "stored_ci95": [
+        -0.046875,
+        -1.4603025070543183e-18
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 18.070175438596493,
+      "stored_ci95": [
+        0.12385144707549078,
+        0.23761284722222217
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 19.12280701754386,
+      "stored_ci95": [
+        0.13440860215053763,
+        0.2513301503766196
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 16.315789473684212,
+      "stored_ci95": [
+        0.10516934046345809,
+        0.22163143774831975
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 17.36842105263158,
+      "stored_ci95": [
+        0.11683630749908419,
+        0.23334239130434775
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "pilot200",
+      "method_a": "bsr_m4_g80",
+      "method_b": "bsr_m2_g80",
+      "difference_percentage_points": -1.7543859649122806,
+      "stored_ci95": [
+        -0.0374331550802139,
+        0.0017730496453900704
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": 4.4650751547303305,
+      "stored_ci95": [
+        0.022805784541675467,
+        0.066319587831593
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": 4.067197170645448,
+      "stored_ci95": [
+        0.017520791198982748,
+        0.06507760843750215
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "difference_percentage_points": 3.8461538461538494,
+      "stored_ci95": [
+        0.016487501374230423,
+        0.060206582072069165
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "difference_percentage_points": 3.448275862068967,
+      "stored_ci95": [
+        0.010357933234439249,
+        0.05908359788359787
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "bsr_m2_g20",
+      "difference_percentage_points": -0.6189213085764811,
+      "stored_ci95": [
+        -0.016777041942604858,
+        0.003581007567144647
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 10.831122900088419,
+      "stored_ci95": [
+        0.08421695967658825,
+        0.13227530609265167
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 13.218390804597707,
+      "stored_ci95": [
+        0.10539779797863766,
+        0.1600021929824561
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "difference_percentage_points": 8.841732979664013,
+      "stored_ci95": [
+        0.06401677111575328,
+        0.11228081763192657
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "difference_percentage_points": 11.229000884173301,
+      "stored_ci95": [
+        0.0849933598937583,
+        0.14002992076869353
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "bsr_m2_g40",
+      "difference_percentage_points": -1.9893899204244059,
+      "stored_ci95": [
+        -0.030426956763316814,
+        -0.00981639061810214
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 16.489832007073385,
+      "stored_ci95": [
+        0.1381442559963298,
+        0.19135365814326466
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 21.662245800176834,
+      "stored_ci95": [
+        0.186249288589763,
+        0.2471268158796591
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "difference_percentage_points": 14.898320070733861,
+      "stored_ci95": [
+        0.12252195871761089,
+        0.17569751436288428
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "difference_percentage_points": 20.070733863837308,
+      "stored_ci95": [
+        0.1701752083621126,
+        0.23012323573586793
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "bsr_m2_g80",
+      "difference_percentage_points": -1.5915119363395236,
+      "stored_ci95": [
+        -0.02595150703796631,
+        -0.006245966602132307
+      ]
+    }
+  ],
+  "independently_recomputed_ci": [
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        0.0021052631578947294,
+        0.04245176783338136
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        -0.02147244896628917,
+        0.020023302845262058
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        0.002170996816219063,
+        0.04793342413417965
+      ]
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        -0.022194663923557487,
+        0.02393542187834628
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        0.1092373457689692,
+        0.15884902992635608
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "full1000",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        0.08967115757902616,
+        0.13786003437046396
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        0.10539779797863766,
+        0.1600021929824561
+      ]
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "independent_ci95": [
+        0.0849933598937583,
+        0.14002992076869353
+      ]
+    }
+  ],
+  "stored_adversarial_artifacts": [
+    {
+      "path": "cache/bsr_m2_g20_seed142.pt",
+      "sha256": "6dbb0a26ab37043ebaa666c9535e801b591b3f5a73940f7be0f07548d0889575",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m2_g20_seed242.pt",
+      "sha256": "3b25e058ab1be4109bec035d4c9bf58810337f96f6ea58c73f6d1bf5f59b5a1b",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m2_g20_seed42.pt",
+      "sha256": "b6216459ef10a13894f0045c8d70c33586a5a4d1aeca9546184ea21a1b613f80",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m2_g40_seed142.pt",
+      "sha256": "f58f512d54864991a4374a8bdac329ec62c897ef6715589762879d3012d9c051",
+      "max_linf": 0.0313725620508194
+    },
+    {
+      "path": "cache/bsr_m2_g40_seed242.pt",
+      "sha256": "f23e1f14d9da2465615675618d1f14c1e8dabb589af0ce6c5c559675d46da8c7",
+      "max_linf": 0.0313725620508194
+    },
+    {
+      "path": "cache/bsr_m2_g40_seed42.pt",
+      "sha256": "50bc7d281899c01cf727b1bb835273491339eba5119e8dde984ba0799c332430",
+      "max_linf": 0.0313725620508194
+    },
+    {
+      "path": "cache/bsr_m2_g80_seed142.pt",
+      "sha256": "123b678312b5a74e341b567d0ed0253d4b741b121636826d9d00cb199cc8f4a4",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m2_g80_seed242.pt",
+      "sha256": "0fba5f5e105b89a98f6c04c42c77c521d8c819bdd65fdf202f0e5fb4ec861262",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m2_g80_seed42.pt",
+      "sha256": "01cd29267a6302e6e12a15e79667bad2ecad56f90b38675370759b0a15ff7417",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m4_g20_seed142.pt",
+      "sha256": "be880ff583391ad5292417f1dc0389aec058f21b8ca612c974066657ec1ed767",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m4_g20_seed242.pt",
+      "sha256": "a636f7abfbf34d71627824c1988ca62a4f976f7a1c6db8a92ddc93a50acd11b4",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m4_g20_seed42.pt",
+      "sha256": "8fe59e07e4793645c3068edc00ec35836afe49fad7baa55c4a8735b7bf13e3c8",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m4_g40_seed142.pt",
+      "sha256": "b37d5ac5ee93e4f4ee560e63b7e37a3b76716a527af832454a7ebec52b335e05",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m4_g40_seed242.pt",
+      "sha256": "54ec500381a8f61c4161d7c8cb2838c4ba39a1efd6459a1b3b5c3fa246e5c18c",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m4_g40_seed42.pt",
+      "sha256": "3755ca174130c964eb8ccba7b551f4d7390c21b92d5bfd2607bf62d65bc1a971",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/bsr_m4_g80_seed142.pt",
+      "sha256": "5902cd980e02cf011931281622f6b0ef9872f0db4cbcaacacc76e388e7d46459",
+      "max_linf": 0.0313725620508194
+    },
+    {
+      "path": "cache/bsr_m4_g80_seed242.pt",
+      "sha256": "aa0d5fb1d6234042447475d299a1a1677195ed09db490663b07b83590e43ba95",
+      "max_linf": 0.0313725620508194
+    },
+    {
+      "path": "cache/bsr_m4_g80_seed42.pt",
+      "sha256": "496c8c6aabb484d1a9587f7fda4156195b16ef06ba60fd8b1c765cb9f9947a27",
+      "max_linf": 0.0313725620508194
+    },
+    {
+      "path": "cache/mi10_reference_deterministic.pt",
+      "sha256": "69bb3168bee6cf2694a00cf6ced50970cf2579a656d3c68a92dff5e312770e4a",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/mi_g20_deterministic.pt",
+      "sha256": "47cd820125083834047a550fb105451a3278be7d5295924d35c7a93f20dc9891",
+      "max_linf": 0.0313725620508194
+    },
+    {
+      "path": "cache/mi_g20_fixed_step_deterministic.pt",
+      "sha256": "e1328664cafbe0aa3bea57d149f622923484217c506068d1795f3e5102856547",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/mi_g40_deterministic.pt",
+      "sha256": "c079cf085b83618acd2f6806c852ccb6c44b04f20c73195301287418975f8cae",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/mi_g40_fixed_step_deterministic.pt",
+      "sha256": "ad334da6d0104cffa10e4abe9d5cb4b17a428ee5d64fe1bb72807fcd1189ebcf",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/mi_g80_deterministic.pt",
+      "sha256": "7f59bcfa63b8afbf502df7c7127f549e7a7f22ce477f348b43c15b264b1ba31d",
+      "max_linf": 0.03137257695198059
+    },
+    {
+      "path": "cache/mi_g80_fixed_step_deterministic.pt",
+      "sha256": "482c00b5198b2ed003c6b26865caab52166ec6b2ebdf4bbc812a42168a10e49a",
+      "max_linf": 0.03137257695198059
+    }
+  ],
+  "ci_scope": "All 90 point differences independently recomputed; eight G40 BSR-vs-fixed-step MI confidence intervals independently resampled"
+}

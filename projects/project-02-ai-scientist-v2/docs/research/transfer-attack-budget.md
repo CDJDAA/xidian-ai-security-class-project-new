@@ -4,17 +4,19 @@
 
 后续验证：已完成 WSL2 / CUDA 部署，并通过真实 `deepseek-flash` 请求额外生成 [一个原始候选](../reports/2026-11-17/ideation.json)。上游 Semantic Scholar 查新路径因 HTTP 429 超时，成功候选使用本地论文证据模式，不能视为外部查新完成。运行状态与原始输出的人工复核见 [部署记录](../reports/2026-11-17/deployment.md)。下文仍是人工整理、用于冻结实验规则的课程方案。
 
+实施优先级更新：本周五中期前先完成等预算 MI-FGSM / BSR 的 V1 对照；下文的检查点混合完整方案作为中期后的 V2 扩展。范围、当前缺口与最终产物见[阶段计划](midterm-plan.md)，不能把尚未实现的实验写成已完成。
+
 ## 1. 五篇论文给出的线索
 
-页码均指本地 PDF 页码，包含首页，不是印刷页码。
+页码指最初阅读时 PDF 的顺序页码，包含首页，不是印刷页码。当前仓库未附这五个 PDF，文献链接指向原始出版来源。
 
 | 论文 | 方法与关键位置 | 对课程设计的启发与边界 |
 | --- | --- | --- |
-| [BSR](../../../paper/Wang_CVPR2024_BSR.pdf)，CVPR 2024 | p4–5：图像分块、随机打乱和旋转，对多个变换视图平均输入梯度并结合动量；p8：变换数量等消融 | 空间多样性。原设 T=10、每步 N=20，同样 10 步不等于与单视图方法等计算；变换也不保证始终保留分类语义 |
-| [Checkpoints](../../../paper/Checkpoints_CVPR2025.pdf)，CVPR 2025 | p3–4：利用训练与验证准确率差给检查点赋重要性，并先筛选具有足够验证准确率的模型；p5：实验设置；p8：纵向集成 | 训练轨迹多样性。论文已经研究每轮取 4 个检查点的低显存方案，因此不能把随机少量取点本身作为创新 |
-| [LPAA](../../../paper/LPAA_CVPR2026.pdf)，CVPR 2026 | p3–4：对当前扰动作随机掩码，构造局部扰动子空间；p4–5：初始化；p6：参数 | 扰动空间多样性。主迭代之外还有初始化成本，不能只按迭代次数比较效率；完整初始化需进一步核对实现 |
-| [RaPA](../../../paper/RaPA_CVPR2026.pdf)，CVPR 2026 | p4：对模型参数作随机掩码；p5–6：定向迁移与计算设置 | 参数多样性。主要研究 targeted attack，不能与非定向 ASR 直接混表；原文已有每轮采样数的预算控制，不应声称它未考虑计算成本 |
-| [PR](../../../paper/PR_2026.pdf)，Discover Computing 2026 | p8：在 ViT 注意力输入中随机置换 patch tokens；p9：评估；p18–19：局限 | token 层多样性；需要区分位置、注意力分支与残差对齐。文件名中的 PR 不是期刊 Pattern Recognition 的证据；本文实际页眉为 Discover Computing |
+| [BSR](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Boosting_Adversarial_Transferability_by_Block_Shuffle_and_Rotation_CVPR_2024_paper.html)，CVPR 2024 | p4–5：图像分块、随机打乱和旋转，对多个变换视图平均输入梯度并结合动量；p8：变换数量等消融 | 空间多样性。原设 T=10、每步 N=20，同样 10 步不等于与单视图方法等计算；变换也不保证始终保留分类语义 |
+| [Checkpoints](https://openaccess.thecvf.com/content/CVPR2025/html/Li_Enhancing_Adversarial_Transferability_with_Checkpoints_of_a_Single_Models_Training_CVPR_2025_paper.html)，CVPR 2025 | p3–4：利用训练与验证准确率差给检查点赋重要性，并先筛选具有足够验证准确率的模型；p5：实验设置；p8：纵向集成 | 训练轨迹多样性。论文已经研究每轮取 4 个检查点的低显存方案，因此不能把随机少量取点本身作为创新 |
+| [LPAA](https://openaccess.thecvf.com/content/CVPR2026/html/Mi_Improving_Adversarial_Transferability_with_Local_Perturbation_Augmentation_CVPR_2026_paper.html)，CVPR 2026 | p3–4：对当前扰动作随机掩码，构造局部扰动子空间；p4–5：初始化；p6：参数 | 扰动空间多样性。主迭代之外还有初始化成本，不能只按迭代次数比较效率；完整初始化需进一步核对实现 |
+| [RaPA](https://openaccess.thecvf.com/content/CVPR2026/html/Su_RaPA_Enhancing_Transferable_Targeted_Attacks_via_Random_Parameter_Pruning_CVPR_2026_paper.html)，CVPR 2026 | p4：对模型参数作随机掩码；p5–6：定向迁移与计算设置 | 参数多样性。主要研究 targeted attack，不能与非定向 ASR 直接混表；原文已有每轮采样数的预算控制，不应声称它未考虑计算成本 |
+| [PR](https://doi.org/10.1007/s10791-026-10735-4)，Discover Computing 2026 | p8：在 ViT 注意力输入中随机置换 patch tokens；p9：评估；p18–19：局限 | token 层多样性；需要区分位置、注意力分支与残差对齐。文件名中的 PR 不是期刊 Pattern Recognition 的证据；本文实际页眉为 Discover Computing |
 
 这些方法共同试图减轻对单一代理模型的过拟合，但改变的层面和所需计算不同。课程应先研究可控的预算分配问题，而不是直接把五种方法叠加。
 
@@ -99,4 +101,4 @@ BSR 在小图上可能破坏语义，不能直接把 ImageNet 最优参数搬过
 
 **当前只是课程方案**，没有用这五篇论文的数字替代本机实验结果，没有宣称已复现 BSR / Checkpoints / LPAA / RaPA / PR，也没有宣称混合分配优于端点。
 
-来源：上述本地 PDF（正文与关键页已核对）；[RaPA 官方会议页](https://openaccess.thecvf.com/content/CVPR2026/html/Su_RaPA_Enhancing_Transferable_Targeted_Attacks_via_Random_Parameter_Pruning_CVPR_2026_paper.html)、[LPAA 官方会议页](https://openaccess.thecvf.com/content/CVPR2026/html/Mi_Improving_Adversarial_Transferability_with_Local_Perturbation_Augmentation_CVPR_2026_paper.html)，以及 PR 首页 DOI `10.1007/s10791-026-10735-4`。
+来源：上述论文原文（最初阅读时的 PDF 正文与关键页已核对）；[RaPA 官方会议页](https://openaccess.thecvf.com/content/CVPR2026/html/Su_RaPA_Enhancing_Transferable_Targeted_Attacks_via_Random_Parameter_Pruning_CVPR_2026_paper.html)、[LPAA 官方会议页](https://openaccess.thecvf.com/content/CVPR2026/html/Mi_Improving_Adversarial_Transferability_with_Local_Perturbation_Augmentation_CVPR_2026_paper.html)，以及 PR 首页 DOI `10.1007/s10791-026-10735-4`。

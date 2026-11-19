@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "stage": "pilot",
+  "completed_at": "2026-11-18T00:12:08+08:00",
+  "images": 200,
+  "source": "cifar10_resnet20",
+  "target": "cifar10_mobilenetv2_x1_0",
+  "source_full_test_clean": {
+    "correct": 9260,
+    "count": 10000,
+    "accuracy": 0.926,
+    "seconds": 2.0055169939987536
+  },
+  "target_full_test_clean": {
+    "correct": 9405,
+    "count": 10000,
+    "accuracy": 0.9405,
+    "seconds": 3.4754150369990384
+  },
+  "target_evaluation_started_at": "2026-11-18T00:12:04+08:00",
+  "methods": {
+    "mi10_g10": {
+      "target": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.96,
+        "robust_accuracy": 0.145,
+        "asr_numerator": 163,
+        "asr_denominator": 192,
+        "asr": 0.8489583333333334,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.145,
+            "asr_numerator": 163,
+            "asr_denominator": 192,
+            "asr": 0.8489583333333334
+          }
+        ]
+      },
+      "source": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.915,
+        "robust_accuracy": 0.0,
+        "asr_numerator": 183,
+        "asr_denominator": 183,
+        "asr": 1.0,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.0,
+            "asr_numerator": 183,
+            "asr_denominator": 183,
+            "asr": 1.0
+          }
+        ]
+      },
+      "generation": {
+        "sample_view_gradient_evaluations": 2000,
+        "backward_calls": 100,
+        "gradient_evaluations_per_image": 10,
+        "attack_seconds": 1.510439296002005,
+        "images_per_second": 132.41180928580297,
+        "peak_cuda_allocated_mib": 56.04248046875,
+        "peak_cuda_reserved_mib": 80.0,
+        "linf_max": 0.03137257695198059,
+        "linf_mean": 0.03137257695198059,
+        "all_constraints_passed": true,
+        "batch_seeds": [
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+      }
+    },
+    "mi40_g40": {
+      "target": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.96,
+        "robust_accuracy": 0.155,
+        "asr_numerator": 161,
+        "asr_denominator": 192,
+        "asr": 0.8385416666666666,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.155,
+            "asr_numerator": 161,
+            "asr_denominator": 192,
+            "asr": 0.8385416666666666
+          }
+        ]
+      },
+      "source": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.915,
+        "robust_accuracy": 0.0,
+        "asr_numerator": 183,
+        "asr_denominator": 183,
+        "asr": 1.0,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.0,
+            "asr_numerator": 183,
+            "asr_denominator": 183,
+            "asr": 1.0
+          }
+        ]
+      },
+      "generation": {
+        "sample_view_gradient_evaluations": 8000,
+        "backward_calls": 400,
+        "gradient_evaluations_per_image": 40,
+        "attack_seconds": 6.08258058699721,
+        "images_per_second": 32.88078096779217,
+        "peak_cuda_allocated_mib": 56.04248046875,
+        "peak_cuda_reserved_mib": 80.0,
+        "linf_max": 0.03137257695198059,
+        "linf_mean": 0.03137257695198059,
+        "all_constraints_passed": true,
+        "batch_seeds": [
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+      }
+    },
+    "bsr10x4_g40": {
+      "target": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.96,
+        "robust_accuracy": 0.1,
+        "asr_numerator": 172,
+        "asr_denominator": 192,
+        "asr": 0.8958333333333334,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.1,
+            "asr_numerator": 172,
+            "asr_denominator": 192,
+            "asr": 0.8958333333333334
+          }
+        ]
+      },
+      "source": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.915,
+        "robust_accuracy": 0.01,
+        "asr_numerator": 181,
+        "asr_denominator": 183,
+        "asr": 0.9890710382513661,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.01,
+            "asr_numerator": 181,
+            "asr_denominator": 183,
+            "asr": 0.9890710382513661
+          }
+        ]
+      },
+      "generation": {
+        "sample_view_gradient_evaluations": 8000,
+        "backward_calls": 400,
+        "gradient_evaluations_per_image": 40,
+        "attack_seconds": 7.061920803000248,
+        "images_per_second": 28.320906673865593,
+        "peak_cuda_allocated_mib": 56.9111328125,
+        "peak_cuda_reserved_mib": 82.0,
+        "linf_max": 0.03137257695198059,
+        "linf_mean": 0.03137257695198059,
+        "all_constraints_passed": true,
+        "batch_seeds": [
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+      }
+    },
+    "mi40_g40_large_step": {
+      "target": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.96,
+        "robust_accuracy": 0.12,
+        "asr_numerator": 168,
+        "asr_denominator": 192,
+        "asr": 0.875,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.12,
+            "asr_numerator": 168,
+            "asr_denominator": 192,
+            "asr": 0.875
+          }
+        ]
+      },
+      "source": {
+        "sample_count": 200,
+        "attack_seed_count": 1,
+        "clean_accuracy": 0.915,
+        "robust_accuracy": 0.0,
+        "asr_numerator": 183,
+        "asr_denominator": 183,
+        "asr": 1.0,
+        "per_seed": [
+          {
+            "seed_index": 0,
+            "robust_accuracy": 0.0,
+            "asr_numerator": 183,
+            "asr_denominator": 183,
+            "asr": 1.0
+          }
+        ]
+      },
+      "generation": {
+        "sample_view_gradient_evaluations": 8000,
+        "backward_calls": 400,
+        "gradient_evaluations_per_image": 40,
+        "attack_seconds": 5.190952537999692,
+        "images_per_second": 38.52857419441346,
+        "peak_cuda_allocated_mib": 56.04248046875,
+        "peak_cuda_reserved_mib": 82.0,
+        "linf_max": 0.03137257695198059,
+        "linf_mean": 0.03137257695198059,
+        "all_constraints_passed": true,
+        "batch_seeds": [
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "timing_scope": "GPU-synchronized attack loop including transforms and result CPU transfer; excludes warmup, source/target evaluation"
+      }
+    }
+  },
+  "paired_comparisons": {
+    "bsr_minus_mi10_g10": {
+      "sample_count": 200,
+      "asr_denominator": 192,
+      "attack_seed_count_a": 1,
+      "attack_seed_count_b": 1,
+      "asr_a": 0.8958333333333334,
+      "asr_b": 0.8489583333333334,
+      "difference_a_minus_b": 0.046875,
+      "ci95": [
+        0.0,
+        0.09424083769633508
+      ],
+      "bootstrap_seed": 20261117,
+      "bootstrap_requested": 2000,
+      "bootstrap_valid": 2000,
+      "bootstrap_skipped_zero_denominator": 0,
+      "resampling_unit": "image_with_all_attack_seeds_and_methods"
+    },
+    "bsr_minus_mi40_g40": {
+      "sample_count": 200,
+      "asr_denominator": 192,
+      "attack_seed_count_a": 1,
+      "attack_seed_count_b": 1,
+      "asr_a": 0.8958333333333334,
+      "asr_b": 0.8385416666666666,
+      "difference_a_minus_b": 0.05729166666666674,
+      "ci95": [
+        0.010309278350515464,
+        0.10996211077431792
+      ],
+      "bootstrap_seed": 20261117,
+      "bootstrap_requested": 2000,
+      "bootstrap_valid": 2000,
+      "bootstrap_skipped_zero_denominator": 0,
+      "resampling_unit": "image_with_all_attack_seeds_and_methods"
+    },
+    "bsr_minus_mi40_g40_large_step": {
+      "sample_count": 200,
+      "asr_denominator": 192,
+      "attack_seed_count_a": 1,
+      "attack_seed_count_b": 1,
+      "asr_a": 0.8958333333333334,
+      "asr_b": 0.875,
+      "difference_a_minus_b": 0.02083333333333337,
+      "ci95": [
+        -0.030773195876288663,
+        0.07217429624485866
+      ],
+      "bootstrap_seed": 20261117,
+      "bootstrap_requested": 2000,
+      "bootstrap_valid": 2000,
+      "bootstrap_skipped_zero_denominator": 0,
+      "resampling_unit": "image_with_all_attack_seeds_and_methods"
+    }
+  },
+  "warmup": {
+    "original_view_batches": 2,
+    "bsr_batches": 1,
+    "images_per_batch": 20,
+    "sample_view_gradient_evaluations": 120,
+    "included_in_attack_budget": false
+  },
+  "total_sample_view_gradient_evaluations": 26000,
+  "limitations": [
+    "200-image single-seed pilot; not a conclusive benchmark",
+    "One source/target pair and CIFAR-adapted BSR settings",
+    "Equal gradient evaluations do not imply equal FLOPs or time",
+    "CUDA transform backward may be nondeterministic; seed controls sampling",
+    "No target feedback used to generate attacks or select hyperparameters"
+  ],
+  "api_calls": 0
+}
