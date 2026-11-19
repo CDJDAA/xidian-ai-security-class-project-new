@@ -1,0 +1,27 @@
+{
+  "artifacts_sha256": {
+    "results.json": "add5cace1bb2757a96b7ee980305441feaf2419a6f500cd312c06a33e8d248d2",
+    "summary.csv": "fc6d6881a35d62d01e1fe87281d055c4a8e6ae1df643f634089f2ef1b0b8bca3",
+    "predictions.csv": "edbf784b4baa3024724695be19e4842eee2d8037cd2594a6e9a513ea3de04c15",
+    "comparison.png": "3db5e2cdf93ae3d2532ef6d093eb704144a314e444ada2eb367da32b9987419c",
+    "examples.png": "42d52acfb759cfbdd8bf74faac5225d685159666d5bfd6b20a8d3aedf6e219e1",
+    "config.frozen.json": "18e5fbb06ffde347e003206ad4b2fa3d7db657dcdc92fa21101e1830f3068610",
+    "selection.json": "91c819cb10029eec0587605c8e4160f21dee376bc01a96168caae513d924b37c",
+    "provenance.json": "4aab3252c608190dac45a443db5df97cf8b79939484fcca60e7e3ac94cb85c97",
+    "independent-audit.json": "ee003bdd224ccdb1f5c282225075e89c75d141144080bbf1b5e57338325d3c54",
+    "development.json": "d5da7ec2116bd64e8094e999cb1941b655f85a101efe948eeecb67022acf8ffe",
+    "development_transforms.png": "b8870f601a7e5eaf08dd9827acb04d6e6c54e0282e130ddf760149d61e2fafe6"
+  },
+  "exporter_sha256": "e7b6b4762fe2fc1cd9babeaee96e454a18c94497dc384d554b155018535847bf",
+  "pytest_junit": {
+    "tests": 101,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "pytest_summary": {
+    "test_functions_passed": 50,
+    "subtests_passed": 51,
+    "junit_test_count_includes_subtests": true
+  }
+}

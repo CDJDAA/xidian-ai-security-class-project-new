@@ -1,0 +1,212 @@
+{
+  "schema_version": 2,
+  "stage": "full",
+  "frozen_at": "2026-11-18T12:14:56+08:00",
+  "config_sha256": "84969b088a342739101250219f4060d19e88df802e33d9752401194488a2eb30",
+  "selection_sha256": "1719dc8924843d6c9d3e4cf539a2a65712bf6667cfb2b04e77a6f71570cf11eb",
+  "source_sha256": {
+    "course_tools/run_v1_full.py": "2c7b52ec89f825ee9634954796a8c423bd25ab92a428738a673466d6d9ec62f1",
+    "course_tools/run_v1.py": "82eabc8948aefb0bfabdf001aaac80c0122e59264bf5146a05217ca33f3d9a85",
+    "course_tools/v1_assets.py": "8310f7cd85aa1b8583babeec206c31afae87ec6fc9f2496e16bf1bcd64ced4c0",
+    "course_tools/v1_attacks.py": "3afdeb76da2f99c1fc8ce73afbc468375d92045285d98f443f6f770e72a85559",
+    "course_tools/v1_metrics.py": "ce10e3118cc9617b3692374577836c4a1afc1a7b2f1b062e9a8f74d47d906fa1",
+    "course_tools/report_v1_full.py": "e49a575a15bb92c516d89e0db4eece7ded94f7805a6d328d5f19f8f5075bcdad",
+    "docs/research/v1-full-protocol.md": "737db8a40bf55133918018e5fee62700b04729f9a1cb7796335c0b17f80afb97"
+  },
+  "git_head": "34e86bfbf872d96c7f4d391ae7869f76259efa41",
+  "assets": {
+    "prepared_at_utc": "2026-11-18T04:14:54.866371+00:00",
+    "model_repository": "https://github.com/chenyaofo/pytorch-cifar-models",
+    "model_commit": "786c16252c0fc58ee9adac063f8337cc4a7a497a",
+    "sources": {
+      "LICENSE": {
+        "url": "https://raw.githubusercontent.com/chenyaofo/pytorch-cifar-models/786c16252c0fc58ee9adac063f8337cc4a7a497a/LICENSE",
+        "sha256": "0eab51837bca1227951f45df5d2c4e07c5fc9926862d758ab3fe629ff31b04bc"
+      },
+      "pytorch_cifar_models/resnet.py": {
+        "url": "https://raw.githubusercontent.com/chenyaofo/pytorch-cifar-models/786c16252c0fc58ee9adac063f8337cc4a7a497a/pytorch_cifar_models/resnet.py",
+        "sha256": "885b8fd2ccfb8ee27c02d3a382e2951622fdcbc2af2bbca375aaf71d40f5f246"
+      },
+      "pytorch_cifar_models/mobilenetv2.py": {
+        "url": "https://raw.githubusercontent.com/chenyaofo/pytorch-cifar-models/786c16252c0fc58ee9adac063f8337cc4a7a497a/pytorch_cifar_models/mobilenetv2.py",
+        "sha256": "8d78f491e55286754c0faad9f70fac8e329f7073c930d7aa68962cb2aae69938"
+      },
+      "pytorch_cifar_models/vgg.py": {
+        "url": "https://raw.githubusercontent.com/chenyaofo/pytorch-cifar-models/786c16252c0fc58ee9adac063f8337cc4a7a497a/pytorch_cifar_models/vgg.py",
+        "sha256": "5562540e312da9184ff2e4ebc290dc68a9aec1e2a3f5b1e395b9cab4d7e8c3e5"
+      }
+    },
+    "acquisition": {
+      "models": {
+        "actual_source": "official GitHub release URLs in model metadata",
+        "route": "Windows HTTPS download, then copied to WSL"
+      },
+      "dataset": {
+        "canonical_url": "https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz",
+        "actual_download_url": "https://storage.googleapis.com/tensorflow/tf-keras-datasets/cifar-10-python.tar.gz",
+        "route": "Windows HTTPS download, then copied to WSL",
+        "official_archive_md5": "c58f30108f718f92721af3b95e74349a",
+        "observed_archive_md5": "c58f30108f718f92721af3b95e74349a",
+        "observed_archive_sha256": "6d958be074577803d12ecdefd02955f39262c83c16fe9348329d7fe0b5c001ce",
+        "bytes": 170498071,
+        "note": "Original Toronto download was slow; its incomplete archive is retained separately in cache. The Google mirror is byte-identical by the official torchvision MD5 check."
+      },
+      "additional_models": {
+        "cifar10_vgg11_bn": {
+          "actual_download_url": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/vgg/cifar10_vgg11_bn-eaeebf42.pt",
+          "route": "Windows HTTPS official GitHub release download, then copied to WSL",
+          "weight_sha256": "eaeebf42370c92fdfbb5dbe8eba7c27d4eb7366a1dca0b5be435364ccdf54378",
+          "weight_bytes": 39068509,
+          "source_commit": "786c16252c0fc58ee9adac063f8337cc4a7a497a",
+          "source_acquisition": "Exact git show bytes from the pinned author commit; no line-ending conversion",
+          "acquired_at_utc": "2026-11-18T04:09:04.351216+00:00"
+        }
+      }
+    },
+    "models": {
+      "cifar10_resnet20": {
+        "name": "cifar10_resnet20",
+        "source": "pytorch_cifar_models/resnet.py",
+        "weight_url": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar10_resnet20-4118986f.pt",
+        "published_sha256_prefix": "4118986f",
+        "expected_weight_sha256": "4118986f0df73003d572b0e397f0ac7b3f60af1f31aff3d2da164536e36f6ec8",
+        "author_test_top1_percent": 92.6,
+        "weight_relative_path": "cache/v1/weights/cifar10_resnet20-4118986f.pt",
+        "weight_sha256": "4118986f0df73003d572b0e397f0ac7b3f60af1f31aff3d2da164536e36f6ec8",
+        "source_sha256": "885b8fd2ccfb8ee27c02d3a382e2951622fdcbc2af2bbca375aaf71d40f5f246",
+        "code_repository": "https://github.com/chenyaofo/pytorch-cifar-models",
+        "code_commit": "786c16252c0fc58ee9adac063f8337cc4a7a497a",
+        "license": "BSD-3-Clause; upstream source retains its notices",
+        "input_space": "RGB float32 [0,1], BCHW, 32x32",
+        "normalization": {
+          "mean": [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          "std": [
+            0.2023,
+            0.1994,
+            0.201
+          ],
+          "source": "https://raw.githubusercontent.com/chenyaofo/image-classification-codebase/610e6523ab462351700aaf629e6c739a9a30e903/conf/cifar10.conf",
+          "config_sha256": "31fe87685702e3939c9df52975925e50bae013fad196d2fd523347c41e220686"
+        }
+      },
+      "cifar10_mobilenetv2_x1_0": {
+        "name": "cifar10_mobilenetv2_x1_0",
+        "source": "pytorch_cifar_models/mobilenetv2.py",
+        "weight_url": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/mobilenetv2/cifar10_mobilenetv2_x1_0-fe6a5b48.pt",
+        "published_sha256_prefix": "fe6a5b48",
+        "expected_weight_sha256": "fe6a5b4808c9b1b7a440c02fa19a10dc3d8ea5c63e38381b2f60b1937958735e",
+        "author_test_top1_percent": 93.79,
+        "weight_relative_path": "cache/v1/weights/cifar10_mobilenetv2_x1_0-fe6a5b48.pt",
+        "weight_sha256": "fe6a5b4808c9b1b7a440c02fa19a10dc3d8ea5c63e38381b2f60b1937958735e",
+        "source_sha256": "8d78f491e55286754c0faad9f70fac8e329f7073c930d7aa68962cb2aae69938",
+        "code_repository": "https://github.com/chenyaofo/pytorch-cifar-models",
+        "code_commit": "786c16252c0fc58ee9adac063f8337cc4a7a497a",
+        "license": "BSD-3-Clause; upstream source retains its notices",
+        "input_space": "RGB float32 [0,1], BCHW, 32x32",
+        "normalization": {
+          "mean": [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          "std": [
+            0.2023,
+            0.1994,
+            0.201
+          ],
+          "source": "https://raw.githubusercontent.com/chenyaofo/image-classification-codebase/610e6523ab462351700aaf629e6c739a9a30e903/conf/cifar10.conf",
+          "config_sha256": "31fe87685702e3939c9df52975925e50bae013fad196d2fd523347c41e220686"
+        }
+      },
+      "cifar10_vgg11_bn": {
+        "name": "cifar10_vgg11_bn",
+        "source": "pytorch_cifar_models/vgg.py",
+        "weight_url": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/vgg/cifar10_vgg11_bn-eaeebf42.pt",
+        "published_sha256_prefix": "eaeebf42",
+        "expected_weight_sha256": "eaeebf42370c92fdfbb5dbe8eba7c27d4eb7366a1dca0b5be435364ccdf54378",
+        "author_test_top1_percent": 92.79,
+        "weight_relative_path": "cache/v1/weights/cifar10_vgg11_bn-eaeebf42.pt",
+        "weight_sha256": "eaeebf42370c92fdfbb5dbe8eba7c27d4eb7366a1dca0b5be435364ccdf54378",
+        "source_sha256": "5562540e312da9184ff2e4ebc290dc68a9aec1e2a3f5b1e395b9cab4d7e8c3e5",
+        "code_repository": "https://github.com/chenyaofo/pytorch-cifar-models",
+        "code_commit": "786c16252c0fc58ee9adac063f8337cc4a7a497a",
+        "license": "BSD-3-Clause; upstream source retains its notices",
+        "input_space": "RGB float32 [0,1], BCHW, 32x32",
+        "normalization": {
+          "mean": [
+            0.4914,
+            0.4822,
+            0.4465
+          ],
+          "std": [
+            0.2023,
+            0.1994,
+            0.201
+          ],
+          "source": "https://raw.githubusercontent.com/chenyaofo/image-classification-codebase/610e6523ab462351700aaf629e6c739a9a30e903/conf/cifar10.conf",
+          "config_sha256": "31fe87685702e3939c9df52975925e50bae013fad196d2fd523347c41e220686"
+        }
+      }
+    },
+    "dataset": {
+      "name": "CIFAR-10",
+      "url": "https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz",
+      "official_archive_md5": "c58f30108f718f92721af3b95e74349a",
+      "archive_sha256": "6d958be074577803d12ecdefd02955f39262c83c16fe9348329d7fe0b5c001ce",
+      "relative_path": "data/cifar-10-batches-py",
+      "files": {
+        "batches.meta": {
+          "sha256": "f962466ef690d46b226450fb9aadc74ba4bc64a76aa526b5827fe4bc5c7125cb",
+          "bytes": 158
+        },
+        "data_batch_1": {
+          "sha256": "54636561a3ce25bd3e19253c6b0d8538147b0ae398331ac4a2d86c6d987368cd",
+          "bytes": 31035704
+        },
+        "data_batch_2": {
+          "sha256": "766b2cef9fbc745cf056b3152224f7cf77163b330ea9a15f9392beb8b89bc5a8",
+          "bytes": 31035320
+        },
+        "data_batch_3": {
+          "sha256": "0f00d98ebfb30b3ec0ad19f9756dc2630b89003e10525f5e148445e82aa6a1f9",
+          "bytes": 31035999
+        },
+        "data_batch_4": {
+          "sha256": "3f7bb240661948b8f4d53e36ec720d8306f5668bd0071dcb4e6c947f78e9682b",
+          "bytes": 31035696
+        },
+        "data_batch_5": {
+          "sha256": "d91802434d8376bbaeeadf58a737e3a1b12ac839077e931237e0dcd43adcb154",
+          "bytes": 31035623
+        },
+        "readme.html": {
+          "sha256": "4d1c3fb199d6a183ae03f5162b469d7bc04edf2fad9547bd5f224271d52f98e5",
+          "bytes": 88
+        },
+        "test_batch": {
+          "sha256": "f53d8d457504f7cff4ea9e021afcf0e0ad8e24a91f3fc42091b8adef61157831",
+          "bytes": 31035526
+        }
+      },
+      "loader": "torchvision.datasets.CIFAR10; ToTensor only"
+    }
+  },
+  "asset_signature": "f4b645cba9a00db2994823b65d3d1a4f2e798a2e1a6060665abd525208de40bc",
+  "environment": {
+    "python": "3.11.18",
+    "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "torch": "2.10.0+cu126",
+    "torchvision": "0.25.0+cu126",
+    "numpy": "2.4.6",
+    "cuda_runtime": "12.6",
+    "gpu": "NVIDIA GeForce GTX 1660 Ti",
+    "threads": 4
+  },
+  "target_access": "Pilot target effects and full-test clean predictions were already observed. In this new run all configurations are frozen and all source attacks complete before target-effect evaluation; no target-based selection.",
+  "randomness": "CPU generators fix batch-shared BSR sampling; CUDA grid_sample backward may remain nondeterministic",
+  "api_calls": 0
+}

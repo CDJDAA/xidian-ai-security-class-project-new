@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "dataset": "CIFAR10",
+  "source_model": "cifar10_resnet20",
+  "target_model": "cifar10_mobilenetv2_x1_0",
+  "epsilon": 0.03137254901960784,
+  "split_seed": 20261117,
+  "pilot_per_class": 20,
+  "final_per_class": 100,
+  "development_per_class": 5,
+  "attack_seed": 42,
+  "batch_size": 20,
+  "bootstrap_seed": 20261117,
+  "bootstrap_replicates": 2000,
+  "clean_accuracy_floor": 0.85,
+  "methods": [
+    {"name": "mi10_g10", "method": "mi", "steps": 10, "views": 1, "alpha": 0.0031372549019607846},
+    {"name": "mi40_g40", "method": "mi", "steps": 40, "views": 1, "alpha": 0.0007843137254901962},
+    {"name": "bsr10x4_g40", "method": "bsr", "steps": 10, "views": 4, "alpha": 0.0031372549019607846, "blocks": 2, "rotation_degrees": 10.0},
+    {"name": "mi40_g40_large_step", "method": "mi", "steps": 40, "views": 1, "alpha": 0.0031372549019607846}
+  ],
+  "notes": {
+    "purpose": "Pilot: transfer-based black-box evaluation, not a full ImageNet BSR reproduction",
+    "start": "zero",
+    "loss": "cross_entropy",
+    "momentum_decay": 1.0,
+    "bsr_sampling": "New shared-in-batch transform parameters per view and step; bilinear interpolation, zero fill",
+    "normalization": "Inside model wrapper, perturbation constrained in raw [0,1] pixels",
+    "freeze": "Freeze config, IDs, source and weight hashes before test target inference; no target-based tuning",
+    "randomness": "Seeded sampling; CUDA grid_sample backward can retain nondeterminism",
+    "future_target": "cifar10_vgg11_bn; not included in this pilot"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "stage": "exploratory_sweep",
+  "dataset": "CIFAR10",
+  "selection_source": "docs/reports/2026-11-18/v1-budget/selection.json",
+  "selection_sha256": "91c819cb10029eec0587605c8e4160f21dee376bc01a96168caae513d924b37c",
+  "sample_count": 1000,
+  "source_model": "cifar10_resnet20",
+  "target_models": ["cifar10_mobilenetv2_x1_0", "cifar10_vgg11_bn"],
+  "epsilon": 0.03137254901960784,
+  "gradient_budgets": [20, 24, 28, 32, 36, 40, 80],
+  "views": [1, 2, 4],
+  "mi_step_rules": ["fixed", "epsilon_over_steps"],
+  "bsr_seeds": [42, 142, 242],
+  "batch_size": 20,
+  "momentum_decay": 1.0,
+  "blocks": 2,
+  "rotation_degrees": 10.0,
+  "fixed_step_denominator": 10,
+  "bootstrap_seed": 20261117,
+  "bootstrap_replicates": 10000,
+  "clean_accuracy_floor": 0.85,
+  "notes": {
+    "purpose": "Exploratory crossover scan with one fixed ResNet20 source and two target models; no source diversity",
+    "prior_access": "The same full1000, pilot200 and new800 already had V1 target attack effects evaluated; this is not a fresh confirmation",
+    "primary_comparison": "BSR M=2 with alpha=epsilon/T minus MI with fixed alpha=epsilon/10, separately for each target",
+    "adaptive_followup": "Start with G=20/24/28/32/36/40. Refine observed mean sign-change brackets by adding missing even budgets. If an entire target curve is positive at the lower boundary, expand downward as a separate recorded sweep. Report no crossover in range if no bracket is observed; do not assume monotonicity, a unique threshold or a confidence interval for the threshold.",
+    "minimum_grid_resolution": 2,
+    "randomness": "BSR geometry shared within fixed batches; actual seed is base plus batch index",
+    "api_calls": 0
+  }
+}

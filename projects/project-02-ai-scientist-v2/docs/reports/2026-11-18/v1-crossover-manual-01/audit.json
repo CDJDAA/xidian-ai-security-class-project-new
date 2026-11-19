@@ -1,0 +1,118 @@
+{
+  "status": "passed",
+  "created_at_utc": "2026-11-18T12:40:28.119851+00:00",
+  "run_directory": "E:\\SecAI-code\\xidian-ai-security-class-project-new\\projects\\project-02-ai-scientist-v2\\experiments\\v1_crossover_manual_01",
+  "report_directory": "E:\\SecAI-code\\xidian-ai-security-class-project-new\\projects\\project-02-ai-scientist-v2\\docs\\reports\\2026-11-18\\v1-crossover-manual-01",
+  "python_version": "3.12.14",
+  "numpy_version": "2.3.5",
+  "audit_script_sha256": "e5dfb24436f00a0964e5f0b2ee5936f201c68b67cb742a5b032bf727ca0bc91b",
+  "point_differences_checked": 252,
+  "cluster_standard_errors_checked": 252,
+  "denominators_cluster_counts_and_df_checked": 252,
+  "max_point_difference_error": 2.0122792321330962e-16,
+  "max_standard_error_difference": 6.938893903907228e-18,
+  "family_sizes": {
+    "full1000": 84,
+    "new800": 84,
+    "pilot200": 84
+  },
+  "holm_adjustments_checked": 252,
+  "additional_image_bootstrap_intervals_checked": [
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "gradient_budget": 20,
+      "method_a": "bsr_m2_g20",
+      "method_b": "bsr_m4_g20",
+      "subset": "full1000",
+      "ci95": [
+        0.026471198022922166,
+        0.04953998584571833
+      ],
+      "matches": true
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "gradient_budget": 80,
+      "method_a": "bsr_m2_g80",
+      "method_b": "bsr_m4_g80",
+      "subset": "full1000",
+      "ci95": [
+        0.014705496574285538,
+        0.03033509700176367
+      ],
+      "matches": true
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "gradient_budget": 20,
+      "method_a": "bsr_m2_g20",
+      "method_b": "bsr_m4_g20",
+      "subset": "full1000",
+      "ci95": [
+        -0.0032119914346895075,
+        0.015856236786469344
+      ],
+      "matches": true
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "gradient_budget": 40,
+      "method_a": "bsr_m2_g40",
+      "method_b": "bsr_m4_g40",
+      "subset": "full1000",
+      "ci95": [
+        0.011157018777497286,
+        0.029946627699705672
+      ],
+      "matches": true
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "gradient_budget": 80,
+      "method_a": "bsr_m2_g80",
+      "method_b": "bsr_m4_g80",
+      "subset": "full1000",
+      "ci95": [
+        0.007383771725067026,
+        0.025339147177268907
+      ],
+      "matches": true
+    }
+  ],
+  "bootstrap_seed": 20261117,
+  "bootstrap_repetitions": 10000,
+  "translated_records_fully_preserved": {
+    "summary.csv": 168,
+    "per_seed.csv": 336,
+    "comparisons.csv": 168,
+    "predictions.csv": 112000
+  },
+  "original_completion_sha256_preserved": {
+    "results.json": "e6b47d5fcaeb85eca42b41ce041af3c169cf72339c0beb3287fae91f122e724f",
+    "summary.csv": "0a45b0f90c18292314e61db10a374163dc249399baeaf5cbe1b6cd458633cf00",
+    "per_seed.csv": "de19aa1146e9d453006e77163118710ba9bdcdccc9faee5cfa5da51720330838",
+    "predictions.csv": "ff4b03375c2f66e3082829d055aeb043c349ae1555226175087fecb83356a375",
+    "comparisons.csv": "463ff670a83743df6d02e14b5f43918a29bf83839cf9221c315b54b4b548867f",
+    "inputs.pt": "85727009871700632164f6c079273e2d68b7097ec85650b75f0e75a0a27bdaaa"
+  },
+  "input_report_sha256": {
+    "analysis.json": "34c60316bc882daf167613b7e7ed3a52352f5546f4c863831be1aa9eb330f1eb",
+    "data/all_comparisons.csv": "ed1a13b9b8bd5d235dc3a0ffdb9e6c435410741a5545ef5b26e1b940a2136c0b",
+    "data/方法汇总_中文.csv": "7850ef0e31ed0add717b42a11ed759894427dbfaeec3252ffaa2e1f482fbecef",
+    "data/种子明细_中文.csv": "eca5b8b871c86fd34f7fe96d9997f3d3cde947f7f32bdac31698ad39bc2cbd39",
+    "data/原配对比较_中文.csv": "149e4aac832d6367d5c414c9b1818ce782c67f4cc13279d4b39f50135670e458",
+    "data/完整逐图预测_中文.csv": "560b3d57cf665a51829b8ae1caf97a2c340bb8dbd686a534b559dc64019621cd"
+  },
+  "scope": "Independent numerical and preservation audit only; no project metric or multiplicity helpers imported.",
+  "not_independently_checked": [
+    "Student-t tail probabilities behind the recorded raw p-values",
+    "BH adjusted p-values",
+    "All 252 confidence intervals (five newly added M2-minus-M4 intervals were independently resampled)",
+    "Model predictions by rerunning classifiers",
+    "Adversarial tensors by regenerating attacks"
+  ],
+  "model_inference_calls": 0,
+  "attacks_generated": 0,
+  "api_calls": 0,
+  "torch_imported": false
+}

@@ -1,0 +1,50 @@
+{
+  "source_run": "/mnt/e/SecAI-code/xidian-ai-security-class-project-new/projects/project-02-ai-scientist-v2/experiments/v1_crossover_manual_01",
+  "source_sha256": {
+    "summary.csv": "0a45b0f90c18292314e61db10a374163dc249399baeaf5cbe1b6cd458633cf00",
+    "per_seed.csv": "de19aa1146e9d453006e77163118710ba9bdcdccc9faee5cfa5da51720330838",
+    "comparisons.csv": "463ff670a83743df6d02e14b5f43918a29bf83839cf9221c315b54b4b548867f",
+    "predictions.csv": "ff4b03375c2f66e3082829d055aeb043c349ae1555226175087fecb83356a375",
+    "config.frozen.json": "f69785bea1fbdaf4e9155ae70fe86eed77fc95859d4152d7dad3e4ccd8616a51",
+    "results.json": "e6b47d5fcaeb85eca42b41ce041af3c169cf72339c0beb3287fae91f122e724f",
+    "selection.json": "e38fd1a2e01cb12a5f667bc14d607d205f8153c9c99cdc2f12bfe14f5a306fb3",
+    "completion.json": "d4a9978812c997945e25adc8db9a50070ec49e147640ed5c41b84d4d0af4ff68"
+  },
+  "script_sha256": "db1fd08951616ec5061a0dfc6071994a98b5961abed20495e9bb152eba7672a5",
+  "chinese_font": "Microsoft YaHei",
+  "matplotlib_version": "3.11.2",
+  "figure_groups": [
+    "01_asr_full1000",
+    "02_gain_full1000",
+    "03_gain_detail_20_40",
+    "04_view_and_step_rule_contrasts",
+    "05_attack_seed_stability",
+    "06_time_and_effectiveness",
+    "07_subset_sensitivity"
+  ],
+  "png_dpi": 300,
+  "x_axis": "actual numeric gradient budgets; no categorical equal spacing",
+  "asr_shading": "BSR observed min-max attack seed range, not a confidence interval",
+  "paired_intervals": "original image paired percentile 95% bootstrap, not multiplicity adjusted or a crossover confidence interval",
+  "model_inference_calls": 0,
+  "attacks_generated": 0,
+  "api_calls": 0,
+  "artifacts_sha256": {
+    "01_asr_full1000.png": "7df609e0c6d2da7611f0efe690d4f6f946a61099d953bcaf72066f22f37ed8d9",
+    "01_asr_full1000.svg": "fc74aa348297da306213ed11475a220bb6679c05b39939a01910eaf92146d190",
+    "02_gain_full1000.png": "08514a47ed84f2afe2d87153e477153d528a679155c4648ec2ec9f34bb006718",
+    "02_gain_full1000.svg": "37efd5547b77150f00f33bab8c6b7b2473b8505429320bca2c8bf6d488d4a4c9",
+    "03_gain_detail_20_40.png": "73f35bdce832eebd62c5a461b8f47ec03d0a0a54c318d603765268e4d012fc0c",
+    "03_gain_detail_20_40.svg": "38e8aa5831e91fe2be5ab658339aa4132e1cb55865f3181034f05d8f9d1c393b",
+    "04_view_and_step_rule_contrasts.png": "1efde976b93cc001cc3b1001d69a6542c2fb4210b38cc85a58afe42c56a3360f",
+    "04_view_and_step_rule_contrasts.svg": "febcc77c7be0e98165059d7ffa39f41d17d408e5236333af32fd43716c397a9d",
+    "05_attack_seed_stability.png": "9e793032f166d8b7846cfeac5edeef2624afde9c2562abd7be6ef3d1f2b878a1",
+    "05_attack_seed_stability.svg": "4304ce3f35e6c81f099676855c329376557af5bf510754f54bc3da788d6e45f3",
+    "06_time_and_effectiveness.png": "4d7c261d3b4d0475aea1956fedcd0435116aa6bc6cdbf0b7b2ab9e023eb536ac",
+    "06_time_and_effectiveness.svg": "23314a793f636988682e650a2e1605ad1a5ea14d7b56d6d41479568588102d29",
+    "07_subset_sensitivity.png": "9af74ce075f0c4dc2a820a6f4f74403d7d26894bd09c4d2b11714a1ed100f481",
+    "07_subset_sensitivity.svg": "b836fefb98f874504e66facb41aaf383dc0acd711b484849c539758d5986b8a3",
+    "qa_contact_sheet.png": "7d7c3f6ef5470ca09c54cc084e038e3f41eb5e9d085f1a6e02a7006934fe7bc0"
+  },
+  "extra_comparisons_sha256": "ed1a13b9b8bd5d235dc3a0ffdb9e6c435410741a5545ef5b26e1b940a2136c0b"
+}

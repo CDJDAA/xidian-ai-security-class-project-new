@@ -1,0 +1,763 @@
+{
+  "analysis": "Conditional cluster-t multiplicity sensitivity analysis",
+  "created_at_utc": "2026-11-18T08:26:48.376894+00:00",
+  "run_directory": "/mnt/e/SecAI-code/xidian-ai-security-class-project-new/projects/project-02-ai-scientist-v2/docs/reports/2026-11-18/v1-full",
+  "subset": "new800",
+  "family": "bsr_vs_mi",
+  "family_size": 24,
+  "alpha": 0.05,
+  "simultaneous_confidence_level": 0.95,
+  "input_sha256": {
+    "results.json": "d33b90ea65634b2cd974f878733c40f6f90e936c164e40a793ca2308665e5947",
+    "predictions.csv": "3c8ccaa5a1144124671b7f9effcaa057bf5112867427a1d7b3604bef2d7d7f23",
+    "selection.json": "1719dc8924843d6c9d3e4cf539a2a65712bf6667cfb2b04e77a6f71570cf11eb",
+    "config.frozen.json": "84969b088a342739101250219f4060d19e88df802e33d9752401194488a2eb30"
+  },
+  "analysis_script_sha256": "b6bd19ec56ba4379b3f0dbe8fce0e7ddd8fd7c31e29187953f7d8f5c8b6ef40c",
+  "prediction_rows_validated": 50000,
+  "original_batch_size": 20,
+  "method": "d_i=mean_s success_a(s,i)-mean_s success_b(s,i), restricted to target clean-correct images; delta=mean_i d_i. Cluster g=original final_ids position // original batch size. CRV1 variance=G/(G-1)*sum_g(sum_i_in_g(d_i-delta))^2/N^2, Student-t df=G-1. Holm is primary; BH exploratory. Separate Bonferroni intervals use t critical value at 1-alpha/(2*family_size).",
+  "numpy_version": "2.4.6",
+  "scipy_version": "1.16.3",
+  "notes": [
+    "Post-hoc sensitivity analysis of saved predictions; not a new confirmatory experiment.",
+    "Conditional on these fixed models, image IDs, batches, and realized attack seeds. Seed rows are averaged within image, never treated as independent images.",
+    "Cluster sandwich SE and Student-t inference are large-cluster approximations, not exact finite-sample guarantees; degrees of freedom equal nonempty clean-correct clusters minus one.",
+    "Holm controls family-wise error for valid component p-values under arbitrary test dependence. Its validity here inherits the approximate component tests.",
+    "BH is exploratory: FDR control requires independent or suitably positively dependent valid tests; that dependence condition has not been established for this experiment.",
+    "Bonferroni cluster-t intervals are approximate simultaneous intervals. They are not Holm intervals or BH intervals and do not replace the saved image-bootstrap intervals.",
+    "Failure to reject zero difference does not prove equivalence, no difference, or equal performance.",
+    "Unavailable tests retain a conservative p=1 placeholder during family adjustment, but exported raw/adjusted p-values and decisions for those tests remain null.",
+    "Full1000, pilot200 and new800 overlap. Each invocation defines one subset family; running them separately does not create independent confirmations or control a combined family."
+  ],
+  "references": {
+    "multipletests": "https://www.statsmodels.org/stable/generated/statsmodels.stats.multitest.multipletests.html",
+    "family_error_and_dependence": "https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html",
+    "cluster_covariance": "https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.RegressionResults.get_robustcov_results.html"
+  },
+  "model_inference_calls": 0,
+  "attacks_generated": 0,
+  "api_calls": 0,
+  "comparisons": [
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "gradient_budget": 20,
+      "difference_a_minus_b": -0.009210526315789483,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013203775809488644,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        -0.03250342297656877,
+        0.016467603625056483
+      ],
+      "p_raw_cluster_t": 0.48920248715019066,
+      "p_holm": 0.9784049743003813,
+      "p_bh_exploratory": 0.5104721605045468,
+      "reject_holm": false,
+      "reject_bh_exploratory": false,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.05247220551532704,
+        0.034051152883748076
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "gradient_budget": 20,
+      "difference_a_minus_b": -0.030263157894736853,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.011552778298344467,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        -0.05483207904571752,
+        -0.0053110351741912625
+      ],
+      "p_raw_cluster_t": 0.012115248810554197,
+      "p_holm": 0.06057624405277098,
+      "p_bh_exploratory": 0.014538298572665037,
+      "reject_holm": false,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.0681154052986341,
+        0.007589089509160388
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "gradient_budget": 20,
+      "difference_a_minus_b": -0.05000000000000001,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013968435549267692,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        -0.075401376146789,
+        -0.023587853334006367
+      ],
+      "p_raw_cluster_t": 0.0008690034056559417,
+      "p_holm": 0.007752785231051816,
+      "p_bh_exploratory": 0.0012268283373966236,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.0957670583302064,
+        -0.0042329416697936065
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "gradient_budget": 20,
+      "difference_a_minus_b": -0.07105263157894738,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.014288785133713306,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        -0.09799351189315156,
+        -0.044063441235037096
+      ],
+      "p_raw_cluster_t": 1.107187744483005e-05,
+      "p_holm": 0.00014393440678279066,
+      "p_bh_exploratory": 2.2143754889660098e-05,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.11786930337987267,
+        -0.0242359597780221
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.047807017543859645,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.010718525748793954,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.02327471134818446,
+        0.07227332457293034
+      ],
+      "p_raw_cluster_t": 5.7980181402361025e-05,
+      "p_holm": 0.0006957621768283323,
+      "p_bh_exploratory": 0.0001070403348966665,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.012688167517409116,
+        0.08292586757031017
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.024122807017543848,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.012420107113243824,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.002170996816219063,
+        0.04793342413417965
+      ],
+      "p_raw_cluster_t": 0.058676608176068956,
+      "p_holm": 0.17602982452820687,
+      "p_bh_exploratory": 0.06401084528298431,
+      "reject_holm": false,
+      "reject_bh_exploratory": false,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.01657121091412368,
+        0.06481682494921137
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.024561403508771916,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.010876235564367015,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        -0.00043687199650503075,
+        0.04960881375911458
+      ],
+      "p_raw_cluster_t": 0.0290588753170191,
+      "p_holm": 0.1162355012680764,
+      "p_bh_exploratory": 0.0332101432194504,
+      "reject_holm": false,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.011074176848940138,
+        0.06019698386648397
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.0008771929824561308,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.01268585557370734,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        -0.022194663923557487,
+        0.02393542187834628
+      ],
+      "p_raw_cluster_t": 0.9451929155247563,
+      "p_holm": 0.9784049743003813,
+      "p_bh_exploratory": 0.9451929155247564,
+      "reject_holm": false,
+      "reject_bh_exploratory": false,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.040687539872747265,
+        0.042441925837659523
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.09473684210526316,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.011256343941833943,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.07130283136055189,
+        0.11974078600651825
+      ],
+      "p_raw_cluster_t": 1.2294768835865454e-10,
+      "p_holm": 2.3360060788144363e-09,
+      "p_bh_exploratory": 4.917907534346181e-10,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.05785585081932149,
+        0.13161783339120484
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.06184210526315789,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.010311381360958587,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.04089281980842388,
+        0.08619702703328239
+      ],
+      "p_raw_cluster_t": 3.687646419033225e-07,
+      "p_holm": 5.162704986646515e-06,
+      "p_bh_exploratory": 8.0457740051634e-07,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.028057248644999554,
+        0.09562696188131622
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.07280701754385964,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.010584756695209698,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.04844265611257695,
+        0.09849226600205707
+      ],
+      "p_raw_cluster_t": 1.9300718152395926e-08,
+      "p_holm": 3.088114904383348e-07,
+      "p_bh_exploratory": 5.1468581739722473e-08,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.03812645683453225,
+        0.10748757825318703
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_mobilenetv2_x1_0",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.03991228070175438,
+      "clean_correct_count": 760,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.010637338095827073,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.017491974359778728,
+        0.06493013740929438
+      ],
+      "p_raw_cluster_t": 0.0005203990244118072,
+      "p_holm": 0.005203990244118072,
+      "p_bh_exploratory": 0.0008326384390588915,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.00505943899355267,
+        0.07476512240995609
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20",
+      "gradient_budget": 20,
+      "difference_a_minus_b": 0.04465075154730326,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.012463649934568437,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.022805784541675467,
+        0.066319587831593
+      ],
+      "p_raw_cluster_t": 0.0008614205812279795,
+      "p_holm": 0.007752785231051816,
+      "p_bh_exploratory": 0.0012268283373966236,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.0038140671848535257,
+        0.085487435909753
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g20",
+      "method_b": "mi_g20_fixed_step",
+      "gradient_budget": 20,
+      "difference_a_minus_b": 0.04067197170645445,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.01073050579836549,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.017520791198982748,
+        0.06507760843750215
+      ],
+      "p_raw_cluster_t": 0.0004639262250592458,
+      "p_holm": 0.005103188475651704,
+      "p_bh_exploratory": 0.0007953021001015642,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.005513869494202198,
+        0.0758300739187067
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20",
+      "gradient_budget": 20,
+      "difference_a_minus_b": 0.03846153846153846,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.012096147426261685,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.016487501374230423,
+        0.060206582072069165
+      ],
+      "p_raw_cluster_t": 0.0027337762737202394,
+      "p_holm": 0.019136433916041674,
+      "p_bh_exploratory": 0.0036450350316269858,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.0011710376330348465,
+        0.07809411455611176
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g20",
+      "method_b": "mi_g20_fixed_step",
+      "gradient_budget": 20,
+      "difference_a_minus_b": 0.03448275862068965,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.011816372703949463,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.010357933234439249,
+        0.05908359788359787
+      ],
+      "p_raw_cluster_t": 0.005579551911590997,
+      "p_holm": 0.03347731146954598,
+      "p_bh_exploratory": 0.007047855046220207,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        -0.004233146026303258,
+        0.07319866326768255
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.10831122900088416,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013313613763680997,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.08421695967658825,
+        0.13227530609265167
+      ],
+      "p_raw_cluster_t": 3.050998419046293e-10,
+      "p_holm": 5.186697312378698e-09,
+      "p_bh_exploratory": 9.152995257138879e-10,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.06468966983922332,
+        0.15193278816254502
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g40",
+      "method_b": "mi_g40_fixed_step",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.132183908045977,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013057445224228272,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.10539779797863766,
+        0.1600021929824561
+      ],
+      "p_raw_cluster_t": 5.943958360944914e-13,
+      "p_holm": 1.1887916721889827e-11,
+      "p_bh_exploratory": 2.8531000132535587e-12,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.08940167555380214,
+        0.17496614053815185
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.08841732979664013,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.014358076336104218,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.06401677111575328,
+        0.11228081763192657
+      ],
+      "p_raw_cluster_t": 2.1535135988711564e-07,
+      "p_holm": 3.2302703983067346e-06,
+      "p_bh_exploratory": 5.168432637290776e-07,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.04137362795427536,
+        0.13546103163900491
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g40",
+      "method_b": "mi_g40_fixed_step",
+      "gradient_budget": 40,
+      "difference_a_minus_b": 0.11229000884173297,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013732358142796197,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.0849933598937583,
+        0.14002992076869353
+      ],
+      "p_raw_cluster_t": 2.6649526300246817e-10,
+      "p_holm": 4.796914734044427e-09,
+      "p_bh_exploratory": 9.136980445798909e-10,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.06729644933280231,
+        0.15728356835066365
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.16489832007073385,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013966136077618572,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.1381442559963298,
+        0.19135365814326466
+      ],
+      "p_raw_cluster_t": 4.419633603582874e-15,
+      "p_holm": 9.723193927882323e-14,
+      "p_bh_exploratory": 3.5357068828662994e-14,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.11913879587366087,
+        0.21065784426780682
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m2_g80",
+      "method_b": "mi_g80_fixed_step",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.21662245800176835,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013212169574101923,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.186249288589763,
+        0.2471268158796591
+      ],
+      "p_raw_cluster_t": 4.112081520227159e-20,
+      "p_holm": 9.868995648545182e-19,
+      "p_bh_exploratory": 9.868995648545182e-19,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.17333327694539716,
+        0.2599116390581396
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.14898320070733864,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.012731185520790599,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.12252195871761089,
+        0.17569751436288428
+      ],
+      "p_raw_cluster_t": 5.9321949666037556e-15,
+      "p_holm": 1.2457609429867886e-13,
+      "p_bh_exploratory": 3.5593169799622533e-14,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.10726994597042935,
+        0.19069645544424793
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    },
+    {
+      "target": "cifar10_vgg11_bn",
+      "subset": "new800",
+      "method_a": "bsr_m4_g80",
+      "method_b": "mi_g80_fixed_step",
+      "gradient_budget": 80,
+      "difference_a_minus_b": 0.20070733863837315,
+      "clean_correct_count": 754,
+      "cluster_count": 44,
+      "degrees_of_freedom": 43,
+      "cluster_standard_error": 0.013845294415029841,
+      "inference_status": "ok",
+      "original_image_bootstrap_ci95": [
+        0.1701752083621126,
+        0.23012323573586793
+      ],
+      "p_raw_cluster_t": 3.700226299677296e-18,
+      "p_holm": 8.51052048925778e-17,
+      "p_bh_exploratory": 4.440271559612755e-17,
+      "reject_holm": true,
+      "reject_bh_exploratory": true,
+      "bonferroni_cluster_t_simultaneous_ci": [
+        0.15534374764376302,
+        0.24607092963298327
+      ],
+      "attack_seed_count_a": 3,
+      "attack_seed_count_b": 1,
+      "few_clusters_warning": false,
+      "p_raw_numerically_floored": false
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+{
+  "stage": "exploratory_sweep",
+  "sample_count": 1000,
+  "source_model": "cifar10_resnet20",
+  "target_models": [
+    "cifar10_mobilenetv2_x1_0"
+  ],
+  "methods": [
+    {
+      "name": "mi_g20_fixed_step",
+      "method": "mi",
+      "steps": 20,
+      "views": 1,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.003137254901960784,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 20,
+      "alpha_kind": "fixed_epsilon_over_denominator",
+      "seeds": [
+        null
+      ]
+    },
+    {
+      "name": "bsr_m2_g20",
+      "method": "bsr",
+      "steps": 10,
+      "views": 2,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.003137254901960784,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 20,
+      "alpha_kind": "epsilon_over_steps",
+      "seeds": [
+        42,
+        142,
+        242
+      ]
+    },
+    {
+      "name": "mi_g24_fixed_step",
+      "method": "mi",
+      "steps": 24,
+      "views": 1,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.003137254901960784,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 24,
+      "alpha_kind": "fixed_epsilon_over_denominator",
+      "seeds": [
+        null
+      ]
+    },
+    {
+      "name": "bsr_m2_g24",
+      "method": "bsr",
+      "steps": 12,
+      "views": 2,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.00261437908496732,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 24,
+      "alpha_kind": "epsilon_over_steps",
+      "seeds": [
+        42,
+        142,
+        242
+      ]
+    },
+    {
+      "name": "mi_g30_fixed_step",
+      "method": "mi",
+      "steps": 30,
+      "views": 1,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.003137254901960784,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 30,
+      "alpha_kind": "fixed_epsilon_over_denominator",
+      "seeds": [
+        null
+      ]
+    },
+    {
+      "name": "bsr_m2_g30",
+      "method": "bsr",
+      "steps": 15,
+      "views": 2,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.002091503267973856,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 30,
+      "alpha_kind": "epsilon_over_steps",
+      "seeds": [
+        42,
+        142,
+        242
+      ]
+    },
+    {
+      "name": "mi_g36_fixed_step",
+      "method": "mi",
+      "steps": 36,
+      "views": 1,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.003137254901960784,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 36,
+      "alpha_kind": "fixed_epsilon_over_denominator",
+      "seeds": [
+        null
+      ]
+    },
+    {
+      "name": "bsr_m2_g36",
+      "method": "bsr",
+      "steps": 18,
+      "views": 2,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.0017429193899782135,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 36,
+      "alpha_kind": "epsilon_over_steps",
+      "seeds": [
+        42,
+        142,
+        242
+      ]
+    },
+    {
+      "name": "mi_g40_fixed_step",
+      "method": "mi",
+      "steps": 40,
+      "views": 1,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.003137254901960784,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 40,
+      "alpha_kind": "fixed_epsilon_over_denominator",
+      "seeds": [
+        null
+      ]
+    },
+    {
+      "name": "bsr_m2_g40",
+      "method": "bsr",
+      "steps": 20,
+      "views": 2,
+      "epsilon": 0.03137254901960784,
+      "alpha": 0.001568627450980392,
+      "decay": 1.0,
+      "blocks": 2,
+      "rotation_degrees": 10.0,
+      "gradient_budget": 40,
+      "alpha_kind": "epsilon_over_steps",
+      "seeds": [
+        42,
+        142,
+        242
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "job_id": "mi_g20_fixed_step_deterministic",
+      "method": "mi_g20_fixed_step",
+      "seed": null
+    },
+    {
+      "job_id": "bsr_m2_g20_seed42",
+      "method": "bsr_m2_g20",
+      "seed": 42
+    },
+    {
+      "job_id": "bsr_m2_g20_seed142",
+      "method": "bsr_m2_g20",
+      "seed": 142
+    },
+    {
+      "job_id": "bsr_m2_g20_seed242",
+      "method": "bsr_m2_g20",
+      "seed": 242
+    },
+    {
+      "job_id": "mi_g24_fixed_step_deterministic",
+      "method": "mi_g24_fixed_step",
+      "seed": null
+    },
+    {
+      "job_id": "bsr_m2_g24_seed42",
+      "method": "bsr_m2_g24",
+      "seed": 42
+    },
+    {
+      "job_id": "bsr_m2_g24_seed142",
+      "method": "bsr_m2_g24",
+      "seed": 142
+    },
+    {
+      "job_id": "bsr_m2_g24_seed242",
+      "method": "bsr_m2_g24",
+      "seed": 242
+    },
+    {
+      "job_id": "mi_g30_fixed_step_deterministic",
+      "method": "mi_g30_fixed_step",
+      "seed": null
+    },
+    {
+      "job_id": "bsr_m2_g30_seed42",
+      "method": "bsr_m2_g30",
+      "seed": 42
+    },
+    {
+      "job_id": "bsr_m2_g30_seed142",
+      "method": "bsr_m2_g30",
+      "seed": 142
+    },
+    {
+      "job_id": "bsr_m2_g30_seed242",
+      "method": "bsr_m2_g30",
+      "seed": 242
+    },
+    {
+      "job_id": "mi_g36_fixed_step_deterministic",
+      "method": "mi_g36_fixed_step",
+      "seed": null
+    },
+    {
+      "job_id": "bsr_m2_g36_seed42",
+      "method": "bsr_m2_g36",
+      "seed": 42
+    },
+    {
+      "job_id": "bsr_m2_g36_seed142",
+      "method": "bsr_m2_g36",
+      "seed": 142
+    },
+    {
+      "job_id": "bsr_m2_g36_seed242",
+      "method": "bsr_m2_g36",
+      "seed": 242
+    },
+    {
+      "job_id": "mi_g40_fixed_step_deterministic",
+      "method": "mi_g40_fixed_step",
+      "seed": null
+    },
+    {
+      "job_id": "bsr_m2_g40_seed42",
+      "method": "bsr_m2_g40",
+      "seed": 42
+    },
+    {
+      "job_id": "bsr_m2_g40_seed142",
+      "method": "bsr_m2_g40",
+      "seed": 142
+    },
+    {
+      "job_id": "bsr_m2_g40_seed242",
+      "method": "bsr_m2_g40",
+      "seed": 242
+    }
+  ],
+  "generation_jobs": 20,
+  "mi_generation_jobs": 5,
+  "bsr_generation_jobs": 15,
+  "total_sample_view_gradient_evaluations": 600000,
+  "comparisons_per_target_subset": 5,
+  "budget_scope": "Attack generation only; warmup and model evaluation are recorded separately",
+  "prior_access": "Exploratory settings may be chosen after observing the original V1 target results. The original full1000 and new800 have already had attack effects evaluated. Within this run all source-only attacks finish before target-effect evaluation. This is not a fresh held-out confirmation.",
+  "api_calls": 0
+}

@@ -9,6 +9,47 @@ import backoff
 import openai
 
 MAX_NUM_TOKENS = 4096
+DEEPSEEK_MODELS = {"deepseek-chat", "deepseek-flash", "deepseek-v4-flash", "deepseek-v4-pro"}
+DEEPSEEK_VISION_MODELS = {"deepseek-flash"}
+
+
+def deepseek_client_kwargs(max_retries=2):
+    """Configure the requested DeepSeek endpoint without exposing credentials."""
+    api_key = os.environ.get("DEEPSEEK_API_KEY") or os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("Set DEEPSEEK_API_KEY or OPENAI_API_KEY for DeepSeek.")
+    return {
+        "api_key": api_key,
+        "base_url": (
+            os.environ.get("DEEPSEEK_BASE_URL")
+            or os.environ.get("OPENAI_BASE_URL")
+            or "https://api.deepseek.com/v1"
+        ),
+        "max_retries": max_retries,
+        "timeout": 60.0,
+    }
+
+
+def deepseek_request_kwargs(model):
+    """Use non-thinking requests for this course's bounded chat/tool workflow."""
+    if model != "deepseek-chat":
+        return {"extra_body": {"thinking": {"type": "disabled"}}}
+    return {}
+
+
+def validate_deepseek_messages(messages, model):
+    """Only enable image content for the explicitly documented vision model."""
+    allowed_types = {"text", "image_url"} if model in DEEPSEEK_VISION_MODELS else {"text"}
+    for message in messages:
+        content = message.get("content")
+        if isinstance(content, list) and any(
+            not isinstance(part, dict) or part.get("type") not in allowed_types
+            for part in content
+        ):
+            raise ValueError(
+                f"{model} adapter does not support this content; image feedback "
+                "requires a separately supported vision model."
+            )
 
 AVAILABLE_LLMS = [
     "claude-3-5-sonnet-20240620",
@@ -31,6 +72,10 @@ AVAILABLE_LLMS = [
     "o3-mini",
     "o3-mini-2025-01-31",
     # DeepSeek Models
+    "deepseek-chat",
+    "deepseek-flash",
+    "deepseek-v4-flash",
+    "deepseek-v4-pro",
     "deepseek-coder-v2-0724",
     "deepcoder-14b",
     # Llama 3 models
@@ -83,7 +128,6 @@ AVAILABLE_LLMS = [
         anthropic.RateLimitError,
     ),
 )
-@track_token_usage
 def get_batch_responses_from_llm(
     prompt,
     client,
@@ -98,7 +142,19 @@ def get_batch_responses_from_llm(
     if msg_history is None:
         msg_history = []
 
-    if model.startswith("ollama/"):
+    if model in DEEPSEEK_MODELS:
+        # DeepSeek exposes one completion per request; do not send OpenAI's n/seed.
+        content, new_msg_history = [], []
+        for _ in range(n_responses):
+            history = msg_history + [{"role": "user", "content": msg}]
+            response = make_llm_call(
+                client, model, temperature,
+                system_message=system_message, prompt=history,
+            )
+            answer = response.choices[0].message.content
+            content.append(answer)
+            new_msg_history.append(history + [{"role": "assistant", "content": answer}])
+    elif model.startswith("ollama/"):
         new_msg_history = msg_history + [{"role": "user", "content": msg}]
         response = client.chat.completions.create(
             model=model.replace("ollama/", ""),
@@ -214,7 +270,17 @@ def get_batch_responses_from_llm(
 
 @track_token_usage
 def make_llm_call(client, model, temperature, system_message, prompt):
-    if model.startswith("ollama/"):
+    if model in DEEPSEEK_MODELS:
+        messages = [{"role": "system", "content": system_message}, *prompt]
+        validate_deepseek_messages(messages, model)
+        return client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=MAX_NUM_TOKENS,
+            **deepseek_request_kwargs(model),
+        )
+    elif model.startswith("ollama/"):
         return client.chat.completions.create(
             model=model.replace("ollama/", ""),
             messages=[
@@ -324,7 +390,7 @@ def get_response_from_llm(
         )
         content = response.choices[0].message.content
         new_msg_history = new_msg_history + [{"role": "assistant", "content": content}]
-    elif "gpt" in model:
+    elif model in DEEPSEEK_MODELS or "gpt" in model:
         new_msg_history = msg_history + [{"role": "user", "content": msg}]
         response = make_llm_call(
             client,
@@ -478,7 +544,10 @@ def extract_json_between_markers(llm_output: str) -> dict | None:
 
 
 def create_client(model) -> tuple[Any, str]:
-    if model.startswith("claude-"):
+    if model in DEEPSEEK_MODELS:
+        # Keep the exact user-selected ID; do not alias it to deepseek-coder.
+        return openai.OpenAI(**deepseek_client_kwargs()), model
+    elif model.startswith("claude-"):
         print(f"Using Anthropic API with model {model}.")
         return anthropic.Anthropic(), model
     elif model.startswith("bedrock") and "claude" in model:

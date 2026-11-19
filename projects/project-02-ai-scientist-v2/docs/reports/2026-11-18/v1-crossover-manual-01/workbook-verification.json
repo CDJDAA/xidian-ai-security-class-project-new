@@ -1,0 +1,218 @@
+{
+  "xlsx_sha256": "cb79d07d73b6c59e7481c843443402dad6d87b1f0e4e6af8128f747b8099c4fc",
+  "sheets": [
+    "结果总览",
+    "配对比较",
+    "方法汇总",
+    "种子明细",
+    "逐图示例",
+    "字段说明"
+  ],
+  "comparison_rows_checked": 252,
+  "summary_rows_checked": 168,
+  "chart_count": 2,
+  "chart_series_checked": 8,
+  "numeric_x_budgets_checked": true,
+  "formula_cells": 1858,
+  "formula_errors": 0,
+  "auto_filter_tables": 5,
+  "panes": [
+    {
+      "ySplit": "4",
+      "topLeftCell": "A5",
+      "activePane": "bottomLeft",
+      "state": "frozen"
+    },
+    {
+      "xSplit": "3",
+      "ySplit": "5",
+      "topLeftCell": "D6",
+      "activePane": "bottomRight",
+      "state": "frozen"
+    },
+    {
+      "xSplit": "3",
+      "ySplit": "5",
+      "topLeftCell": "D6",
+      "activePane": "bottomRight",
+      "state": "frozen"
+    },
+    {
+      "xSplit": "3",
+      "ySplit": "5",
+      "topLeftCell": "D6",
+      "activePane": "bottomRight",
+      "state": "frozen"
+    },
+    {
+      "xSplit": "3",
+      "ySplit": "5",
+      "topLeftCell": "D6",
+      "activePane": "bottomRight",
+      "state": "frozen"
+    },
+    {
+      "xSplit": "1",
+      "ySplit": "5",
+      "topLeftCell": "B6",
+      "activePane": "bottomRight",
+      "state": "frozen"
+    }
+  ],
+  "chart_info": [
+    {
+      "chart": "xl/drawings/charts/chart1.xml",
+      "series": [
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "255F9E",
+            "255F9E"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$7:$A$13",
+          "y_formula": "'结果总览'!$B$7:$B$13"
+        },
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "707A87",
+            "707A87"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$7:$A$13",
+          "y_formula": "'结果总览'!$C$7:$C$13"
+        },
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "C46D2B",
+            "C46D2B"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$7:$A$13",
+          "y_formula": "'结果总览'!$D$7:$D$13"
+        },
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "2D8A70",
+            "2D8A70"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$7:$A$13",
+          "y_formula": "'结果总览'!$E$7:$E$13"
+        }
+      ]
+    },
+    {
+      "chart": "xl/drawings/charts/chart2.xml",
+      "series": [
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "255F9E",
+            "255F9E"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$25:$A$31",
+          "y_formula": "'结果总览'!$B$25:$B$31"
+        },
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "707A87",
+            "707A87"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$25:$A$31",
+          "y_formula": "'结果总览'!$C$25:$C$31"
+        },
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "C46D2B",
+            "C46D2B"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$25:$A$31",
+          "y_formula": "'结果总览'!$D$25:$D$31"
+        },
+        {
+          "x": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            80.0
+          ],
+          "y_point_count": 7,
+          "colors": [
+            "2D8A70",
+            "2D8A70"
+          ],
+          "numeric_x_formula": "'结果总览'!$A$25:$A$31",
+          "y_formula": "'结果总览'!$E$25:$E$31"
+        }
+      ]
+    }
+  ]
+}

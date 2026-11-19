@@ -1,0 +1,24 @@
+{
+  "sheets": 6,
+  "summary_rows": 168,
+  "seed_rows": 336,
+  "comparison_rows": 252,
+  "prediction_sample_rows": 896,
+  "full_prediction_rows": 112000,
+  "native_charts": 2,
+  "sample_ids": [
+    9718,
+    6881,
+    3591,
+    8330,
+    6363,
+    5022,
+    8307,
+    9972
+  ],
+  "source_run": "v1_crossover_manual_01",
+  "postprocessing_only": true,
+  "input_change_reaction_verified": true,
+  "temporary_changes_restored": true,
+  "export_reimport_rendered": true
+}
